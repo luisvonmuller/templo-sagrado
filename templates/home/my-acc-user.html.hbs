@@ -1,0 +1,1001 @@
+{{> home/header}}
+<style type="text/css">
+    .acc-menu {
+        border-right: 2px;
+        min-width: 100%;
+    }
+
+    .acc-item {
+        font-family: Arial, Helvetica, sans-serif !important;
+        background-color: rgb(110, 110, 110);
+        color: #fff;
+    }
+
+    .acc-item h4 {
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .acc-menu-item {
+        cursor: pointer;
+        background-color: rgb(0, 0, 0);
+    }
+
+    .acc-menu-item:hover {
+        background-color: rgb(255, 255, 255);
+        color: black;
+    }
+
+    .acc-credits {
+        background-color: rgba(128, 42, 144, 1) !important;
+        color: white;
+        cursor: not-allowed;
+    }
+
+    .acc-menu-item:hover span {
+        color: black;
+    }
+
+    .acc-menu-item span,
+    .acc-credits span {
+        font-family: Arial, Helvetica, sans-serif !important;
+        position: relative;
+        display: inline-block;
+        color: white;
+        font-size: 0.9rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px 20px;
+        transition: 0.3s;
+
+    }
+
+    #whole-chat-container {
+        overflow-y: scroll !important;
+        height: 40vh !important;
+        background-attachment: fixed;
+        background-image: url("/assets/home/img/fundo_site_02.jpg");
+    }
+
+    .msg-in {
+        border-radius: 1em !important;
+        background-color: white;
+        -webkit-box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        -moz-box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+    }
+
+    .msg-out {
+        background-color: #dcf8c6;
+        border-radius: 1em !important;
+        -webkit-box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        -moz-box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+    }
+
+    .href-from-acc-menu {
+        color: white;
+        text-decoration: none !important;
+    }
+
+    .href-from-acc-menu:hover {
+        color: black !important;
+    }
+
+    /*
+        Alter table with atendiments info from client
+    */
+    @media (max-width: 768px) {
+        .home-alter-w-in-mobol {
+            max-width: 95% !important;
+            margin-left: 2.5555% !important;
+        }
+    }
+
+    @media (max-width: 425px) {
+        .home-alter-w-in-mobol {
+            max-width: 100% !important;
+            margin-left: 2.5555% !important;
+        }
+
+        .home-alter-info-from-client {
+            max-width: 100% !important;
+            margin-left: 3% !important;
+        }
+    }
+
+    @media (max-width: 375px) {
+        .home-alter-w-in-mobol table {
+            font-size: 12px;
+        }
+
+        .home-alter-w-in-mobol {
+            max-width: 100% !important;
+            margin-left: 3.2% !important;
+        }
+    }
+
+    @media (max-width: 320px) {
+        .home-alter-w-in-mobol table {
+            font-size: 8px;
+        }
+
+        .home-alter-w-in-mobol {
+            max-width: 100% !important;
+            margin-left: 4.5555% !important;
+        }
+    }
+
+    .home-loading-effects {
+        margin-top: 5em !important;
+        margin-bottom: 5em !important;
+        transform: scale(2, 2);
+    }
+
+    .spinner-border {
+        border-right-color: transparent;
+        display: inline-block;
+        width: 2rem;
+        height: 2rem;
+        vertical-align: text-bottom;
+        border: .25em solid rgba(0, 0, 0, 0.6);
+        border-right-color: transparent;
+        border-radius: 50%;
+        -webkit-animation: spinner-border .75s linear infinite;
+        animation: spinner-border .75s linear infinite;
+    }
+
+    h1 {
+        color: rgb(30, 30, 30);
+        font-weight: 700;
+    }
+
+    table {
+        color: white !important;
+    }
+</style>
+
+<!-- Hiddens inputs -->
+<input id="client-id" hidden value="{{ self_data.0.0.user_id }}">
+<!-- [END] Hiddens inputs -->
+<section style="background-color: white;" id="new-user" class="py-5 container mt-4 home-main position-relative home-border">
+    <img src="/assets/home/img/arabesco.png" class="home-top-left-arabesque" alt="Arabesco" title="Arabesco">
+    <img src="/assets/home/img/arabesco.png" class="home-top-right-arabesque" alt="Arabesco" title="Arabesco">
+    <div>
+        <div class="row d-flex justify-content-center mt-3 mb-4">
+            <div class="col-lg-2 text-center">
+                <img src="/assets/img/ciganinha.png" class="img-fluid">
+            </div>
+            <div class="col-lg-6 my-auto">
+                <h1 style="text-transform: none;" class="text-center"> 
+                    Bem vindo de volta, <br><label class="user_name">{{ self_data.0.0.user_name }}!</label>
+                </h1>
+            </div>
+            <div class="col-lg-12">
+                <a id="attend" href="/atendimento" class="d-none mt-3 btn btn-block btn-primary">Acessar área de atendimento e ficar disponível </a>
+            </div>
+        </div>
+        <div class="row px-3">
+            <div class="col-lg-12 pt-3 pb-2 text-center acc-credits" style="background: transparent;">
+                <h2>
+                    <strong> <i class="fas fa-wallet ml-1"></i> Seu saldo: € </strong>
+                    <label id="user_balance" style="background: transparent !important;">
+                        {{ self_data.0.0.user_balance }}
+                    </label>
+                </h2>
+            </div>
+            <div class="col-lg-4 acc-menu-item text-center">
+                <a href="/comprar-creditos" class="href-from-acc-menu">
+                    <span>
+                        <i href="/comprar-creditos" class="far fa-hourglass mr-2"></i></i> Adquirir créditos
+                    </span>
+                </a>
+            </div>
+            <div data-toggle-target="#self-data" class="col-lg-4 acc-menu-item text-center">
+                <span data-toggle-target="#self-data">
+                    <i data-toggle-target="#self-data" class="fas fa-portrait mr-2"></i> Meus dados
+                </span>
+            </div>
+            <div data-toggle-target="#apointments" class="col-lg-4 acc-menu-item text-center">
+                <span data-toggle-target="#apointments">
+                    <i data-toggle-target="#apointments" class="fas fa-clipboard-check mr-3"></i>Atendimentos
+                    realizados
+                </span>
+            </div>
+            <div data-toggle-target="#mail" class="col-lg-4 acc-menu-item text-center">
+                <span data-toggle-target="#mail">
+                    <i data-toggle-target="#mail" class="fas fa-mail-bulk mr-3"></i>Atendimentos por e-mail
+                </span>
+            </div>
+            <div data-toggle-target="#transactions" class="col-lg-4 acc-menu-item text-center">
+                <span data-toggle-target="#transactions">
+                    <i class="fas fa-shopping-cart"></i>Minhas compras</span>
+            </div>
+            <div data-toggle-target="#clerk-my-acc" class="col-lg-4 acc-menu-item text-center">
+                <span data-toggle-target="#clerk-my-acc">
+                    <i class="fas fa-user-friends"></i> Atendentes Sugeridos.
+                </span>
+            </div>
+        </div>
+
+
+        <div class="row pb-3" style="background: transparent;">
+            <div id="apointments" class="col-lg-12 d-none acc-item loading pr-3 home-alter-w-in-mobol"
+                style="background: transparent; min-width: 100%;">
+                <div class="px-2">
+                    <h1 class=" my-3" style="border: none; text-transform: none;">
+                        Seus atendimentos...
+                    </h1>
+                    <div class="table-responsive-lg">
+                        <table class="table table-striped " style="background-color: rgba(0, 0, 0, 0.5); border: none;">
+                            <thead class="text-center" style="border: none !important;">
+                                <tr style="background-color: rgba(128, 42, 144, 1) !important;">
+                                    <th class="home-alter-display" scope="col" style="border: none;">Duração:</th>
+                                    <th scope="col" style="border: none;">Atendente</th>
+                                    <th scope="col" style="border: none;">Dia</th>
+                                    <th scope="col" style="border: none;">Opções</th>
+                                </tr>
+                            </thead>
+                            <tbody id="chat-list-holder" class="text-center" style="border: none !important;">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div id="mail" class="col-lg-12 d-none acc-item pr-3 pb-3 home-alter-w-in-mobol"
+                style="background: transparent; min-width: 100%;">
+                <div class="px-2">
+                    <h1 class=" mb-3" style="border: none; text-transform: none;">
+                        Seus atendimentos por e-mail...
+                    </h1>
+                    <div class="table-responsive-lg">
+                        <table class="table table-striped " style="background-color: rgba(0, 0, 0, 0.5); border: none;">
+                            <thead class="text-center" style="border: none !important;">
+                                <tr style="background-color: rgba(128, 42, 144, 1) !important;">
+                                    <th scope="col" style="border: none;">Atendente</th>
+                                    <th scope="col" style="border: none;">Data</th>
+                                    <th scope="col" style="border: none;">Status</th>
+                                    <th scope="col" style="border: none;">Opções</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mail-list-holder" class="text-center" style="border: none !important;">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div id="transactions" class="col-lg-12 d-none acc-item pr-3 pb-3 home-alter-w-in-mobol"
+                style="background: transparent; min-width: 100%;">
+                <div class="px-2">
+                    <h1 class=" mb-3" style="border: none; text-transform: none;">
+                        Suas compras...
+                    </h1>
+                    <div class="table-responsive-lg">
+                        <table class="table table-striped " style="background-color: rgba(0, 0, 0, 0.5); border: none;">
+                            <thead class="text-center" style="border: none !important;">
+                                <tr style="background-color: rgba(128, 42, 144, 1) !important;">
+                                    <th scope="col" style="border: none;">Data</th>
+                                    <th scope="col" style="border: none;">Plataforma</th>
+                                    <th scope="col" style="border: none;">Valor</th>
+                                    <th scope="col" style="border: none;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transaction-list-holder" class="text-center" style="border: none !important;">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div id="clerk-my-acc" class="col-lg-12 acc-item pr-3 pb-3"
+                style="background: transparent; min-width: 100%;">
+                <div>
+                    <h1 class="mb-4 " style="border: none; text-transform: none;">
+                        Atendentes Sugeridos para você:
+                    </h1>
+                    <div class="home-atendents">
+                        <div id="clerksOnline" class="container-fluid">
+                            <div class="row pb-5 mb-5">
+                                {{#each self_data.1}}
+                                <div class="col-lg-3 col-md-6 mb-5 pb-5 pt-5 mt-5">
+                                    <div class="card text-center home-card-atendent">
+                                        <div class="justify-content-center">
+                                            <img src="{{ this.2.clerk_image }}" class="rounded-circle mx-auto home-limit-height-from-atendet-picture" style="width: 60%; margin-top: -20%;" alt="consultor">
+                                        </div>
+                                        <button type="button" class="btn btn-block home-alter-leght-name" title="Ver perfil de {{ this.2.clerk_info_exhibition }}">
+                                            <a href="#" data-name="{{this.2.clerk_info_exhibition}}" class="clerk-profile-link">
+                                                <i class="fa fa-user home-icon-atendent"></i>
+                                                {{ this.2.clerk_info_exhibition }}
+                                            </a>
+                                        </button>
+                                        <div class="card-footer mt-5 pt-5" style="border: none;">
+                                            <p class="home-description card-text" style="color: rgb(0,0,0) !important;">
+                                                {{this.2.clerk_info_phrase}} </p>
+                                            <button data-clerk-id="{{this.0.user_id}}" disabled="true" type="button" class="new-text-chat text-chat-btn btn btn-block home-atendiments-forms">
+                                                <img data-clerk-id="{{this.0.user_id}}" src="/assets/home/img/B1.png" alt="chat">
+                                                Atendimento via <br>Chat €<span data-clerk-id="{{this.0.user_id}}" class="valMinChat"></span>/min
+                                            </button>
+                                            <button data-clerk-id="{{this.0.user_id}}" disabled="true" type="button" class="new-voice-chat voice-chat-btn btn btn-block home-atendiments-forms">
+                                                <img data-clerk-id="{{this.0.user_id}}" src="/assets/home/img/B3.png" alt="phone">
+                                                Atendimento via <br>Tel. €<span data-clerk-id="{{this.0.user_id}}" class="valMinVoip"></span>/min
+                                            </button>
+
+                                            <button data-clerk-id="{{this.0.user_id}}" type="button" class="new-mail btn btn-block home-atendiments-forms">
+                                                <i data-clerk-id="{{this.0.user_id}}" class="fa fa-envelope" aria-hidden="true" style="font-size: 1.5rem;"></i>
+                                                Atendimento por<br>E-mail. €<span data-clerk-id="{{this.0.user_id}}" class="valMail"></span>
+                                            </button>
+
+                                            <div class="whole-status-btn mt-2" data-clerk-id="{{ this.0.user_id }}">
+                                                <button type="button" data-clerk-id="{{ this.0.user_id }}" class="notify-me btn btn-block btn-dark"> <i data-clerk-id="{{ this.0.user_id }}" class="far fa-paper-plane"></i>
+                                                    Avise-me
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="self-data" class="col-lg-12 d-none acc-item pr-3 home-alter-w-in-mobol pb-5"
+            style="background: transparent; min-width: 100%;">
+            <div class="px-2">
+                <h1 class="" style="text-transform: none;">
+                    Seus Dados Cadastrados:
+                </h1>
+                <form id="form-new-user" method="POST" action="/user/self-update"
+                    style="background-color: rgba(0, 0, 0, 1);" class="p-3">
+                    <div class="row mt-2">
+                        <div class="col-lg-6">
+                            <label for="user_name">Nome: <span style="color: red;">*</span></label>
+                            <input type="text" name="user_name" class="form-control"
+                                value="{{ self_data.0.0.user_name }}" id="user_name" placeholder="Seu nome completo.">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="user_email">E-mail: <span style="color: red;">*</span></label>
+                            <input type="text" name="user_email" class="form-control"
+                                value="{{ self_data.0.0.user_email }}" id="user_email" placeholder="Seu E-mail.">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="user_birthdate">Sua Data de Nascimento:<span
+                                    style="color: red;">*</span></label>
+                            <input type="date" name="user_birthdate" class="form-control" id="user_birthdate"
+                                value="{{ self_data.0.0.user_birthdate }}" placeholder="dd/mm/yyyy.">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="user_birthdate">Gênero:<span style="color: red;">*</span></label>
+                            <select name="user_genre" class="form-control">
+                                <option value="Masculino">Masculino</option>
+                                <option value="Feminino">Feminino</option>
+                                <option value="Prefere não informar">Prefiro não informar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label for="user_alias">Usuário: <span style="color: red;">*</span></label>
+                            <input type="text" name="user_alias" class="form-control" id="user_alias"
+                                value="{{ self_data.0.0.user_alias }}"
+                                placeholder="Escolha seu nome de usuário Usuário">
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="user_alias">Senha: <span style="color: red;">*</span></label>
+                            <input type="password" name="user_pass" class="form-control" id="user_pass"
+                                value="{{ self_data.0.0.user_pass }}" placeholder="Digite a senha desejada">
+                        </div>
+
+                        <div class="col-lg-4">
+                            <label for="user_alias">Confirmação de senha: <span style="color: red;">*</span></label>
+                            <input type="password" class="form-control" id="user_pass2"
+                                value="{{ self_data.0.0.user_pass }}" placeholder="Confirme sua senha">
+                        </div>
+                    </div>
+                    <div class="alert alert-info text-center mt-3">
+                        Se você não escrever uma nova senha, a antiga será mantida.
+                    </div>
+                    <button type="submit" class="btn btn-dark btn-block hvr-shutter-out-horizontal "
+                        style="background: transparent; border: 1px solid rgba(222, 169, 81, 1);"><i
+                            class="fas fa-save"></i>
+                        Atualizar meus
+                        dados </button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <img src="/assets/home/img/arabesco.png" class="home-bottom-left-arabesque" alt="Arabesco" title="Arabesco">
+    <img src="/assets/home/img/arabesco.png" class="home-bottom-right-left-arabesque" alt="Arabesco" title="Arabesco">
+</section>
+
+{{> home/footer }}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+<script>
+    $(document).ready(async function () {
+        $.get('/whats-my-id', async function (e) {
+            function generatePostSlug(postTitle) {
+                if (postTitle) {
+                    return postTitle.replace('.', '').split(' ').join('-').toLowerCase();
+                }
+            }
+
+            /* Common date functions */
+            function timestamp(unix_timestamp) {
+                var date = new Date(unix_timestamp);
+                var hours = date.getHours();
+                var minutes = "0" + date.getMinutes();
+                var seconds = "0" + date.getSeconds();
+                let year = date.getFullYear();
+                let month = (1 + date.getMonth()).toString().padStart(2, '0');
+                let day = date.getDate().toString().padStart(2, '0');
+
+                var formattedTime = day + '/' + month + '/' + year + ' - ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                return formattedTime;
+            }
+
+            function parseData(unix_timestamp) {
+                var date = new Date(unix_timestamp);
+                let year = date.getFullYear();
+                let month = (1 + date.getMonth()).toString().padStart(2, '0');
+                let day = date.getDate().toString().padStart(2, '0');
+                return day + '/' + month + '/' + year
+            }
+
+            async function getClerkName(clerkId) {
+                return await $.get('/user/get_clerk_name/' + clerkId + '/', (data) => {
+                    return JSON.parse(data)[0]
+                });
+            };
+            /* -----------------------------------------------------------------------------------------------*/
+            /* Meta info Meta info Meta info Meta info Meta info Meta info Meta info Meta info Meta info Meta */
+            const myCredits = await $.get("/my-credits", function (e) { return e; });
+            const myBalance = parseFloat(myCredits[0][0] + myCredits[0][1]);
+            const socket = new WebSocket("wss://attend." + window.location.host.replace("www.", "") + "/ws");
+            const client_id = parseInt(e);
+            const user_id = parseInt(e);
+            /* Meta info Meta info Meta info Meta info Meta info Meta info Meta info Meta info Meta info Meta */
+            /* -----------------------------------------------------------------------------------------------*/
+
+            /* Reparses stuff to match the european currency standart */
+            $("#user_balance").text(parseFloat(myBalance).toFixed(2).replace('.', ','));
+
+            function statusClerkButtons(user_id, status, text, voice, video) {
+                switch (status) {
+                    case 1:
+                        if (text) {
+                            $('.text-chat-btn[data-clerk-id="' + user_id + '"]').removeAttr('disabled');
+                        } else {
+                            $('.text-chat-btn[data-clerk-id="' + user_id + '"]').attr('disabled', 'disabled');
+                        }
+
+                        if (voice) {
+                            $('.voice-chat-btn[data-clerk-id="' + user_id + '"]').removeAttr('disabled');
+                        } else {
+                            $('.voice-chat-btn[data-clerk-id="' + user_id + '"]').attr('disabled', 'disabled');
+                        }
+
+                        if (!text && !voice) {
+                            $('div[data-clerk-id="' + user_id + '"]').html('<button type="button" disabled class="btn home-change-all-card-buttons btn-block text-white btn-dark"> Já volto! 😁 </button>');
+                        } else {
+                            $('.whole-status-btn[data-clerk-id="' + user_id + '"]').html('<button type="button" class="btn btn-block mt-2 home-atendiments-forms-available"><i class="fas fa-rss"></i> Disponível</button>');
+                        }
+
+                        $('#clerksOnline').prepend($('div[data-clerk-id="' + user_id + '"]').parents('.home-alter-cards'));
+                        break;
+                    case 2:
+                        // Is on a call, so do you wanna wait for it?
+                        $('div[data-clerk-id="' + user_id + '"]').html('<button type="button" disabled class="btn home-change-all-card-buttons btn-block text-white btn-danger"> Em atendimento </button>');
+                        break;
+                    case 3:
+                        $('div[data-clerk-id="' + user_id + '"]').html('<button type="button" class="btn btn-block mt-2 home-atendiments-forms-available"><i class="fas fa-rss"></i> Indisponível</button>');
+                        break;
+                }
+            }
+
+            var configs;
+
+            $.get('/admin/config/get-configs', function (e) {
+                configs = e[0]
+                $('.valMinChat').text(parseFloat(configs['absolute_min_value_chat']).toFixed(2));
+                $('.valMinVoip').text(parseFloat(configs['absolute_min_value_voice']).toFixed(2));
+                $('.valMail').text(parseFloat(configs['site_mail_val']).toFixed(2));
+            });
+
+
+            /* When socket finally opens */
+            socket.onopen = function (event) {
+                socket.send(JSON.stringify({
+                    action: 'new-client-entered-the-thread',
+                    client_id: null,
+                    clerk_id: null,
+                    data: null,
+                    from: 'Client',
+                }));
+            }
+
+            socket.onmessage = async function (event) {
+                var income_data = JSON.parse(event.data);
+
+                if (income_data.client_id === client_id) {
+                    switch (income_data.action) {
+                        /* Processes and redraw clerks */
+                        case "clerks-available":
+                            [].map.call(income_data.data, function (clerk) {
+                                statusClerkButtons(clerk['clerk_id'], clerk['status'], clerk["is_available_chat"], clerk["is_available_voice"], clerk["is_available_video"]);
+                            });
+                            $('.home-loading-effects').addClass('animate__animated animate__fadeOut').remove();
+                            $('#home-hidden-content').removeClass('d-none').addClass('animate__animated animate__fadeInUp');
+                            break;
+                        /* Incoming advice to the client that clerk has accepted an text chat invitation */
+                        case "text-chat-acc":
+                            window.location = "/chat/" + income_data.data;
+                            break;
+                        /* Incoming advice to the client that clerk has accepted an voice chat invitation */
+                        case "voice-chat-acc":
+                            window.location = '/voip/' + income_data.data;
+                        /* Incoming advice to the client that clerk has refused an text chat invitation */
+                        case "text-chat-ref":
+                            Swal.fire({
+                                title: 'O atendente recusou sua solicitação.',
+                                text: "Por favor, aguarde ou selecione outro atendente.",
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                            break;
+                        /* Incoming advice to the client that clerk has refused an voice chat invitation */
+                        case "voice-chat-ref":
+                            Swal.fire({
+                                title: 'O atendente recusou sua solicitação.',
+                                text: "Por favor, aguarde ou selecione outro atendente.",
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                            break;
+                    }
+                } else {
+                    switch (income_data.action) {
+                        /* Processes and redraw clerks */
+                        case "clerks-available":
+                            [].map.call(income_data.data, function (clerk) {
+                                statusClerkButtons(clerk['clerk_id'], clerk['status'], clerk["is_available_chat"], clerk["is_available_voice"], clerk["is_available_video"]);
+                            });
+                            $('.home-loading-effects').addClass('animate__animated animate__fadeOut').remove();
+                            $('#home-hidden-content').removeClass('d-none').addClass('animate__animated animate__fadeInUp');
+                            break;
+                    }
+                }
+            }
+
+
+            //* Voice Chat implementation */
+            $(document).on('click', '.new-voice-chat', async function (e) {
+				if ($(e.target).data('clerk-id') > 0) {
+					if (parseFloat(myBalance) >= (configs['absolute_min_value_voice'] * 3)) {
+						socket.send(JSON.stringify({
+							action: "voice-chat-intend",
+							client_id: client_id,
+							clerk_id: $(e.target).data('clerk-id'),
+							data: null,
+							from: 'Client'
+						}));
+
+
+						Swal.fire({
+							title: 'Esperando o atendente responder sua requisição de atendimento!',
+							showCloseButton: true,
+							showCancelButton: true,
+							cancelButtonText:
+								'Cancelar',
+							onBeforeOpen: function () {
+								Swal.showLoading()
+							},
+						});
+
+					} else {
+						Swal.fire({
+							title: 'Você não possui créditos Suficientes..',
+							text: "Você será redirecionado a página de compra de minutos.",
+							showConfirmButton: false,
+							timer: 2500
+						});
+
+						await new Promise(r => setTimeout(r, 2000));
+						window.location = '/comprar-creditos';
+
+					}
+				} else {
+					Swal.fire({
+						title: 'Sem suporte...',
+						text: "Atualize a página, se o erro persistir por favor tente em outro navegador...",
+						icon: 'warning',
+					});
+				}
+			});
+
+
+            /* Text chat inviter implementation */
+            $(document).on('click', '.new-text-chat', async function (e) {
+				if ($(e.target).data('clerk-id') > 0) {
+					if (parseFloat(myBalance) >= parseFloat(configs['absolute_min_value_chat'] * 3)) {
+						socket.send(JSON.stringify({
+							action: "text-chat-intend",
+							client_id: client_id,
+							clerk_id: $(e.target).data('clerk-id'),
+							data: null,
+							from: 'Client'
+						}));
+
+						Swal.fire({
+							title: 'Esperando o atendente responder sua requisição de atendimento!',
+							showCloseButton: true,
+							showCancelButton: true,
+							cancelButtonText:
+								'Cancelar',
+							onBeforeOpen: function () {
+								Swal.showLoading()
+							},
+						});
+					} else {
+						Swal.fire({
+							title: 'Você não possui créditos!',
+							text: "Você será redirecionado a página de compra de minutos.",
+							showConfirmButton: false,
+							timer: 2500
+						});
+
+						await new Promise(r => setTimeout(r, 2000));
+						window.location = '/comprar-creditos';
+					}
+				} else {
+					Swal.fire({
+						title: 'Sem suporte...',
+						text: "Atualize a página, se o erro persistir por favor tente em outro navegador...",
+						icon: 'warning',
+					});
+				}
+			});
+
+            /* Mail attendance implementation */
+            $(document).on('click', '.new-mail', async function (e) {
+                if (parseFloat(myBalance) >= (configs['site_mail_val'])) {
+                    window.location = '/atendimento-email/' + $(e.target).data('clerk-id');
+                } else {
+                    Swal.fire({
+                        title: 'Você não possui créditos!',
+                        text: "Você será redirecionado a página de compra de créditos.",
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    await new Promise(r => setTimeout(r, 2000));
+                    window.location = '/comprar-creditos';
+                }
+            });
+
+            $(document).on('click', '.notify-me', function (e) {
+                $.get("/notify-me/" + $(e.target).data('clerk-id'), function (e) {
+                    Swal.fire(
+                        'Feito!',
+                        'Assim que o atendente ficar online te avisaremos por e-mail!',
+                        'success'
+                    )
+                });
+            });
+
+            $(document).on('click', '.logged-out-notify', function (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Você precisa Entrar primeiro!',
+                })
+            })
+
+            $(document).on('click', '.acc-menu-item', function (e) {
+                /* Hide all displayed elems ... */
+                [].map.call($('.acc-item'), function (item) {
+                    $(item).addClass('d-none');
+                });
+
+                $($(e.target).data('toggle-target')).removeClass('d-none', 'true');
+            });
+
+            $(document).on('click', '.report-chat', function (e) {
+                $('#report-chat-modal').modal('show');
+                $('#whole-chat-modal').modal('hide');
+                $('#report-chat-client-id').val($(e.target).data('client-id'));
+                $('#report-chat-id').val($(e.target).data('chat-id'));
+            });
+
+            $(document).on('submit', '#report-chat', function (e) {
+                e.preventDefault();
+                $.post('/chat/report-chat/', $(e.target).serialize(), function (e) {
+                    Swal.fire(
+                        'Chat reportado.',
+                        'Em breve entraremos em contato com novidades!',
+                        'success'
+                    );
+                    $('#report-chat-modal').modal('hide');
+                });
+            });
+
+            $(document).on('click', '.see-whole-chat', function (e) {
+                var selfId = user_id;
+                var chatId = $(e.target).data('chat-id');
+                $('.whole-chat-report-chat').attr('data-chat-id', chatId);
+                $('.whole-chat-report-chat').attr('data-client-id', selfId);
+                $('#whole-chat-container').html('');
+                $.get('/retrive_whole_chat/' + chatId, function (data) {
+                    [].map.call(data, (chatMsg) => {
+                        if (chatMsg['chat_msg_user_id'] === selfId) {
+                            let tmpHtml = '<div class="row clear-fix mx-2">';
+                            tmpHtml += '<div class="msg-out col-lg-6 ml-auto alert">' + chatMsg['chat_msg_body'] + ' <br>';
+                            tmpHtml += '<small class="float-right"> Enviado em:' + timestamp(Date.parse(chatMsg['chat_msg_time'])) + '</small> </div> </div>';
+                            $('#whole-chat-container').append(tmpHtml);
+                        } else {
+                            let tmpHtml = '<div class="row clear-fix mx-2">';
+                            tmpHtml += '<div class="msg-in col-lg-6 mr-auto alert">' + chatMsg['chat_msg_body'] + ' <br>';
+                            tmpHtml += '<small class="float-right"> Enviado em: ' + timestamp(Date.parse(chatMsg['chat_msg_time'])) + ' </small> </div> </div>';
+                            $('#whole-chat-container').append(tmpHtml);
+                        }
+                    })
+                });
+                $('#whole-chat-modal').modal('show');
+            });
+
+            $.get('/user/client_chat_list', function (data) {
+                var chatList = JSON.parse(data);
+                [].map.call(chatList, async function (chat) {
+                    /* Stuff to parse  */
+                    let clerk_name = JSON.parse(await getClerkName(chat['clerk_id']));
+                    var minsSpend = new Date(Date.parse(chat['end_time']) - Date.parse(chat['init_time']));
+                    /* HTML to append */
+                    let tempHTML = '<tr> <td class="home-alter-display" style="border: none;"> ' + (isNaN(minsSpend.getMinutes()) ? "Não Calculável" : minsSpend.getMinutes()) + ' minuto(s) </td> ';
+                    tempHTML += '<td style="border: none;"> ' + clerk_name[0] + '</td>';
+                    tempHTML += '<td style="border: none;"> ' + parseData(Date.parse(chat['init_time'])) + '</td>';
+                    tempHTML += '<td style="border: none;"> <button data-client-id="' + chat['client_id'] + '" data-chat-id="' + chat['chat_id'] + '" class="see-whole-chat btn btn-primary btn-sm hvr-shutter-out-horizontal " style="background: transparent; border: 1px solid rgba(222, 169, 81, 1);"> <i data-client-id="' + chat['client_id'] + '" data-chat-id="' + chat['chat_id'] + '" class="fas fa-eye"></i> Ver conversa</button> <button class="report-chat btn btn-primary btn-sm hvr-shutter-out-horizontal " style="background: transparent; border: 1px solid rgba(222, 169, 81, 1);" data-client-id="' + chat['client_id'] + '" data-chat-id="' + chat['chat_id'] + '"><i data-client-id="' + chat['client_id'] + '" data-chat-id="' + chat['chat_id'] + '" class="fas fa-exclamation-triangle"></i> Reportar </button> </td>';
+                    tempHTML += '</tr>';
+                    $("#chat-list-holder").append(tempHTML);
+                });
+            });
+
+            $.get('/user/client-mail-list', function (data) {
+                var chatList = JSON.parse(data);
+                [].map.call(chatList, async function (chat) {
+                    /* Stuff to parse  */
+                    let clerk_name = JSON.parse(await getClerkName(chat['clerk_id']));
+                    var mail_status = chat['call_email_response_title'] !== null ? 'Respondido' : 'Aguardando Resposta';
+
+                    /* HTML to append */
+                    let tempHTML = '<tr><td style="border: none;"> ' + clerk_name[0] + '</td>';
+                    tempHTML += '<td style="border: none;"> ' + parseData(Date.parse(chat['call_email_request_date'])) + '</td>';
+                    tempHTML += '<td style="border: none;"> ' + mail_status + '</td>';
+                    tempHTML += '<td style="border: none;"> <button data-mail-id="' + chat['call_email_id'] + '" class="see-my-mail btn btn-primary btn-sm hvr-shutter-out-horizontal " style="background: transparent; border: 1px solid rgba(222, 169, 81, 1);"> <i data-client-id="' + chat['client_id'] + '"data-mail-id="' + chat['call_email_id'] + '" class="fas fa-eye"></i> Ver Meu Envio.</button> ';
+                    if (chat['call_email_response_title'] !== null) {
+                        tempHTML += '<button disable class="see-answer-mail btn btn-primary btn-sm hvr-shutter-out-horizontal " style="background: transparent; border: 1px solid rgba(222, 169, 81, 1);" data-client-id="' + chat['client_id'] + '" data-mail-id="' + chat['call_email_id'] + '"><i data-client-id="' + chat['client_id'] + '" data-mail-id="' + chat['call_email_id'] + '" class="fas fa-exclamation-triangle"></i> Ver resposta </button> </td>';
+                    } else {
+                        tempHTML += '<button disabled class="btn btn-primary btn-sm hvr-shutter-out-horizontal " style="background: transparent; border: 1px solid rgba(222, 169, 81, 1);" data-clerk-id="' + chat['clerk_id'] + '" data-mail-id="' + chat['call_email_id'] + '"><i data-clerk-id="' + chat['clerk_id'] + '" data-mail-id="' + chat['call_email_id'] + '" class="fas fa-exclamation-triangle"></i> Não Respondido </button> </td>';
+                    }
+                    tempHTML += '</tr>';
+
+                    $("#mail-list-holder").append(tempHTML);
+                });
+            });
+
+            function saleStatus(status) {
+                if (status) {
+                    return '<div class="badge badge-success">Confirmada</div>';
+                } else {
+                    return '<div class="badge badge-default">Aguardando confirmação</div>';
+                }
+            }
+
+            $.get('/user/client-transaction-list', function (data) {
+                var transactions = JSON.parse(data);
+                [].map.call(transactions, trasaction => {
+                    let tmpHTML = '<tr>';
+                    tmpHTML += '<td>' + parseData(trasaction['sale_date']) + '</td>';
+                    tmpHTML += '<td>' + trasaction['sale_payment_source'] + '</td>';
+                    tmpHTML += '<td> € ' + parseFloat(trasaction['sale_real_value']).toFixed(2).replace('.', ',') + '</td>';
+                    tmpHTML += '<td>' + saleStatus(trasaction['sale_status']) + '</td></tr>';
+                    $('#transaction-list-holder').append(tmpHTML);
+                })
+            });
+
+            $(document).on('click', '.see-my-mail', function (e) {
+                $.get("/get-my-mail/" + $(e.target).data('mail-id'), function (data) {
+                    var mail = data[0];
+                    $("#my-mail-delivery").html(mail[0]);
+                    $("#my-mail-subject").html(mail[1]);
+                    $("#my-mail-content").html(mail[2]);
+                    $("#my-mail-modal").modal("show");
+                });
+            });
+
+            $(document).on('click', '.see-answer-mail', function (e) {
+                $.get("/get-answer-mail/" + $(e.target).data('mail-id'), function (data) {
+                    var mail = data[0];
+                    $("#answer-mail-date").html(new Date(mail[0]));
+                    $("#answer-mail-subject").html(mail[1]);
+                    $("#answer-mail-content").html(mail[2]);
+                    $("#answer-mail-modal").modal("show");
+                });
+            });
+
+            [].map.call($('.clerk-profile-link'), function (item) {
+                $(item).attr("href", "/tarologo/" + generatePostSlug($(item).data('name')));
+            });
+
+            $.get("/am-i-a-clerk/", async (e) => {
+                if (JSON.parse(e).length > 0) {
+                    $('#attend').removeClass('d-none');
+                    $('.acc-menu-item').hide();
+                    $('.acc-item').hide();
+                    var myId = await $.get("/whats-my-id", (e) => JSON.parse(e));
+
+                    var configStuff;
+
+
+                    $.get("/admin/clerk/single/" + myId, async (incomeData) => {
+
+                        await $.get('/admin/config/get-configs', (e) => {
+                            configStuff = JSON.parse(e)[0];
+                        });
+
+                        $('#acc-revenue').show();
+                        var clerkData = JSON.parse(incomeData)[0];
+                        $('#amountOwned').html(
+                            parseFloat(clerkData[0]['user_balance']).toFixed(2)
+                        );
+
+                    });
+                } else {
+                    $('#acc-revenue').hide();
+                }
+            });
+        });
+    });
+</script>
+<!-- Whole CHAT Modal -->
+<div class="modal fade" id="whole-chat-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLongTitle">Visualizando Chat</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="whole-chat-container" class="py-2 container-fluid">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="alert alert-info mr-auto">
+                    Suas mensagens estão em verde, as do atendente em branco.
+                </div>
+                <button type="button" class="report-chat whole-chat-report-chat btn btn-warning mr-2"><i
+                        class="report-chat whole-chat-report-chat fas fa-exclamation-triangle"></i>
+                    Reportar Chat</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-window-close"></i>
+                    Fechar Chat</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [END] Whole CHAT Modal -->
+
+<!-- Report Chat Modal -->
+<form id="report-chat" method="POST">
+    <div class="modal fade" id="report-chat-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel"><i class="fas fa-exclamation-triangle"></i> Reportar
+                        irregulariedade (atendimento). </h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="report-chat-reason">Qual o Motivo?</label>
+                    <input type="hidden" name="user_id" id="report-chat-client-id" value="" />
+                    <input type="hidden" name="chat_id" id="report-chat-id" value="" />
+                    <textarea class="form-control" id="report-chat-reason" name="report_chat_reason"
+                        placeholder="Descreva aqui o motivo de você estar reportando este atendimento. Ele será revisado e entraremos em contato assim que tivermos uma posição."></textarea>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="mr-auto btn btn-warning"> <i class="fas fa-exclamation-triangle"></i>
+                        Reportar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"><i
+                            class="fa fa-window-close"></i> Fechar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- [END] Report Chat Modal -->
+
+<!-- My Mail Modal -->
+<div class="modal fade" id="my-mail-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel">Visualizando seu envio... </h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <strong>📭 Será entregue para:</strong> <span class="float-right" id="my-mail-delivery"></span><br>
+                <strong>🤔 O assunto posto:</strong> <span class="float-right" id="my-mail-subject"></span>
+                <hr>
+                <strong>🔮 O que você escreveu:</strong><br><span id="my-mail-content"></span><br>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-window-close"></i>
+                    Fechar </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [END] Report Chat Modal -->
+
+<!-- Answer Mail Modal -->
+<div class="modal fade" id="answer-mail-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel">Visualizando seu envio... </h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <strong>📭 Data resposta:</strong> <span class="float-right" id="answer-mail-date"></span><br>
+                <strong>🤔 Assunto da resposta:</strong> <span class="float-right" id="answer-mail-subject"></span>
+                <hr>
+                <strong>🔮 O que o atendente disse...</strong><br><span id="answer-mail-content"></span><br>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-window-close"></i>
+                    Fechar </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [END] Report Chat Modal -->

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Área administrativa do templo sagrado.">
+  <meta name="author" content="Easy Web Usa">
+  <title>Templo Sagrado - Área Administrativa</title>
+  <link rel="icon" href="/assets/admin/favicon.ico">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+  <link rel="stylesheet" href="/assets/admin/vendor/nucleo/css/nucleo.css" type="text/css">
+  <link rel="stylesheet" href="/assets/admin/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="/assets/admin/css/argon.css?v=1.2.0" type="text/css">
+  <style type="text/css">
+    .navbar-vertical .navbar-brand-img,
+    .navbar-vertical .navbar-brand>img {
+      max-width: 100%;
+      max-height: 3rem;
+    }
+
+    .modal-xl {
+      max-width: 1540px !important;
+    }
+
+    .modal-lg {
+      max-width: 1200px !important;
+    }
+
+    .btn-primary {
+      background-color: #007bff !important;
+    }
+
+    .btn-primary:hover {
+      background-color: #007bff !important;
+    }
+
+
+    .btn-light:hover {
+      color: #212529;
+      background-color: #e2e6ea;
+      border-color: #dae0e5;
+    }
+
+    .btn-light {
+      color: #212529;
+      background-color: #f8f9fa;
+      border-color: #f8f9fa;
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    a {
+      text-decoration: none;
+      color: #007bff;
+      background-color: transparent;
+    }
+
+    .disabled {
+      display: none !important;
+    }
+
+    *::-webkit-scrollbar {
+      width: 6px !important;
+      height: 6px !important;
+      width: 6px !important;
+      height: 6px !important;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .bg-dark {
+      background-image: url('/assets/admin/img/fundo_site_02.jpg') !important;
+    }
+
+    .badge {
+      font-size: 0.84em !important;
+    }
+
+    .badge-dark {
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidenav -->
+  <nav style="overflow-x: hidden !important;"
+    class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+    <div class="scrollbar-inner">
+      <!-- Brand -->
+      <div class="sidenav-header ">
+        <a class="navbar-brand" href="/admin/">
+          <img src="/assets/admin/logo.png" class="img-fluid" alt="Logo Templo Sagrado">
+        </a>
+      </div>
+      <div class="navbar-inner">
+        <div class="row mt-4">
+          <div class="col">
+            <h5 class="card-title text-uppercase text-muted mb-0">Minutos VoIP</h5>
+            <span class="h2 font-weight-bold mb-0"><span id="totalVoip">...</span></span>
+          </div>
+          <div class="col-auto">
+            <div class="icon icon-shape bg-gradient-purple text-white rounded-circle shadow">
+              <i class="fas fa-phone"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <hr class="my-3">
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+          <!-- Nav items -->
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/">
+                <i class="fas fa-home"></i>
+                <span class="nav-link-text">Home</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/clients">
+                <i class="fas fa-grin-stars"></i>
+                <span class="nav-link-text">Clientes</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/clerk">
+                <i class="fas fa-user-friends"></i>
+                <span class="nav-link-text">Atendentes</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/product">
+                <i class="fas fa-stopwatch"></i>
+                <span class="nav-link-text">Planos de Minutos</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/intends">
+                <i class="fas fa-cash-register"></i>
+                <span class="nav-link-text">Registros do Módulo de Atendimento</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/attendance-chat">
+                <i class="fas fa-comment-alt"></i>
+                <span class="nav-link-text">Atendimentos (Chat)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/attendance-mail">
+                <i class="fas fa-mail-bulk"></i>
+                <span class="nav-link-text">Atendimentos (E-mail)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/attendance-voice">
+                <i class="fas fa-phone-square-alt"></i>
+                <span class="nav-link-text">Atendimentos (Telefone)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/sales/">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="nav-link-text">Vendas</span> <br>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/testimonials/">
+                <i class="fas fa-comment-alt"></i>
+                <span class="nav-link-text">Depoimentos</span> <br>
+              </a>
+            </li>
+          </ul>
+          <!-- Divider -->
+          <hr class="my-3">
+          <!-- Heading -->
+          <h6 class="navbar-heading p-0 text-muted">
+            <span class="docs-normal">Configurações </span>
+          </h6>
+          <!-- Navigation -->
+          <ul class="navbar-nav mb-md-3">
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/pages/" target="_blank">
+                <i class="far fa-file-alt"></i>
+                <span class="nav-link-text">Alterar texto das páginas</span><br>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/blog/">
+                <i class="fas fa-rocket"></i>
+                <span class="nav-link-text">Blog e posts</span><br>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/attendance-tags/" target="_blank">
+                <i class="fas fa-tags"></i>
+                <span class="nav-link-text">Tags para atendentes </span><br>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/config" target="_blank">
+                <i class="fas fa-cogs"></i>
+                <span class="nav-link-text">Configurações</span><br>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/banners">
+                <i class="far fa-images"></i>
+                <span class="nav-link-text">Banners</span><br>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <!-- Main content -->
+  <div class="main-content" id="panel">
+    <!-- Topnav -->
+    <div class="bg-dark">
+      <nav class="navbar navbar-top navbar-expand navbar-dark ">
+        <div class="container-fluid">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Search form -->
+            <!-- Navbar links -->
+            <ul class="navbar-nav align-items-center  ml-md-auto ">
+              <li class="nav-item d-xl-none">
+                <!-- Sidenav toggler -->
+                <div class="pr-3 sidenav-toggler sidenav-toggler-dark" data-action="sidenav-pin"
+                  data-target="#sidenav-main">
+                  <div class="sidenav-toggler-inner">
+                    <i class="sidenav-toggler-line"></i>
+                    <i class="sidenav-toggler-line"></i>
+                    <i class="sidenav-toggler-line"></i>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item d-sm-none">
+                <a class="nav-link" href="#" data-action="search-show" data-target="#navbar-search-main">
+                  <i class="ni ni-zoom-split-in"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>

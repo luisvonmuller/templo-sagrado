@@ -1,0 +1,29 @@
+{{> home/header }}
+
+<main id="new-user" class="container mt-4 position-relative home-border">
+    <img src="/assets/home/img/arabesco.png" class="home-top-left-arabesque" alt="Arabesco" title="Arabesco">
+    <img src="/assets/home/img/arabesco.png" class="home-top-right-arabesque" alt="Arabesco" title="Arabesco">
+    <div class="row">
+        <div class="col-lg-12 py-4 px-3">
+            <h1 class="text-center">
+                Trabalhe conosco:
+            </h1>
+            <hr>
+            <p id="pageContent">
+
+            </p>
+        </div>
+    </div>
+    <img src="/assets/home/img/arabesco.png" class="home-bottom-left-arabesque" alt="Arabesco" title="Arabesco">
+    <img src="/assets/home/img/arabesco.png" class="home-bottom-right-left-arabesque" alt="Arabesco" title="Arabesco">
+</main>
+
+{{> home/footer }}
+
+<script type="text/javascript">
+    $(document).ready(() => {
+        $.get("/page-content/Contact", (e) => {
+            $('#pageContent').html(JSON.parse(e)[0]);
+        });
+    });
+</script>

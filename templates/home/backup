@@ -1,0 +1,42 @@
+
+        /* Balance */
+        var initial_balance = await $.get("/my-balance", (e) => (parseFloat(e).toFixed(2).replace('.', ',')));
+        $("#my-balance").html((parseFloat(initial_balance).toFixed(2).replace('.', ',')));
+
+
+        function progressBar(actual_balance) {
+            /* This rule of three gets the progress bar width */
+            var proportion = ((actual_balance * 100) / initial_balance);
+            /* Updates the bar */
+            $("#progressive-timer").attr('style', 'width:' + parseFloat(proportion).toFixed(1) + "%");
+        }
+
+        /* Here we count stuff */
+        async function minutes() {
+            await new Promise(r => setTimeout(r, 1000));
+            $.get("/register-new-voice-chat-transaction/" + call_id + "/" + clerk_id + "/", async function (e) {
+                $.get("/client-sign-voice-chat-transaction/" + e[0] + '/', async function (transaction_stat) {
+                    if (transaction_stat) {
+                        socket.send(JSON.stringify({
+                            id: call_id,
+                            from: my_mail,
+                            to: target_mail,
+                            type: "new-transaction",
+                            transaction_id: e[0]
+                        }));
+
+                        /* Actual values */
+                        var myBalance = await $.get("/my-balance", (e) => (parseFloat(e).toFixed(2).replace('.', ',')));
+                        $("#my-balance").html((parseFloat(myBalance).toFixed(2).replace('.', ',')));
+
+                        /* Update and redraw */
+                        progressBar(myBalance);
+                        /* Self call (recursividade) */
+                        minutes();
+                    } else {
+                        Swal.fire("Aviso!", "Seus minutos acabaram, você será redirecionado para a home.", "info");
+                    }
+                });
+            });
+
+        }

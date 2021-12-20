@@ -1,0 +1,238 @@
+{{> pages/header}}
+<div class="header pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-6">
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="/">Administrativo</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Atendimentos por E-mail na plataforma
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-6 clear-fix">
+                    <form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+                        <div class="form-group mb-0">
+                            <div class="input-group input-group-alternative input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="Procurar ... " type="text">
+                            </div>
+                        </div>
+                        <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+                            aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Page content -->
+<main class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-lg-12 py-1 px-2">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Olha só, seus atendimentos por e-mail estão aqui! 📮 💌</h2>
+                    <p class="text-sm mb-0">
+                        ⚠️ Por enquanto o módulo de atendimento por e-mail ainda não registra, difere e nem aceita pagamentos com bônus, na próxima versão do sistema, haverá suporte. ⚠️
+                    </p>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="mailsTable" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Atendente</th>
+                                    <th scope="col">Cliente</th>
+                                    <th scope="col">Data de Req.</th>
+                                    <th scope="col">Data de Resposta</th>
+                                    <th scope="col">Opções</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{{> pages/footer }}
+
+<script>
+    $(document).ready(() => {
+
+
+        const timestamp = (unix_timestamp) => {
+            var date = new Date(unix_timestamp);
+            var hours = date.getHours();
+            var minutes = "0" + date.getMinutes();
+            var seconds = "0" + date.getSeconds();
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+
+            var formattedTime = day + '/' + month + '/' + year + ' - ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+            return formattedTime;
+        }
+
+        const parseData = (unix_timestamp) => {
+            var date = new Date(unix_timestamp);
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+            return day + '/' + month + '/' + year
+        }
+
+        var mailsTable = $('#mailsTable').DataTable({
+            "ordering": false,
+            "info": false,
+            "language":
+            {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": ">",
+                    "sPrevious": "<",
+                    "sFirst": "<<",
+                    "sLast": ">>"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                },
+                "select": {
+                    "rows": {
+                        "_": "Selecionado %d linhas",
+                        "0": "Nenhuma linha selecionada",
+                        "1": "Selecionado 1 linha"
+                    }
+                },
+                "buttons": {
+                    "copy": "Copiar para a área de transferência",
+                    "copyTitle": "Cópia bem sucedida",
+                    "copySuccess": {
+                        "1": "Uma linha copiada com sucesso",
+                        "_": "%d linhas copiadas com sucesso"
+                    }
+                }
+            }
+
+        });
+
+        const mailOptions = (mail_id) => {
+            return '<button class="btn btn-default btn-sm see-mail" data-mail-id="' + mail_id + '"> <i class="fas fa-eye" data-mail-id="' + mail_id + '"> </i> Ver conteúdo </button>';
+        };
+
+        $.get('/admin/attendance-mail/list/', (e) => {
+            var data = JSON.parse(e);
+            [].map.call((data), async (mail) => {
+                mailsTable.row.add([JSON.parse(await $.get('/admin/query-for-user-name/' + mail['clerk_id'] + '/', (e) => {
+                    return e;
+                }))[0],
+                JSON.parse(await $.get('/admin/query-for-user-name/' + mail['user_id'] + '/', (e) => {
+                    return e;
+                }))[0],
+                parseData(mail['call_email_request_date']),
+                (mail['call_email_response_date']) ? parseData(mail['call_email_response_date']) : '<div class="badge badge-danger">Não respondido</div>',
+                mailOptions(mail['call_email_id'])
+                ]).draw(true);
+            });
+        });
+
+        $(document).on('click', '.see-mail', (e) => {
+            $.get('/admin/attendance-mail/single/' + $(e.target).data('mail-id'), async (mail) => {
+                var mail = JSON.parse(mail);
+                $("#mailClerkName").html(JSON.parse(await $.get('/admin/query-for-user-name/' + mail['clerk_id'] + '/', (e) => {
+                    return e;
+                }))[0] ?? "Error retriving a name");
+
+                $("#mailUserName").html(JSON.parse(await $.get('/admin/query-for-user-name/' + mail['user_id'] + '/', (e) => {
+                    return e;
+                }))[0]);
+                console.log(mail);
+                $("#mailSubject").html(mail['call_email_request_title']);
+                $("#mailReqContent").html(mail['call_email_request_body']);
+                $("#mailReqDate").html(parseData(mail['call_email_request_date']));
+                $("#mailResDate").html((mail['call_email_response_date']) ? parseData(mail['call_email_response_date']) : '<div class="badge badge-danger">Não respondido</div>');
+                $("#mailClerkSubject").html(mail['call_email_response_title']);
+                $("#mailResContent").html(mail['call_email_response_body']);
+                $('#whole-mail-modal').modal('show');
+            });
+        });
+    });
+</script>
+
+<!-- Whole CHAT Modal -->
+<div class="modal fade" id="whole-mail-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLongTitle">Visualizando Atendimento por e-mail</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <strong>Nome do cliente</strong>
+                        <span id="mailUserName"></span>
+                        <hr>
+                        <strong>Assunto:</strong>
+                        <br>
+                        <span id="mailSubject"></span>
+                        <hr>
+                        <strong>Conteúdo:</strong><br>
+                        <span id="mailReqContent"></span>
+                        <hr>
+                        <strong>Data:</strong><br>
+                        <span id="mailReqDate"></span>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <strong>Nome do Atendente</strong>
+                        <span id="mailClerkName"></span>
+                        <hr>
+                        <strong>Título da resposta:</strong>
+                        <br>
+                        <span id="mailClerkSubject"></span>
+                        <hr>
+                        <strong>Conteúdo:</strong><br>
+                        <span id="mailResContent"></span>
+                        <hr>
+                        <strong>Data:</strong><br>
+                        <span id="mailResDate"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i
+                        class="fas fa-wisndow-close"></i>
+                    Fechar Visualização de atendimento por E-mail</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [END] Whole CHAT Modal -->

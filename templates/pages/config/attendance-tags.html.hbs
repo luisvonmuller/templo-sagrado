@@ -1,0 +1,149 @@
+{{> pages/header}}
+
+<style>
+    .tag-item-delete {
+        cursor: pointer;
+    }
+</style>
+<div class="header pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-6">
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="/">Administrativo</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Registros do módulo de atendimento
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-6 clear-fix">
+                    <form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+                        <div class="form-group mb-0">
+                            <div class="input-group input-group-alternative input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="Procurar ... " type="text">
+                            </div>
+                        </div>
+                        <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+                            aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Page content -->
+<main class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-lg-12 py-1 px-2">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">As suas Tags 🏷️
+                        <button id="new-tag" class="btn btn-primary btn-lg float-right"> <i
+                                class="fas fa-plus-circle mr-2"></i> Adicionar nova Tag</button>
+                    </h2>
+                    <p class="text-sm mb-0">
+                        Por aqui você todas as tags pré configuradas preparadas para seus atendentes! 😄
+                    </p>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="tags-listing" class="my-3 text-center">
+
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="alert alert-dark alert-dismissible fade show" role="alert">
+                                    <strong><i class="fas fa-exclamation-circle"></i> Atenção!</strong>  Se você deletar uma tag já associada a algum atendente, essa associação também será removida.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{{> pages/footer }}
+
+<script type="text/javascript">
+    $(document).ready(() => {
+        $(document).on("click", "#new-tag", async (e) => {
+            /* Destructive assignment, here maybe a lot of browsers will bug */
+            const { value: tag_name } = await Swal.fire({
+                title: 'Dê o nome a sua nova tag',
+                html:
+                    '<input id="swal-input1" class="swal2-input">',
+                focusConfirm: false,
+                preConfirm: () => {
+                    return document.getElementById('swal-input1').value;
+                }
+            });
+    
+            if (tag_name && tag_name != "") {
+                /* If there was an input, register it, but first gonna also sluggyfy it */
+                var slugged = tag_name.replace('.', '').split(' ').join('-').toLowerCase();
+
+                /* Builds up the form */
+                var form_data = new FormData();
+                form_data.append("tag_name", tag_name);
+                form_data.append("tag_slug", slugged);
+
+                $.ajax({
+                    url: '/admin/attendance-tags/new-tag',
+                    type: 'POST',
+                    data: form_data,
+                    contentType: false,
+                    processData: false,
+                    success: async (event) => {
+                        Swal.fire(
+                            'Tag Inserida!',
+                            'A tag foi inserida com sucesso e estamos recarregando a exibição de todas as tags disponíveis!',
+                            'success'
+                        );
+                        getTags();
+                    }
+                });
+            }
+        });
+
+
+        $(document).on("click", ".delete-tag", (e) => {
+            var tag_id = $(e.target).data("tag-id");
+            $(e.target).parents("span").hide("fast");
+            $.get("/admin/attendance-tags/delete-tag/" + tag_id, (e) => {
+                Swal.fire("Deletado", "A tag foi removida, tal como as suas associações a atendentes", "success");
+            });
+        });
+
+        function getTags() {
+            $("#tags-listing").html("Carregando...");
+            $.get("/admin/attendance-tags/list", (data) => {
+                $("#tags-listing").html("");
+                data.forEach((tag) => {
+                    let htmlContent = `<span class="badge badge-secondary mx-2 my-2">
+                        <button data-tag-id="${tag.attendance_tag_id}" type="button" class="close delete-tag" aria-label="Close">
+					        <span data-tag-id="${tag.attendance_tag_id}" aria-hidden="true">&times;</span>
+                        </button>${tag.attendance_tag_name}</span>`;
+                    $("#tags-listing").append(htmlContent);
+                });
+            });
+        }
+
+        getTags();
+
+
+    });
+</script>

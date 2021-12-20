@@ -1,0 +1,23 @@
+user_name: Luís Carlos Von Müller Júnior
+user_phone_number: (49) 9 9920-9227
+user_genre: undefined
+user_birthdate: 23/11/1997
+clerk_info_cpf: 075.547.329-94
+clerk_info_comission_rate: 10
+user_zip_code: 89990-000
+user_city: São Lourenço do Oeste
+user_state: SC
+user_street: 555555555
+user_addr_num: 555
+user_email: luis@vonmuller.com
+user_password: teste123
+clerk_info_experience: 20
+clerk_info_phrase: Tudo é tudo
+clerk_info_oracles: Nada é nada
+clerk_info_experience: 20
+clerk_bank_name: Banco do Brasil
+clerk_bank_account_type: undefined
+clerk_bank_agency_number: 07986
+clerk_bank_acc_number: 309141
+clerk_bank_cpf: 07554732994
+clerk_image: (binary)

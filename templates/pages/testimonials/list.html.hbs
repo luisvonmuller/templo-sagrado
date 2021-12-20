@@ -1,0 +1,184 @@
+{{> pages/header}}
+<style type="text/css">
+    .star-rating {
+        color: gold;
+        font-size: 20px;
+    }
+
+    .change-status {
+        cursor: pointer;
+    }
+</style>
+<!-- Header -->
+<div class="header pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-6">
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="/">Administrativo</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Atendimentos por chat na plataforma
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-6 clear-fix">
+                    <form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+                        <div class="form-group mb-0">
+                            <div class="input-group input-group-alternative input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="Procurar ... " type="text">
+                            </div>
+                        </div>
+                        <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+                            aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Page content -->
+<main class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <h2 class="card-header"><strong>Listando Depoimentos da plataforma:</strong></h2>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="testiomonialsTable" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Atendente</th>
+                                    <th scope="col">Cliente</th>
+                                    <th scope="col">Classificação</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Data de submissão</th>
+                                    <th scope="col">Opções</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{{> pages/footer }}
+
+<script>
+    $(document).ready(() => {
+        const parseDate = (unix_timestamp) => {
+            var date = new Date(unix_timestamp);
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+            return day + '/' + month + '/' + year
+        }
+
+        var testiomonialsTable = $('#testiomonialsTable').DataTable({
+            "ordering": false,
+            "info": false,
+            "language":
+            {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": ">",
+                    "sPrevious": "<",
+                    "sFirst": "<<",
+                    "sLast": ">>"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                },
+                "select": {
+                    "rows": {
+                        "_": "Selecionado %d linhas",
+                        "0": "Nenhuma linha selecionada",
+                        "1": "Selecionado 1 linha"
+                    }
+                },
+                "buttons": {
+                    "copy": "Copiar para a área de transferência",
+                    "copyTitle": "Cópia bem sucedida",
+                    "copySuccess": {
+                        "1": "Uma linha copiada com sucesso",
+                        "_": "%d linhas copiadas com sucesso"
+                    }
+                }
+            }
+
+        });
+
+        const rate = (amount) => {
+            return ('<span class="star-rating"> ★ </span>'.repeat(amount));
+        };
+
+        const status = (stat, t_id) => {
+            if (stat) {
+                return '<div data-t-id="' + t_id + '" data-status="' + stat + '" class="badge change-status badge-success">Aprovado</div>';
+            } else {
+                return '<div  data-t-id="' + t_id + '" data-status="' + stat + '" class="badge change-status badge-warning">Não Aprovado</div>';
+            }
+        }
+
+        $(document).on('click', '.change-status', (e) => {
+            $.get('/admin/testimonials/change-status/' + $(e.target).data('t-id') + '/' + $(e.target).data('status'), () => {
+                $(e.target).parent().html(status(!($(e.target).data('status')), $(e.target).data('t-id')));
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Status alterado com sucesso.'
+                })
+            });
+        });
+
+        const butao = (t_id, content) => {
+            return '<button type="button" data-content="' + content + '" class="btn see-test btn-sm btn-info" data-t-id="' + t_id + '">Ver depoimento</button>';
+        }
+
+        $(document).on('click', '.see-test', (e) => {
+            Swal.fire('Depoimento', $(e.target).data('content'), 'info');
+        });
+
+        $.get('/admin/testimonials/list/', (e) => {
+            var data = JSON.parse(e);
+            [].map.call(data, async (test) => {
+                testiomonialsTable.row.add([
+                    JSON.parse(await $.get('/admin/query-for-user-name/' + test['testimonials_clerk_id'] + '/', (e) => {
+                        return e;
+                    }))[0] ?? "Não localizado (Usuário Excluído).",
+                    JSON.parse(await $.get('/admin/query-for-user-name/' + test['testimonials_client_id'] + '/', (e) => {
+                        return e;
+                    }))[0] ?? "Não localizado (Usuário Excluído).",
+                    rate(test['testimonials_value']),
+                    status(test['testimonials_status'], test['testimonials_id']),
+                    parseDate(test['testimonials_date']),
+                    butao(test['testimonials_id'], test['testimonials_content']),
+                ]).draw(true);
+            });
+        });
+
+    });
+</script>

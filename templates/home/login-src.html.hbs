@@ -1,0 +1,81 @@
+{{> home/header }}
+<!-- Estilos da estruturas -->
+<style type="text/css">
+    #login-container {
+        background-color: #ffffff;
+    }
+</style>
+
+<!-- Estrutura -->
+<main>
+    <section id="login-user" class="container mt-4">
+        <div class="row">
+            <div class="col-lg-12 py-3">
+                <div class="row d-flex justify-content-center">
+                    <div id="login-container" class="col-lg-5 px-5 py-5">
+                        <form action="/auth" method="POST">
+
+                            <img src="/assets/admin/logo.png" class="img-fluid" alt="Logo Templo Sagrado"
+                                style="width: 90%; margin-left: 5%; margin-top: -10%; margin-bottom: 10%;">
+                            <div class="form-group">
+                                <label for="user_email"> Seu e-mail cadastrado: </label>
+                                <input class="form-control" type="email" placeholder="Digite aqui seu e-mail cadastrado"
+                                    name="email" id="user_email">
+                            </div>
+                            <div class="form-group">
+                                <label for="user_password"> Sua senha: </label>
+                                <input type="password" class="form-control" placeholder="Digite aqui sua senha"
+                                    name="password" id="user_password">
+                            </div>
+                            <button type="submit" class="btn btn-large btn-block btn-primary">Entrar</button>
+                            <br>
+                            {{#if flash }}
+                            <div class="alert alert-danger text-center mt-2">
+                                <p>{{flash}}</p>
+                            </div>
+                            {{/if}}
+                        </form>
+
+                        <button class="btn-block btn-primary btn btn-sm" id="forgotPass">Esqueci minha
+                            senha!</button>
+                        <div class="container-login100-form-btn mt-2 pt-2 text-center">
+                            <div class="wrap-login100-form-btn">
+                                <div scope="public_profile,email" onlogin="checkLoginState();" class="fb-login-button"
+                                    data-size="large" data-button-type="continue_with" data-layout="default"
+                                    data-auto-logout-link="false" data-use-continue-as="true" data-widta-width=""></div>
+                            </div>
+                        </div>
+
+
+                        <div class="text-center">
+                            <small>Powered By Easy Tarot - Easy Web Usa.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+</main>
+{{> home/footer }}
+
+<script>
+    $(() => {
+        $(document).on('click', '#forgotPass', async (e) => {
+            Swal.fire({
+                title: 'Nos diga o seu e-mail',
+                input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Gerar nova senha',
+                showLoaderOnConfirm: true,
+                preConfirm: async (mail) => {
+                    await $.get('/user/new-pass-by-mail/' + mail, () => {
+                        Swal.fire('Nova senha enviada com sucesso,', "Sugerimos que verifique o SPAM e que a mude assim que possível.", 'success');
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        });
+    });
+</script>

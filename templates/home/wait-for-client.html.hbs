@@ -1,0 +1,379 @@
+{{> home/header }}
+<!-- Estilos da estruturas -->
+<style type="text/css">
+    #login-container {
+        background-color: #ffffff;
+    }
+
+    @-webkit-keyframes rotating
+
+    /* Safari and Chrome */
+        {
+        from {
+            -webkit-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+
+        to {
+            -webkit-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes rotating {
+        from {
+            -ms-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+
+        to {
+            -ms-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+
+    .rotating {
+        -webkit-animation: rotating 2s linear infinite;
+        -moz-animation: rotating 2s linear infinite;
+        -ms-animation: rotating 2s linear infinite;
+        -o-animation: rotating 2s linear infinite;
+        animation: rotating 2s linear infinite;
+    }
+</style>
+
+<!-- Estrutura -->
+<main>
+    <!-- Retrieves from the back-end our id -->
+    <input hidden id="clerk-id" value="{{self_data.2}}">
+    <section id="login-user" class="container mt-4">
+        <div class="row">
+            <div class="col-lg-12 py-3">
+                <div class="alert alert-info text-center py-5">
+                    <h3><i class="rotating fas fa-hourglass my-auto mr-3"></i> Esperando atendimento </h3>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-lg-12">
+                <button id="im-back" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-sign-out-alt"></i>
+                    Estou de volta! (ficar disponível) </button>
+                <button id="leave" class="btn btn-lg btn-block btn-danger"><i class="fas fa-sign-out-alt"></i> Sair da
+                    página de atendimento </button>
+            </div>
+        </div>
+        <div id="mail-holder" class="row">
+            {{#each self_data.1}}
+            <div class="col-lg-12">
+                <div class="alert alert-info">
+                    <h4><strong>Atendimento via e-mail requisitado por: <i class="float-right">{{this.1}}</i>
+                        </strong> </span> </h4>
+                    <hr>
+                    <button class="answer-mail btn btn-block btn-info" data-mail-id="{{this.0}}"><i
+                            class="fas fa-eye"></i> Ver & Responder E-mail</button>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        <div id="attend-holder" class="row">
+        </div>
+
+    </section>
+</main>
+{{> home/footer }}
+
+<script src="https://cdn.tiny.cloud/1/z7v8t8d49cnfq4y1eodidfna4kflxqxlwyjou6051bxwkyas/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin" />
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.get('/whats-my-id', async function (e) {
+            /* Meta info (our id) */
+            var clerk_id = parseInt(e);
+
+            /* Audio imports for notifications */
+            const call_audio = new Audio('/assets/audio/call.mp3');
+            const text_audio = new Audio('/assets/audio/sirene.mp3');
+
+            /* Common date functions */
+            function getDateTime() {
+                const today = new Date();
+                const date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+                const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                const payload = date + ' ' + time;
+                return payload;
+            }
+
+            function parseData(unix_timestamp) {
+                var date = new Date(unix_timestamp);
+                let year = date.getFullYear();
+                let month = (1 + date.getMonth()).toString().padStart(2, '0');
+                let day = date.getDate().toString().padStart(2, '0');
+                return day + '/' + month + '/' + year
+            }
+
+            /* Web Socket for attendance */
+			const socket = new WebSocket("wss://attend." + window.location.host + "/ws");
+
+            $(document).on('click', '.answer-mail', async function (e) {
+                /* Asynchronously get mails data */
+                await $.get('/get-mail-data/' + $(e.target).data('mail-id'), function (mailData) {
+                    var data = JSON.parse(mailData)[0];
+                    $('#mailUserName').html(data[0]);
+                    $('#mailSubject').html(data[1]['call_email_request_title']);
+                    $('#mailReqContent').html(data[1]['call_email_request_body']);
+                    $('#mailReqDate').html(parseData(data[1]['call_email_request_date']));
+                    $('#mailReqDest').val(data[1]['call_email_request_to_email']);
+                    $('#mailId').val($(e.target).data('mail-id'));
+                });
+                /* Removes the e-mail from the unanswered list */
+                $(e.target).parents('.col-lg-12').addClass('animate__animated animate__fadeOut').remove();
+                /* Shows mail modal */
+                $('#answerMailModal').modal('show');
+            });
+
+            $(document).on('submit', '#answerMail', function (e) {
+                e.preventDefault();
+                /* Shows a user friendly msg */
+                Swal.fire({
+                    title: 'Estamos enviando o e-mail... Aguarde!',
+                    showCloseButton: false,
+                    showCancelButton: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    },
+                });
+
+                /* Posts the answer data */
+                $.post('/answer-mail', $(e.target).serialize(), function (cb) {
+                    Swal.fire('Enviado', 'O e-mail foi enviado com sucesso e o valor foi creditado para você', 'success');
+                });
+
+                /* Clean the form */
+                $('#mailUserName').html('');
+                $('#mailSubject').html('');
+                $('#mailReqContent').html('');
+                $('#mailReqDate').html('');
+                $('#mailReqDest').val('');
+                $('#mailId').val(0);
+
+                /* Hide the answer modal */
+                $('#answerMailModal').modal('hide');
+            });
+
+            /* Status messages functions definitions */
+            function im_in() {
+                return JSON.stringify({
+                    action: "im-in",
+                    clerk_id: clerk_id,
+                    client_id: null,
+                    data: null,
+                    from: "Clerk",
+                });
+            }
+
+            function im_out() {
+                return JSON.stringify({
+                    action: "im-out",
+                    clerk_id: clerk_id,
+                    client_id: null,
+                    data: null,
+                    from: "Clerk",
+                });
+            }
+
+            function im_busy() {
+                return JSON.stringify({
+                    action: "im-busy",
+                    clerk_id: clerk_id,
+                    client_id: null,
+                    data: null,
+                    from: "Clerk",
+                });
+            }
+
+            /**
+            **THIS IS NOT AN ASYNCRHONOUS FUNCTION **
+            @definition attendance_actions() 
+                Stand for all our actions over the attendance websocket, this will send and process stuff for us. 
+            **THIS IS NOT AN ASYNCRHONOUS FUNCTION **
+             * @param {string (String)} action          Our Enum of answer posibilities (acc-voice-chat, acc-text-chat, refuse-voice-chat, refuse-text-chat).
+             * @param {Optional: int (i32)}       client_id       The target client that will answer and behave for the desired enum action (fallbacks to zero if no value provided )
+     
+             @returns JS objcet (that will be send to the attendance web socket.)
+            **/
+
+            function attendance_actions(action, client_id, id = null) {
+                return JSON.stringify({
+                    action: action,
+                    clerk_id: clerk_id,
+                    client_id: parseInt(client_id),
+                    data: parseInt(id),
+                    from: "Clerk",
+                })
+            }
+
+            /* Signal as available */
+            socket.onopen = function (event) {
+                $('#im-back').hide();
+                socket.send(im_in());
+            }
+
+
+            /* When clerk comes back from a chat */
+            $('#im-back').on('click', function (e) {
+                socket.send(im_in());
+                $('#im-back').hide();
+            });
+
+
+
+            /* When the clerk finish his schedule */
+            $('#leave').on('click', function (e) {
+                socket.send(im_out());
+                window.location = "/my-acc";
+            });
+
+            /**
+             @definition getUserName() 
+                Will return the desired user name that we are querying for.
+            ---------------------------------------------- ---------------------------------------------- ----------------------------------------------
+              * @param {int (i32)}       client_id       The target client that will seek for 
+     
+              @returns {string (String)} - String with client's name, UTF-8 encoded.
+             **/
+
+            async function getUserName(user_id) {
+                return await $.get('/whoClient/' + user_id, function (e) {
+                    return e[0] /* Contains and Vec<String> that when calld on position zero will contain the user_name wanted */
+                });
+            };
+
+            /* Answer and start a cool voice chat */
+            $(document).on('click', '.acc-voice-chat', function (e) {
+                socket.send(im_busy());
+                var client_id = $(e.target).data('client-id');
+
+                $.get("/register-voice-chat/" + client_id, function (e) {
+                    socket.send(attendance_actions('voice-chat-acc', client_id, e));
+                    window.location = '/voip/' + e;
+                });
+            });
+
+            $(document).on('click', '.acc-text-chat', function (e) {
+                socket.send(im_busy());
+                var client_id = $(e.target).data('client-id');
+
+                $.get("/register-chat/" + client_id, function (e) {
+                    socket.send(attendance_actions('text-chat-acc', client_id, e));
+                    window.location = '/chat/' + e;
+                });
+            });
+
+            $(document).on('click', '.refuse-text-chat', function (e) {
+                call_audio.pause();
+                call_audio.currentTime = 0;
+                $(e.target).parents('.col-lg-12').hide();
+                socket.send(attendance_actions('text-chat-ref', client_id));
+            });
+
+            $(document).on('click', '.refuse-voice-chat', function (e) {
+                call_audio.pause();
+                call_audio.currentTime = 0;
+                $(e.target).parents('.col-lg-12').hide();
+                socket.send(attendance_actions('voice-chat-ref', client_id));
+            });
+
+            socket.onmessage = async function (event) {
+                var income_data = JSON.parse(event.data);
+                if (income_data.clerk_id == clerk_id) {
+                    switch (income_data.action) {
+                        case "voice-chat-intend":
+                            call_audio.play();
+                            tmpHtml = '<div class="col-lg-12"> <div class="alert alert-primary"><div class="row"><div class="col-lg-4"> Nome do usuário: <br> <b>' + await getUserName(income_data.client_id) + '</b></div>';
+                            tmpHtml += '<div class="col-lg-4"> Informações: <br> <b> Atendimento VOIP </b>  </div>  <div class="col-lg-4">';
+                            tmpHtml += '<button type="button" data-client-id="' + income_data.client_id + '" class="acc-voice-chat btn btn-large btn-block btn-primary">Aceitar atendimento</button> <button type="button" data-client-id="' + income_data.client_id + '" class="refuse-voice-chat btn btn-large btn-block btn-danger mt-2">Recusar atendimento</button> </div> </div> </div></div>';
+                            $("#attend-holder").append(tmpHtml);
+                            break;
+
+                        case "text-chat-intend":
+                            text_audio.play();
+                            tmpHtml = '<div class="col-lg-12"> <div class="alert alert-primary"><div class="row"><div class="col-lg-4"> Nome do usuário: <br> <b>' + await getUserName(income_data.client_id) + '</b></div>';
+                            tmpHtml += '<div class="col-lg-4"> Informações: <br> <b> Atendimento Por Texto </b>  </div>  <div class="col-lg-4">';
+                            tmpHtml += '<button type="button" data-client-id="' + income_data.client_id + '" class="acc-text-chat btn btn-large btn-block btn-primary">Aceitar atendimento</button> <button type="button" data-client-id="' + income_data.client_id + '" class="refuse-text-chat btn btn-large btn-block btn-danger mt-2">Recusar atendimento</button> </div> </div> </div></div>';
+                            $("#attend-holder").append(tmpHtml);
+                            break;
+                    }
+                }
+            };
+        });
+    });
+
+    tinymce.init({
+        selector: '#mailContent'
+    });
+</script>
+
+
+<!-- Modal -->
+<form id="answerMail" method="POST">
+    <div class="modal fade" id="answerMailModal" tabindex="-1" role="dialog" aria-labelledby="answerMailModalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="answerMailModalTitle">Respondendo um E-mail:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <strong>Nome do cliente</strong>
+                                <span id="mailUserName"></span>
+                                <hr>
+                                <strong>Assunto:</strong>
+                                <br>
+                                <span id="mailSubject"></span>
+                                <hr>
+                                <strong>Conteúdo:</strong><br>
+                                <span id="mailReqContent"></span>
+                                <hr>
+                                <strong>Data:</strong><br>
+                                <span id="mailReqDate"></span>
+                            </div>
+                            <div class="col-lg-6">
+                                <input type="hidden" id="mailId" name="call_email_id">
+                                <input type="hidden" id="mailReqDest" name="call_email_request_to_email">
+                                <h4>Sua resposta:</h4>
+                                <hr>
+                                <label>Assunto:</label>
+                                <input name="call_email_response_title"
+                                    placeholder="Descreva em suma o conteúdo da resposta" type="text"
+                                    class="form-control">
+                                <hr>
+                                <label>Conteúdo da sua mensagem:</label>
+                                <textarea id="mailContent" placeholder="Sua mensagem"
+                                    name="call_email_response_body"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger mr-auto" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-success">Enviar e-mail</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

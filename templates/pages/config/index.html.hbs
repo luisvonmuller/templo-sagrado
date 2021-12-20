@@ -1,0 +1,197 @@
+{{> pages/header}}
+
+<!-- Header -->
+<div class="header pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-6">
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="/">Administrativo</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Configurações
+                            <li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-6 clear-fix">
+                    <form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+                        <div class="form-group mb-0">
+                            <div class="input-group input-group-alternative input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="Procurar ... " type="text">
+                            </div>
+                        </div>
+                        <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+                            aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Page content -->
+<main class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-lg-12">
+            <form method="POST" id="configs">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="siteName">Nome do site:</label>
+                                        <input required class="form-control form-control-alternative" id="siteName"
+                                            name="site_name">
+                                        <small>É o que aparece na aba/janela do navegador do usuário</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="siteSeoTags">Descrição do site (SEO):</label>
+                                                <input required class="form-control form-control-alternative"
+                                                    id="siteSeoDesc" name="site_seo_desc">
+                                                <small>Descrição que aparece ao procurar pelo site no google</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="siteSeoTags">Palavras chaves do site (SEO):</label>
+                                                <input required class="form-control form-control-alternative"
+                                                    id="siteSeoTags" name="site_seo_tags">
+                                                <small>Palavras chaves de termos de procura, separe por vírgula cada uma
+                                                    delas.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="siteSeoTags">Valor atendimento por e-mail:</label>
+                                                <input required class="form-control form-control-alternative"
+                                                    id="siteMailVal" name="site_mail_val">
+                                                <small>Valor fixo de atnedimentos por e-mail independente do consultor
+                                                    (mas a comissão é variável)</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="siteSeoTags">Minutos ganhos por cadastro:</label>
+                                                <input readonly required type="number"
+                                                    class="form-control form-control-alternative" id="siteNewUserBonus"
+                                                    name="site_new_user_bonus">
+                                                <small>O usuário ganha alguma quantidade de minutos por se
+                                                    cadastras?</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="siteMinValChat">Valor ABSOLUTO do minuto de CHAT POR
+                                                    TEXTO:</label>
+                                                <input required class="form-control form-control-alternative"
+                                                    id="siteMinValChat" name="absolute_min_value_chat">
+                                                <small>Valor sobre o qual a porcentagme do atendente será creditada em
+                                                    cima (lucro + comissão)</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="siteMinValVoice">Valor ABSOLUTO do minuto de CHAT POR
+                                                    VOZ:</label>
+                                                <input required class="form-control form-control-alternative"
+                                                    id="siteMinValVoice" name="absolute_min_value_voice">
+                                                <small>Valor sobre o qual a porcentagme do atendente será creditada em
+                                                    cima (lucro + comissão)</small>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 mb-5">
+                            <button type="submit" class="btn btn-dark btn-block">Salvar informações.</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+{{> pages/footer }}
+<script type="text/javascript">
+    $(document).ready(() => {
+        $.get("/admin/config/get-configs", (data) => {
+            $('input[name="site_mail_val"]').val(parseFloat(data[0]['site_mail_val']).toFixed(2).replace('.', ','));
+            $('input[name="site_name"]').val(data[0]['site_name']);
+            $('input[name="site_new_user_bonus"]').val(data[0]['site_new_user_bonus']);
+            $('input[name="site_seo_desc"]').val(data[0]['site_seo_desc']);
+            $('input[name="site_seo_tags"]').val(data[0]['site_seo_tags']);
+            $('input[name="absolute_min_value_voice"]').val(parseFloat(data[0]['absolute_min_value_voice']).toFixed(2).replace('.', ','));
+            $('input[name="absolute_min_value_chat"]').val(parseFloat(data[0]['absolute_min_value_chat']).toFixed(2).replace('.', ','));
+        });
+
+        $(document).on('submit', '#configs', (e) => {
+            e.preventDefault();
+            let postData = new FormData();
+            postData.append('site_mail_val', $('input[name="site_mail_val"]').val().replace(',', '.'));
+            postData.append('site_name', $('input[name="site_name"]').val());
+            postData.append('site_new_user_bonus', $('input[name="site_new_user_bonus"]').val());
+            postData.append('site_seo_desc', $('input[name="site_seo_desc"]').val());
+            postData.append('site_seo_tags', $('input[name="site_seo_tags"]').val());
+            postData.append('absolute_min_value_chat', $('input[name="absolute_min_value_chat"]').val().replace(',', '.'));
+            postData.append('absolute_min_value_voice', $('input[name="absolute_min_value_voice"]').val().replace(',', '.'));
+            $.ajax({
+                url: '/admin/config/update-configs',
+                type: 'POST',
+                data: postData,
+                contentType: false,
+                processData: false,
+                success: (event) => {
+                    Swal.fire(
+                        'Configurações atualizadas!',
+                        'Suas configurações foram atualizadas com sucesso!',
+                        'success'
+                    );
+                }
+            });
+        });
+    });
+</script>

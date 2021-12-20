@@ -1,0 +1,244 @@
+{{> pages/header}}
+<style type="text/css">
+    .editable,
+    .editable-image {
+        cursor: pointer !important;
+    }
+
+
+    .page-container {
+        margin-bottom: 30px;
+        border: 0;
+        box-shadow: 0 0 2rem 0 rgba(136, 152, 170, .15);
+    }
+</style>
+<!-- Header -->
+<div class="header pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-6">
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="/">Administrativo</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Páginas</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-6 clear-fix">
+                    <form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+                        <div class="form-group mb-0">
+                            <div class="input-group input-group-alternative input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="Procurar ... " type="text">
+                            </div>
+                        </div>
+                        <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+                            aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Page content -->
+<main class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <h2 class="card-header"><strong>Listando suas páginas na plataforma:</strong></h2>
+                <div class="card-body">
+                    <div id="pagesTabs" class="container-fluid">
+                        <!-- Pages tabs -->
+                        <div class="row">
+                            <div class="col">
+                                <button data-page-target="sobre-page" type="button" class="page-guide btn btn-info">
+                                    Sobre
+                                </button>
+                                <button data-page-target="faq-page" type="button" class="page-guide btn btn-default">
+                                    F.A.Q.
+                                </button>
+                                <button data-page-target="privacidade-page" type="button" class="page-guide btn btn-default">
+                                    Termos de Uso & Privacidade
+                                </button>
+                                <button data-page-target="contact-page" type="button" class="page-guide btn btn-default">
+                                    Trabalhe conosco
+                                </button>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid mt-4" id="pages-container">
+                        <div class="row">
+                            <div id="sobre-page" class="container page-container">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <form data-section="Sobre">
+                                            <textarea id="Sobre-text" name="content" class="tiny-text"
+                                                rows="10"></textarea>
+                                            <button type="submit" class="btn btn-block btn-info mt-2">Salver Texto da
+                                                seção
+                                                Sobre</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ FAQ  -->
+                            <div id="faq-page" class="container d-none page-container">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <form data-section="FAQ">
+                                            <textarea id="FAQ-text" name="content" class="tiny-text"
+                                                rows="10"></textarea>
+                                            <button type="submit" class="btn btn-block btn-info mt-2">Salver Texto da
+                                                seção de F.A.Q</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PRIVACIDADE -->
+                            <div id="privacidade-page" class="container d-none page-container">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <form data-section="Privacidade">
+                                            <textarea id="Privacidade-text" name="content" class="tiny-text"
+                                                rows="10"></textarea>
+                                            <button type="submit" class="btn btn-block btn-info mt-2">Salver Texto da
+                                                seção de Privacidade e termos de uso</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="contact-page" class="container d-none page-container">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <form data-section="Contact">
+                                            <textarea id="Contact-text" name="content" class="tiny-text"
+                                                rows="10"></textarea>
+                                            <button type="submit" class="btn btn-block btn-info mt-2">Salver Texto da
+                                                seção de Trabalhe conosco / mensagem</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</main>
+<form id="updateImgElement">
+    <!-- Modal -->
+    <div class="modal fade" id="fileUploadHandler" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Selecione a nova imagem:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="syslayout-item-id">
+                    <div class="custom-file">
+                        <input id="updateImgElementFileInput" name="update_img_element_file_input" type="file"
+                            class="custom-file-input">
+                        <label for="customFileLang">Selecione o novo conteúdo de
+                            imagem</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="float-left btn btn-warning" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-dark">Salvar nova imagem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+{{> pages/footer }}
+<script src="https://cdn.tiny.cloud/1/z7v8t8d49cnfq4y1eodidfna4kflxqxlwyjou6051bxwkyas/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin" />
+</script>
+
+<script type="text/javascript">
+    $(document).ready(() => {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'bottom-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+
+        $('.page-guide').on('click', (e) => {
+            [].map.call($('.page-container'), (elm) => {
+                $(elm).addClass('d-none');
+            });
+            $('#' + $(e.target).data('page-target')).removeClass('d-none');
+        });
+
+        const drawLayout = () => {
+            [].map.call($('.layout-item'), (e) => {
+                $.get('/admin/pages/retrive-element-content/' + $(e).data('syslayout-item-id'), (incomingData) => {
+                    if (JSON.parse(incomingData)[0].includes('/assets/')) {
+                        $(e).attr('src', JSON.parse(incomingData)[0])
+                    } else {
+                        $(e).text(JSON.parse(incomingData)[0]);
+                    }
+                });
+            });
+        };
+
+        drawLayout();
+
+        $(document).on('submit', 'form', (e) => {
+            e.preventDefault();
+            console.log($(e.target).data('section'));
+            let postData = new FormData();
+            postData.append('content', $('#' + $(e.target).data('section') + '-text').val());
+            postData.append('wich', $(e.target).data('section'));
+            $.ajax({
+                url: '/admin/config/update-page',
+                type: 'POST',
+                data: postData,
+                contentType: false,
+                processData: false,
+                success: (event) => {
+                    Swal.fire(
+                        'Configurações atualizadas!',
+                        'Suas configurações foram atualizadas com sucesso!',
+                        'success'
+                    );
+                }
+            });
+        });
+
+        tinymce.init({
+            selector: '.tiny-text',
+            height: "480"
+        });
+
+
+        [].map.call($('form'), (elm) => {
+            $.get("/page-content/" + $(elm).data('section'), (e) => {
+                tinymce.get($(elm).data('section') + '-text').execCommand('mceInsertContent', false, JSON.parse(e)[0]);
+
+            });
+        });
+
+    });
+</script>

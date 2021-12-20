@@ -1,0 +1,672 @@
+{{> pages/header}}
+<style type="text/css">
+	#whole-chat-container {
+		overflow-y: scroll !important;
+		height: 60vh !important;
+		background-image: url('/assets/admin/img/fundo_site_02.jpg') !important;
+		background-size: fixed;
+		padding-top: 2em;
+		padding-bottom: 2em;
+	}
+
+	.msg-in {
+		border-radius: 1em !important;
+		background-color: white;
+		-webkit-box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+		-moz-box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+		box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+	}
+
+	.msg-out {
+		background-color: #dcf8c6;
+		border-radius: 1em !important;
+		-webkit-box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+		-moz-box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+		box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+	}
+</style>
+
+<div class="header pb-6">
+	<div class="container-fluid">
+		<div class="header-body">
+			<div class="row align-items-center py-4">
+				<div class="col-lg-6 col-6">
+					<nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+						<ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+							<li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+							<li class="breadcrumb-item"><a href="/">Administrativo</a></li>
+							<li class="breadcrumb-item active" aria-current="page">Clientes</li>
+						</ol>
+					</nav>
+				</div>
+				<div class="col-lg-6 col-6 clear-fix">
+					<form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+						<div class="form-group mb-0">
+							<div class="input-group input-group-alternative input-group-merge">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-search"></i></span>
+								</div>
+								<input class="form-control" placeholder="Procurar ... " type="text">
+							</div>
+						</div>
+						<button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+							aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<!-- Page content -->
+<main class="container-fluid mt--6">
+	<div class="row">
+		<div class="col-lg-12 py-1 px-2">
+			<div class="card">
+				<div class="card-header">
+					<h2 class="mb-0">Seus Clientes 💁 💁‍♂️ 💁‍♀️ 🙋 🙋‍♂️</h2>
+					<p class="text-sm mb-0">
+						Aqui estão listados todos os clientes da plataforma... Ativos ou não, você pode gerenciar todos
+						por
+						aqui 😄
+					</p>
+				</div>
+				<div class="table-responsive py-4">
+					<table id="clientsTable" class="table">
+						<thead class="thead-light">
+							<tr>
+								<th scope="col">Nome</th>
+								<th scope="col">Saldo</th>
+								<th scope="col">Bônus</th>
+								<th scope="col">Data de criação</th>
+								<th scope="col">Última vez online</th>
+								<th scope="col">Status</th>
+								<th scope="col">Opções</th>
+							</tr>
+						</thead>
+						<tbody id="">
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+
+{{> pages/footer}}
+
+<script type="text/javascript">
+	$(document).ready(async () => {
+		String.prototype.capitalize = function () {
+			return this.charAt(0).toUpperCase() + this.slice(1)
+		}
+		const timestamp = (unix_timestamp) => {
+			var date = new Date(unix_timestamp);
+			var hours = date.getHours();
+			var minutes = "0" + date.getMinutes();
+			var seconds = "0" + date.getSeconds();
+			let year = date.getFullYear();
+			let month = (1 + date.getMonth()).toString().padStart(2, '0');
+			let day = date.getDate().toString().padStart(2, '0');
+
+			var formattedTime = day + '/' + month + '/' + year + ' - ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+			return formattedTime;
+		}
+
+		const parseData = (unix_timestamp) => {
+			var date = new Date(unix_timestamp);
+			let year = date.getFullYear();
+			let month = (1 + date.getMonth()).toString().padStart(2, '0');
+			let day = date.getDate().toString().padStart(2, '0');
+			return day + '/' + month + '/' + year
+		}
+		const statusBtn = (user_id, user_status) => {
+			if (user_status) {
+				return '<button data-user-status="' + user_status + '" data-user-id="' + user_id + '" class="change-user-status btn-sm btn btn-light">Cliente Ativo</button>';
+			} else {
+				return '<button data-user-status="' + user_status + '" data-user-id="' + user_id + '" class="change-user-status btn-sm btn btn-dark">Cliente Cancelado</button>';
+			}
+		};
+		const optionsBtn = (user_id) => {
+			/* Ativo ou não */
+			let tmp_html = '<button class="btn btn-sm btn-light client-show-profile" data-user-id="' + user_id + '"><i class="fas fa-id-card client-show-profile" data-user-id="' + user_id + '"></i> Ver perfil completo</button> ';
+
+			/* Histórico de atendimento */
+			tmp_html += '<button data-user-id=' + user_id + ' class="client-attend-history btn btn-sm btn-primary"><i class="fas fa-history" data-user-id="' + user_id + '"></i> Histórico </button> ';
+
+			/* Edit Bonus */
+			tmp_html += '<button data-user-id=' + user_id + ' class="client-edit-bonus btn btn-sm btn-secondary"><i class="fas fa-trophy client-edit-bonus" data-user-id=' + user_id + '></i> Alterar Bonus </button> ';
+
+			/* Edit Balance */
+			tmp_html += '<button data-user-id=' + user_id + ' class="client-edit-balance btn btn-sm btn-dark"><i class="fas fa-money-check-alt client-edit-balance" data-user-id=' + user_id + '></i> Alterar Saldo </button> ';
+
+			return tmp_html;
+		};
+
+		const chatsTable = $('#chatsTable').DataTable({
+			"language":
+			{
+				"sEmptyTable": "Nenhum registro encontrado",
+				"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+				"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+				"sInfoFiltered": "(Filtrados de _MAX_ registros)",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sLengthMenu": "_MENU_ resultados por página",
+				"sLoadingRecords": "Carregando...",
+				"sProcessing": "Processando...",
+				"sZeroRecords": "Nenhum registro encontrado",
+				"sSearch": "Pesquisar",
+				"oPaginate": {
+					"sNext": ">",
+					"sPrevious": "<",
+					"sFirst": "<<",
+					"sLast": ">>"
+				},
+				"oAria": {
+					"sSortAscending": ": Ordenar colunas de forma ascendente",
+					"sSortDescending": ": Ordenar colunas de forma descendente"
+				},
+				"select": {
+					"rows": {
+						"_": "Selecionado %d linhas",
+						"0": "Nenhuma linha selecionada",
+						"1": "Selecionado 1 linha"
+					}
+				},
+				"buttons": {
+					"copy": "Copiar para a área de transferência",
+					"copyTitle": "Cópia bem sucedida",
+					"copySuccess": {
+						"1": "Uma linha copiada com sucesso",
+						"_": "%d linhas copiadas com sucesso"
+					}
+				}
+			}
+		});
+
+
+
+		const clientsTable = $('#clientsTable').DataTable({
+			"serverSide": true,
+			"order": [[3, "desc"]],
+			"ajax": {
+				url: '/admin/clients/list',
+				type: 'POST',
+			},
+			"columns": [
+				{ "data": "user_name" },
+				{
+					"data": "user_balance", "render": (data, type, row) => {
+						return data != undefined ? data.toFixed(2).replace('.', ',') : "0,00"
+					}
+				},
+				{
+					"data": "user_bonus", "render": (data, type, row) => {
+						return data != undefined ? data.toFixed(2).replace('.', ',') : "0,00"
+					}
+				},
+				{
+					"data": "user_creation", "render": (data, type, row) => {
+						return parseData(data)
+					}
+				},
+				{
+					"data": "user_lasttimeonline", "render": (data, type, row) => {
+						return parseData(data)
+					}
+				},
+				{
+					"data": "user_status", "render": (data, type, row) => {
+						return statusBtn(row.user_id, data)
+					}
+				},
+				{
+					"data": "user_id", "render": (data, type, row) => {
+						return optionsBtn(row.user_id)
+					}
+				}
+			],
+			"ordering": true,
+			"info": true,
+			"processing": true,
+			"language":
+			{
+				"sEmptyTable": "Nenhum registro encontrado",
+				"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+				"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+				"sInfoFiltered": "(Filtrados de _MAX_ registros)",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sLengthMenu": "_MENU_ resultados por página",
+				"sLoadingRecords": "Carregando...",
+				"sProcessing": "Processando...",
+				"sZeroRecords": "Nenhum registro encontrado",
+				"sSearch": "Pesquisar",
+				"oPaginate": {
+					"sNext": ">",
+					"sPrevious": "<",
+					"sFirst": "<<",
+					"sLast": ">>"
+				},
+				"oAria": {
+					"sSortAscending": ": Ordenar colunas de forma ascendente",
+					"sSortDescending": ": Ordenar colunas de forma descendente"
+				},
+				"select": {
+					"rows": {
+						"_": "Selecionado %d linhas",
+						"0": "Nenhuma linha selecionada",
+						"1": "Selecionado 1 linha"
+					}
+				},
+				"buttons": {
+					"copy": "Copiar para a área de transferência",
+					"copyTitle": "Cópia bem sucedida",
+					"copySuccess": {
+						"1": "Uma linha copiada com sucesso",
+						"_": "%d linhas copiadas com sucesso"
+					}
+				}
+			}
+
+		});
+
+		/** @Get Site Configuration Values */
+		var configs;
+
+		/* Parsing and drawing the cost per minute of this site */
+		await $.get('/admin/config/get-configs', function (e) {
+			configs = e[0];
+		});
+
+		/* Change user status */
+		$(document).on('click', '.change-user-status', (e) => {
+			var [user_status, user_id] = [$(e.target).data('user-status'), $(e.target).data('user-id')];
+			$.get("/admin/clients/update-client-status/" + user_id + "/" + user_status + "/", (event) => {
+				$(e.target).parent().html(statusBtn(user_id, !user_status));
+			})
+		});
+
+		/* [START] Listners [START] */
+		$(document).on('click', '.client-edit-balance', async (e) => {
+			var user_id = $(e.target).data('user-id');
+			await $.get('/admin/clients/balance/' + user_id + '/', (balance_data) => {
+				/* Parses value into a hidden input to make know whats to do */
+				$('input[name="edit_user_min_user_id"]').val(user_id);
+
+				/* Register into a scope variable */
+				let balance = parseFloat(balance_data ?? 0);
+
+				$('#editUserBalance').val(balance.toFixed(2).replace(".", ","));
+
+				/* Meta info about the balance */
+				$('.clientChatMin').html(parseInt(balance / configs.absolute_min_value_chat));
+				$('.clientVoiceMin').html(parseInt(balance / configs.absolute_min_value_voice));
+				$('.clientMail').html(parseInt(balance / configs.site_mail_val));
+			});
+			$('#editMinutesModal').modal('show');
+		});
+
+		$(document).on('click', '.client-edit-bonus', async (e) => {
+			var user_id = $(e.target).data('user-id');
+			await $.get('/admin/clients/bonus/' + user_id + '/', (balance_data) => {
+				/* Parses value into a hidden input to make know whats to do */
+				$('input[name="edit_user_min_user_id"]').val(user_id);
+
+				/* Register into a scope variable */
+				let balance = parseFloat(balance_data ?? 0);
+
+				$('#editUserBonus').val(balance.toFixed(2).replace(".", ","));
+
+				/* Meta info about the balance */
+				$('.clientChatMin').html(parseInt(balance / configs.absolute_min_value_chat));
+				$('.clientVoiceMin').html(parseInt(balance / configs.absolute_min_value_voice));
+				$('.clientMail').html(parseInt(balance / configs.site_mail_val));
+			});
+			$('#editBonusModal').modal('show');
+		});
+
+		$(document).on('click', '.client-attend-history', (e) => {
+			chatsTable.clear().draw(true);
+			$("#attendanceHistory").modal('show');
+			$.get('/admin/attendance-chat/user-chats/' + $(e.target).data('user-id'), (data) => {
+				data = JSON.parse(data);
+
+				[].map.call((data), async (chat) => {
+					/* Will query for amount of registered transactions upon this chat */
+					total_minutes = await $.get('/admin/total-minutes-transacted/' + chat[0]['chat_id'], (data) => {
+						return data
+					});
+					/* Drawing chat row */
+					chatsTable.row.add([
+						chat[1]['user_name'],
+						'<span class="badge badge-primary">' + total_minutes[0]['count'] + ' Minutos gastos </span>',
+						'<button class="see-conversation btn btn-success btn-sm btn-block" data-client-id="' + chat[0]['client_id'] + '" data-clerk-id="' + chat[0]['clerk_id'] + '" data-chat-id="' + chat[0]['chat_id'] + '"> <i class="fas fa-eye see-conversation" data-client-id="' + chat[0]['client_id'] + '" data-clerk-id="' + chat[0]['clerk_id'] + '" data-chat-id="' + chat[0]['chat_id'] + '"></i> Ver conversa</button>'
+					]).draw(true);
+				});
+			});
+		});
+
+		$(document).on('click', '.see-conversation ', (e) => {
+			$('#whole-chat-modal').modal('show');
+			var selfId = $(e.target).data('client-id');
+			var chatId = $(e.target).data('chat-id');
+			$.get('/admin/attendance-chat/retrive_whole_chat/' + chatId, (chatData) => {
+				chatData = JSON.parse(chatData);
+				$("#whole-chat-container").html("");
+				[].map.call(chatData, (chatMsg) => {
+					if (chatMsg['chat_msg_user_id'] === selfId) {
+						let tmpHtml = '<div class="row clear-fix mx-2">';
+						tmpHtml += '<div class="msg-out col-lg-6 ml-auto alert"><p>' + chatMsg['chat_msg_body'] + '</p>';
+						tmpHtml += '<small class="float-right"> Enviado em:' + timestamp(Date.parse(chatMsg['chat_msg_time'])) + '</small> </div> </div>';
+						$('#whole-chat-container').append(tmpHtml);
+					} else {
+						let tmpHtml = '<div class="row clear-fix mx-2">';
+						tmpHtml += '<div class="msg-in col-lg-6 mr-auto alert"><p>' + chatMsg['chat_msg_body'] + ' </p>';
+						tmpHtml += '<small class="float-right"> Enviado em: ' + timestamp(Date.parse(chatMsg['chat_msg_time'])) + ' </small> </div> </div>';
+						$('#whole-chat-container').append(tmpHtml);
+					}
+				})
+			});
+		});
+
+		$(document).on('click', '#newPass', async (e) => {
+			e.preventDefault();
+			await $.get('/user/new-pass/' + $(e.target).data('user-id'), (password) => {
+				Swal.fire('Nova senha  enviada com sucesso,', "A nova senha é: <strong>" + password + "</strong> <br> sugerimos que verifique o SPAM e que o cliente a mude assim que possível.", 'success');
+			});
+		})
+
+		$(document).on('submit', '#updateUserMinutes', (e) => {
+			e.preventDefault();
+			$("#editUserBalance").val($("#editUserBalance").val().replace(",", "."));
+			$.post('/admin/clients/update-client-balance/', $(e.target).serialize()).done((stuff) => {
+				Swal.fire({
+					icon: 'success',
+					title: 'O Saldo Pago do Cliente foi atualizado com sucesso!',
+					showConfirmButton: false,
+					timer: 1500
+				});
+				$('#editMinutesModal').modal('hide');
+				clientsTable.ajax.reload();
+			});
+		});
+
+		$(document).on('submit', '#updateUserBonus', (e) => {
+			e.preventDefault();
+			$("#editUserBonus").val($("#editUserBonus").val().replace(",", "."));
+			$.post('/admin/clients/update-client-bonus/', $(e.target).serialize()).done((stuff) => {
+				Swal.fire({
+					icon: 'success',
+					title: 'O Saldo Bonus do cliente foi atualizado com sucesso!',
+					showConfirmButton: false,
+					timer: 1500
+				});
+				$('#editBonusModal').modal('hide');
+				clientsTable.ajax.reload();
+			});
+		});
+
+		$(document).on('click', '.client-show-profile', async (e) => {
+			await $.get('/admin/clients/single/' + $(e.target).data('user-id'), (data) => {
+				/* Reassign data, take out from the inmutable wrapped box (rust) */
+				data = data[0];
+				/* Start drawing */
+				$('#_user_name').text(data[0]['user_name'] ?? "Não informado");
+				$('#_user_genre').text(data[0]['user_genre'] ?? "Não informado");
+				$('#_user_alias').text(data[0]['user_alias'] ?? "Não informado");
+				$('#_user_creation_date').text(data[0]['user_creation'] ? data[0]['user_creation'].split('T')[0].split('-').reverse().join('/') : "Não informado");
+				$('#_user_email').text(data[0]['user_email'] ?? "Não informado");
+				$('#_user_birthdate').text(data[0]['user_birthdate'] ? data[0]['user_birthdate'].split('-').reverse().join('/') : "Não informado");
+				$('#_address_city').text(data[1]['address_city'] ?? "Não informado");
+				$('#_address_number').text(data[1]['address_number'] ?? "Não informado");
+				$("#newPass").data('user-id', $(e.target).data('user-id'));
+				$('#_adress_zip_code').text(data[1]['address_postalcode'] ?? "Não informado");
+				$('#_address_street').text(data[1]['address_street'] ?? "Não informado");
+				$('#_address_state').text(data[1]['address_state'] ?? "Não informado");
+				$('#_address_state').text(data[1]['address_state'] ?? "Não informado");
+				$('#_phone_number').text(data[2]['phone_number'] ?? "Não informado");
+			});
+			/* Show modal */
+			$('#clientProfile').modal('show');
+		});
+	});
+</script>
+
+
+<!-- Modal Client Profile -->
+<div class="modal fade" id="clientProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2>Exibindo perfil do Client selecionado:</h2>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="card">
+							<div class="card-header">
+								Informações do atendente:
+							</div>
+							<div class="card-body">
+								<div class="col-lg-12">
+									<strong>Nome: </strong> <span id="_user_name"></span>
+									<hr>
+								</div>
+								<div class="col-lg-12">
+									<strong>Gênero: </strong> <span id="_user_genre"></span>
+									<hr>
+								</div>
+								<div class="col-lg-12">
+									<strong>Nome de usuário: </strong> <span id="_user_alias"></span>
+									<hr>
+								</div>
+								<div class="col-lg-12">
+									<strong>Data de inserção: </strong><span id="_user_creation_date"></span>
+									<hr>
+								</div>
+								<div class="col-lg-12">
+									<strong>E-mail: </strong><span id="_user_email"></span>
+									<hr>
+								</div>
+								<div class="col-lg-12">
+									<strong>Data de nascimento: </strong> <span id="_user_birthdate"></span>
+									<hr>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="card">
+							<div class="card-header">
+								Informações de Endereço:
+							</div>
+							<div class="card-body">
+								<div class="col-lg-12">
+									<strong>Estado: </strong> <span id="_address_state"></span> - <strong>CEP:
+									</strong> <span id="_adress_zip_code"></span>
+									<hr>
+								</div>
+								<div class="col-lg-12">
+									<strong>Cidade: </strong><span id="_address_city"></span>
+									<hr>
+								</div>
+								<div class="col-lg-12">
+									<strong>Logradouro: </strong><span id="_address_street"></span>
+									<hr>
+								</div>
+								<div class="col-lg-12">
+									<strong>Número: </strong><span id="_address_number"></span>
+								</div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-header">
+								Informações de Contato Móvel:
+							</div>
+							<div class="card-body">
+								<div class="col-lg-12">
+									<strong>Número de telefone: </strong> <span id="_phone_number"></span>
+								</div>
+							</div>
+						</div>
+						<button class="btn btn-block btn-primary" id="newPass" data-user-id=""><i
+								class="fas fa-envelope mr-2"></i>
+							Enviar nova senha por e-mail</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal Attendance History -->
+<div class="modal fade" id="attendanceHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2>Exibindo Históricos de atendimento do Client selecionado:</h2>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table id="chatsTable" class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Atendente</th>
+							<th scope="col">Créditos Gastos</th>
+							<th scope="col">Opções</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Whole CHAT Modal -->
+<div class="modal fade" id="whole-chat-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	aria-hidden="true">
+	<div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="exampleModalLongTitle">Visualizando Chat</h3>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="whole-chat-container" class="container-fluid">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="alert text-white bg-gradient-purple mr-auto">
+					As mensagens do cliente estão em verde, as do atendente em branco.
+				</div>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-window-close"></i>
+					Fechar Chat</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+<!-- [END] Whole CHAT Modal -->
+
+<!-- Edit Balance Modal -->
+<form id="updateUserMinutes">
+	<div class="modal fade" id="editMinutesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h2 id="exampleModalLongTitle">
+						💰 Alterando Saldo Pago do cliente <button type="button" class="close float-right"
+							data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<hr>
+					</h2>
+					<div class="form-group">
+						<strong for="editUserBalance" class="pl-2 mt--6"> 💵 Saldo do cliente:</strong>
+						<input id="editUserBalance" type="text" class="form-control mt-2 form-control-alternative"
+							name="edit_user_balance">
+						<small class="text-center"><i>O Saldo disposto está em € (euros) - use vírgula ou ponto, como
+								desejar</i></small>
+						<input type="hidden" name="edit_user_min_user_id" value="">
+					</div>
+					<div class="alert alert-secondary mb-3 mt--1">
+						<span>
+							<h3>Esse Saldo é compatível a:</h3>
+							<span>Minutos de Chat:</span> <strong class="float-right clientChatMin"></strong><br>
+							<span>Minutos de Voz:</span> <strong class="float-right clientVoiceMin"></strong> <br>
+							<span>Total de E-mails:</span> <strong class="float-right clientMail"></strong>
+						</span>
+					</div>
+
+					<button type="button" class="btn btn-secondary" data-dismiss="modal"><i
+							class="fas fa-times-circle"></i> Cancelar</button>
+					<button type="submit" class="float-right btn btn-primary"> <i class="fas fa-save"></i>
+						Salvar</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</form>
+<!-- [END] Edit Balance Modal -->
+
+<!-- Edit Balance Modal -->
+<form id="updateUserBonus">
+	<div class="modal fade" id="editBonusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h2 id="exampleModalLongTitle">
+						💰 Alterando Saldo Bônus do cliente <button type="button" class="close float-right"
+							data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<hr>
+					</h2>
+					<div class="form-group">
+						<strong for="editUserBonus" class="pl-2 mt--6"> 💵 Saldo do cliente:</strong>
+						<input id="editUserBonus" type="text" class="form-control mt-2 form-control-alternative"
+							name="edit_user_bonus">
+						<small class="text-center"><i>O Saldo disposto está em € (euros) - use vírgula ou ponto, como
+								desejar</i></small>
+						<input type="hidden" name="edit_user_min_user_id" value="">
+					</div>
+					<div class="alert alert-secondary mb-3 mt--1">
+						<span>
+							<h3>Esse Saldo é compatível a:</h3>
+							<span>Minutos de Chat:</span> <strong class="float-right clientChatMin"></strong><br>
+							<span>Minutos de Voz:</span> <strong class="float-right clientVoiceMin"></strong> <br>
+							<span>Total de E-mails:</span> <strong class="float-right clientMail"></strong>
+						</span>
+					</div>
+
+					<button type="button" class="btn btn-secondary" data-dismiss="modal"><i
+							class="fas fa-times-circle"></i> Cancelar</button>
+					<button type="submit" class="float-right btn btn-primary"> <i class="fas fa-save"></i>
+						Salvar</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</form>
+<!-- [END] Edit Balance Modal -->

@@ -1,0 +1,404 @@
+{{> home/header }}
+<style>
+	.home-alter-cards {
+		position: relative !important;
+	}
+
+	.clerk-profile-link {
+		text-decoration: none !important;
+		color: rgba(128, 42, 144, 1) !important;
+	}
+</style>
+
+<input id="client-id" hidden value="{{ self_data.0.0.user_id }}">
+<!-- MAIN / BODY -->
+<section id="main-clerks" class="container mt-4 mb-1 pb-4 col-lg-x bg-light home-border position-relative">
+	<img src="/assets/home/img/arabesco.png" class="home-top-left-arabesque" alt="Arabesco" title="Arabesco">
+	<img src="/assets/home/img/arabesco.png" class="home-top-right-arabesque" alt="Arabesco" title="Arabesco">
+	<div class="row">
+		<div class="col-lg-12 mt-3 py-3 px-3">
+			<h1 class="text-center home-consultants">
+				Conheça nossos atendentes
+			</h1>
+			<img src="assets/home/img/linha_menu2.png" class="home-menu-decoration img-fluid" alt="menu-decoration">
+		</div>
+	</div>
+	<div id="clerksOnline" class="container-fluid">
+		<div class="row mt-1 pb-5 mb-5 pt-5">
+			{{#each clerk_data.1}}
+			<div class="col-lg-3 col-md-6 mb-5 pb-5 pt-5 mt-5">
+				<div class="card text-center home-card-atendent">
+					<div class="justify-content-center">
+						<img src="{{ this.2.clerk_image }}" class="rounded-circle mx-auto home-limit-height-from-atendet-picture" style="width: 60%; margin-top: -20%;" alt="consultor">
+					</div>
+					<button type="button" class="btn btn-block home-alter-leght-name"
+						title="Ver perfil de {{ this.2.clerk_info_exhibition }}">
+						<a href="#" data-name="{{this.2.clerk_info_exhibition}}" class="clerk-profile-link">
+							<i class="fa fa-user home-icon-atendent"></i>
+							{{ this.2.clerk_info_exhibition }}
+						</a>
+					</button>
+					<div class="card-footer mt-5 pt-5" style="border: none;">
+						<p class="home-description card-text"> {{this.2.clerk_info_phrase}} </p>
+						<button data-clerk-id="{{this.0.user_id}}" disabled="true" type="button"
+							class="logged-out-notify text-chat-btn btn btn-block home-atendiments-forms">
+							<img data-clerk-id="{{this.0.user_id}}" src="/assets/home/img/B1.png" alt="chat">
+							Atendimento via <br>Chat €<span data-clerk-id="{{this.0.user_id}}" class="valMinChat"></span>/min
+						</button>
+						<button data-clerk-id="{{this.0.user_id}}" disabled="true" type="button"
+							class="logged-out-notify voice-chat-btn btn btn-block home-atendiments-forms">
+							<img data-clerk-id="{{this.0.user_id}}" src="/assets/home/img/B3.png" alt="phone">
+							Atendimento via <br>Tel. €<span data-clerk-id="{{this.0.user_id}}" class="valMinVoip"></span>/min
+						</button>
+						<button data-clerk-id="{{this.0.user_id}}" type="button"
+							class="logged-out-notify btn btn-block home-atendiments-forms">
+							<i data-clerk-id="{{this.0.user_id}}" class="fa fa-envelope" aria-hidden="true" style="font-size: 1.5rem;"></i>
+							Atendimento por <br>E-mail. €<span data-clerk-id="{{this.0.user_id}}" class="valMail"></span>
+						</button>
+						<div class="whole-status-btn mt-2" data-clerk-id="{{ this.0.user_id }}">
+							<button type="button" class="logged-out-notify btn btn-block btn-dark"> 
+								<i data-clerk-id="{{ this.0.user_id }}"
+									class="far fa-paper-plane"></i>
+								Avise-me
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{/each}}
+			{{#each self_data.1}}
+			<div class="col-lg-3 col-md-6 mb-5 pb-5 pt-5 mt-5">
+				<div class="card text-center home-card-atendent">
+					<div class="justify-content-center">
+						<img src="{{ this.2.clerk_image }}" class="rounded-circle mx-auto home-limit-height-from-atendet-picture" style="width: 60%; margin-top: -20%;" alt="consultor">
+					</div>
+					<button type="button" class="btn btn-block home-alter-leght-name"
+						title="Ver perfil de {{ this.2.clerk_info_exhibition }}">
+						<a href="#" data-name="{{this.2.clerk_info_exhibition}}" class="clerk-profile-link">
+							<i class="fa fa-user home-icon-atendent"></i>
+							{{ this.2.clerk_info_exhibition }}
+						</a>
+					</button>
+					<div class="card-footer mt-5 pt-5" style="border: none;">
+						<p class="home-description card-text"> {{this.2.clerk_info_phrase}} </p>
+						<button data-clerk-id="{{this.0.user_id}}" disabled="true" type="button"
+							class="new-text-chat text-chat-btn btn btn-block home-atendiments-forms">
+							<img data-clerk-id="{{this.0.user_id}}" src="/assets/home/img/B1.png" alt="chat">
+							Atendimento via <br>Chat €<span data-clerk-id="{{this.0.user_id}}" class="valMinChat"></span>/min
+						</button>
+						<button data-clerk-id="{{this.0.user_id}}" disabled="true" type="button"
+							class="new-voice-chat voice-chat-btn btn btn-block home-atendiments-forms">
+							<img data-clerk-id="{{this.0.user_id}}" src="/assets/home/img/B3.png" alt="phone">
+							Atendimento via <br>Tel. €<span data-clerk-id="{{this.0.user_id}}" class="valMinVoip"></span>/min
+						</button>
+
+						<button data-clerk-id="{{this.0.user_id}}" type="button"
+							class="new-mail btn btn-block home-atendiments-forms">
+							<i data-clerk-id="{{this.0.user_id}}" class="fa fa-envelope" aria-hidden="true" style="font-size: 1.5rem;"></i>
+							Atendimento por<br>E-mail. €<span data-clerk-id="{{this.0.user_id}}" class="valMail"></span>
+						</button>
+
+						<div class="whole-status-btn mt-2" data-clerk-id="{{ this.0.user_id }}">
+							<button type="button" data-clerk-id="{{ this.0.user_id }}"
+								class="notify-me btn btn-block btn-dark"> <i data-clerk-id="{{ this.0.user_id }}" class="far fa-paper-plane"></i>
+								Avise-me
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{/each}}
+		</div>
+	</div>
+	<img src="/assets/home/img/arabesco.png" class="home-bottom-left-arabesque" alt="Arabesco" title="Arabesco">
+	<img src="/assets/home/img/arabesco.png" class="home-bottom-right-left-arabesque" alt="Arabesco" title="Arabesco">
+</section>
+
+{{> home/footer }}
+
+<script type="text/javascript">
+	$(document).ready(async function () {
+		$.get('/whats-my-id', async function (e) {
+			const myBalance = await $.get("/my-balance", function (e) { return e; });
+			const socket = new WebSocket("wss://attend." + window.location.host.replace("www.", "") + "/ws");
+			const client_id = parseInt(e);
+			/* We need to parse the user id in this view */
+
+			$(document).on('click', '.notify-me', function (e) {
+				$.get("/notify-me/" + $(e.target).data('clerk-id'), (e) => {
+					Swal.fire(
+						'Feito!',
+						'Assim que o atendente ficar online te avisaremos por e-mail!',
+						'success'
+					);
+				});
+			});
+
+			$(document).on('click', '.logged-out-notify', function (e) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Você precisa Entrar primeiro!',
+				})
+			});
+
+
+			function statusClerkButtons(user_id, status, text, voice, video) {
+				switch (status) {
+					case 1:
+						if (text) {
+							$('.text-chat-btn[data-clerk-id="' + user_id + '"]').removeAttr('disabled');
+						} else {
+							$('.text-chat-btn[data-clerk-id="' + user_id + '"]').attr('disabled', 'disabled');
+						}
+
+						if (voice) {
+							$('.voice-chat-btn[data-clerk-id="' + user_id + '"]').removeAttr('disabled');
+						} else {
+							$('.voice-chat-btn[data-clerk-id="' + user_id + '"]').attr('disabled', 'disabled');
+						}
+
+						if (!text && !voice) {
+							$('div[data-clerk-id="' + user_id + '"]').html('<button type="button" disabled class="btn home-change-all-card-buttons btn-block text-white btn-dark"> Já volto! 😁 </button>');
+						} else {
+							$('.whole-status-btn[data-clerk-id="' + user_id + '"]').html('<button type="button" class="btn btn-block mt-2 home-atendiments-forms-available"><i class="fas fa-rss"></i> Disponível</button>');
+						}
+
+						$('#clerksOnline').prepend($('div[data-clerk-id="' + user_id + '"]').parents('.home-alter-cards'));
+						break;
+					case 2:
+						// Is on a call, so do you wanna wait for it?
+						$('div[data-clerk-id="' + user_id + '"]').html('<button type="button" disabled class="btn home-change-all-card-buttons btn-block text-white btn-danger"> Em atendimento </button>');
+						break;
+					case 3:
+						$('div[data-clerk-id="' + user_id + '"]').html('<button type="button" class="btn btn-block mt-2 home-atendiments-forms-available"><i class="fas fa-rss"></i> Indisponível</button>');
+						break;
+				}
+			}
+
+			var configs;
+
+			$.get('/admin/config/get-configs', function (e) {
+				configs = e[0]
+				$('.valMinChat').text(parseFloat(configs['absolute_min_value_chat']).toFixed(2));
+				$('.valMinVoip').text(parseFloat(configs['absolute_min_value_voice']).toFixed(2));
+				$('.valMail').text(parseFloat(configs['site_mail_val']).toFixed(2));
+			});
+
+
+			/* When socket finally opens */
+			socket.onopen = function (event) {
+				socket.send(JSON.stringify({
+					action: 'new-client-entered-the-thread',
+					client_id: null,
+					clerk_id: null,
+					data: null,
+					from: 'Client',
+				}));
+			}
+
+			socket.onmessage = async function (event) {
+				var income_data = JSON.parse(event.data);
+
+				if (income_data.client_id === client_id) {
+					switch (income_data.action) {
+						/* Processes and redraw clerks */
+						case "clerks-available":
+							[].map.call(income_data.data, function (clerk) {
+								statusClerkButtons(clerk['clerk_id'], clerk['status'], clerk["is_available_chat"], clerk["is_available_voice"], clerk["is_available_video"]);
+							});
+							$('.home-loading-effects').addClass('animate__animated animate__fadeOut').remove();
+							$('#home-hidden-content').removeClass('d-none').addClass('animate__animated animate__fadeInUp');
+							break;
+						/* Incoming advice to the client that clerk has accepted an text chat invitation */
+						case "text-chat-acc":
+							window.location = "/chat/" + income_data.data;
+							break;
+						/* Incoming advice to the client that clerk has accepted an voice chat invitation */
+						case "voice-chat-acc":
+							window.location = '/voip/' + income_data.data;
+						/* Incoming advice to the client that clerk has refused an text chat invitation */
+						case "text-chat-ref":
+							Swal.fire({
+								title: 'O atendente recusou sua solicitação.',
+								text: "Por favor, aguarde ou selecione outro atendente.",
+								showConfirmButton: false,
+								timer: 2000
+							});
+							break;
+						/* Incoming advice to the client that clerk has refused an voice chat invitation */
+						case "voice-chat-ref":
+							Swal.fire({
+								title: 'O atendente recusou sua solicitação.',
+								text: "Por favor, aguarde ou selecione outro atendente.",
+								showConfirmButton: false,
+								timer: 2000
+							});
+							break;
+					}
+				} else {
+					switch (income_data.action) {
+						/* Processes and redraw clerks */
+						case "clerks-available":
+							[].map.call(income_data.data, function (clerk) {
+								statusClerkButtons(clerk['clerk_id'], clerk['status'], clerk["is_available_chat"], clerk["is_available_voice"], clerk["is_available_video"]);
+							});
+							$('.home-loading-effects').addClass('animate__animated animate__fadeOut').remove();
+							$('#home-hidden-content').removeClass('d-none').addClass('animate__animated animate__fadeInUp');
+							break;
+					}
+				}
+			}
+
+
+			//* Voice Chat implementation */
+			$(document).on('click', '.new-voice-chat', async function (e) {
+				if ($(e.target).data('clerk-id') > 0) {
+					if (parseFloat(myBalance) >= (configs['absolute_min_value_voice'] * 3)) {
+						socket.send(JSON.stringify({
+							action: "voice-chat-intend",
+							client_id: client_id,
+							clerk_id: $(e.target).data('clerk-id'),
+							data: null,
+							from: 'Client'
+						}));
+
+
+						Swal.fire({
+							title: 'Esperando o atendente responder sua requisição de atendimento!',
+							showCloseButton: true,
+							showCancelButton: true,
+							cancelButtonText:
+								'Cancelar',
+							onBeforeOpen: function () {
+								Swal.showLoading()
+							},
+						});
+
+					} else {
+						Swal.fire({
+							title: 'Você não possui créditos Suficientes..',
+							text: "Você será redirecionado a página de compra de minutos.",
+							showConfirmButton: false,
+							timer: 2500
+						});
+
+						await new Promise(r => setTimeout(r, 2000));
+						window.location = '/comprar-creditos';
+
+					}
+				} else {
+					Swal.fire({
+						title: 'Sem suporte...',
+						text: "Atualize a página, se o erro persistir por favor tente em outro navegador...",
+						icon: 'warning',
+					});
+				}
+			});
+
+
+			/* Text chat inviter implementation */
+			$(document).on('click', '.new-text-chat', async function (e) {
+				if ($(e.target).data('clerk-id') > 0) {
+					if (parseFloat(myBalance) >= parseFloat(configs['absolute_min_value_chat'] * 3)) {
+						socket.send(JSON.stringify({
+							action: "text-chat-intend",
+							client_id: client_id,
+							clerk_id: $(e.target).data('clerk-id'),
+							data: null,
+							from: 'Client'
+						}));
+
+						Swal.fire({
+							title: 'Esperando o atendente responder sua requisição de atendimento!',
+							showCloseButton: true,
+							showCancelButton: true,
+							cancelButtonText:
+								'Cancelar',
+							onBeforeOpen: function () {
+								Swal.showLoading()
+							},
+						});
+					} else {
+						Swal.fire({
+							title: 'Você não possui créditos!',
+							text: "Você será redirecionado a página de compra de minutos.",
+							showConfirmButton: false,
+							timer: 2500
+						});
+
+						await new Promise(r => setTimeout(r, 2000));
+						window.location = '/comprar-creditos';
+					}
+				} else {
+					Swal.fire({
+						title: 'Sem suporte...',
+						text: "Atualize a página, se o erro persistir por favor tente em outro navegador...",
+						icon: 'warning',
+					});
+				}
+			});
+
+			/* Mail attendance implementation */
+			$(document).on('click', '.new-mail', async function (e) {
+				if (parseFloat(myBalance) >= (configs['site_mail_val'])) {
+					window.location = '/atendimento-email/' + $(e.target).data('clerk-id');
+				} else {
+					Swal.fire({
+						title: 'Você não possui créditos!',
+						text: "Você será redirecionado a página de compra de créditos.",
+						showConfirmButton: false,
+						timer: 2500
+					});
+
+					await new Promise(r => setTimeout(r, 2000));
+					window.location = '/comprar-creditos';
+				}
+			});
+
+			$(document).on('click', '.notify-me', function (e) {
+				$.get("/notify-me/" + $(e.target).data('clerk-id'), function (e) {
+					Swal.fire(
+						'Feito!',
+						'Assim que o atendente ficar online te avisaremos por e-mail!',
+						'success'
+					)
+				});
+			});
+
+			$(document).on('click', '.logged-out-notify', function (e) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Você precisa Entrar primeiro!',
+				})
+			})
+
+			const generatePostSlug = (postTitle) => {
+				if (postTitle) {
+					return postTitle.replace('.', '').split(' ').join('-').toLowerCase();
+				}
+			}
+
+			$.get("/posts/all/", function (e) {
+				var data = JSON.parse(e);
+				var kokoroto = 0;
+				[].map.call(data, (post) => {
+					if (kokoroto < 3) {
+						$('#blog-post-container').append('<div class="col-lg-4 pt-3 pb-3"> <div class="card text-center" style="min-height: 100%; border: 1px solid rgba(128, 42, 144, 1);"> <img class="card-img-top p-2" src="' + post['post_image'] + '" alt="Post sobre ' + post['post_title'] + '" title="Post sobre ' + post['post_title'] + '"> <div class="card-body"> <h5 class="card-title text-uppercase" style="color: rgba(128, 42, 144, 1);"> ' + post['post_title'] + ' </h5> <p class="card-text"> ' + post['post_content'].slice(0, 60) + '(...) </p> </div> <div class="card-footer text-center"> <a href="/blog-post/' + generatePostSlug(post['post_title']) + '" style="text-decoration: none;"><button type="button" style="background-color: rgba(46, 49, 146, 1); border: none !important;" class="btn btn-primary btn-lg btn-block text-uppercase">Ver post</button> </div> </div> </div>');
+					}
+					kokoroto++;
+				});
+				$("#numPosts").html(kokoroto);
+			});
+
+			[].map.call($('.stars'), function (item) {
+				$(item).html('★'.repeat($(item).data('value')));
+			});
+
+			[].map.call($('.clerk-profile-link'), function (item) {
+				$(item).attr("href", "/tarologo/" + generatePostSlug($(item).data('name')));
+			});
+		});
+	});
+</script>

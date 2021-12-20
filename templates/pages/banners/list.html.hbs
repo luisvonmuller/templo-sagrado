@@ -1,0 +1,380 @@
+{{> pages/header }}
+
+<div class="header pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-6">
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="/">Administrativo</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Banners (Home)</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-6 clear-fix">
+                    <form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+                        <div class="form-group mb-0">
+                            <div class="input-group input-group-alternative input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="Procurar ... " type="text">
+                            </div>
+                        </div>
+                        <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+                            aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Page content -->
+<main class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-lg-12 py-1 px-2">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        Os banners da sua Home 📷
+                        <button data-target="#newBannerModal" data-toggle="modal"
+                            class="float-right btn btn-sm btn-primary"><i class="fas fa-plus-circle"></i> Adicionar novo
+                            Banner</button>
+                    </h2>
+                    <p class="text-sm mb-0">
+                        Estes banners são exibidos na home e você pode controlar-los por aqui 😄
+                    </p>
+                </div>
+                <div class="table-responsive py-4">
+                    <table id="bannersTable" class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Data de adição</th>
+                                <th scope="col">Imagem mobile</th>
+                                <th scope="col">Imagem Desktop</th>
+                                <th scope="col">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</main>
+{{> pages/footer }}
+
+<!-- New Banner modal -->
+<form method="POST" enctype="multipart/form-data" id="newBanner">
+    <div class="modal fade" id="newBannerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content ">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <h2 class="px-1"><i class="fas fa-mobile"></i> Banner para celulares e tables (Mobile):</h2>
+                            <div class="custom-file">
+                                <input required type="file" name="banner_mobile" class="custom-file-input">
+                                <label class="custom-file-label"></label>
+                            </div>
+                            <br>
+                            <br>
+                            <h2 class="px-1"> <i class="far fa-image"></i> - Exemplo de banner Mobile:</h2>
+                            <img class="img-fluid" src="https://templo-sagrado.com/assets/home/img/mobile-banner.png">
+                            <div class="px-2">
+                                <strong><i class="fas fa-info-circle"></i> Proporções ideais indicadas:</strong> <br>767
+                                pixels por 767x
+                                (Proporção: 1
+                                por 1)
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <h2 class="px-1"><i class="fas fa-desktop"></i> - Banner para computadores e televisões
+                                (Desktop):</h2>
+                            <div class="custom-file">
+                                <input required type="file" name="banner_desktop" class="custom-file-input">
+                                <label class="custom-file-label"></label>
+                            </div>
+                            <br>
+                            <br>
+                            <h2 class="px-1"> <i class="far fa-image"></i> - Exemplo de banner Desktop:</h2>
+                            <img class="img-fluid" src="https://templo-sagrado.com/assets/home/img/banner5.jpg">
+
+                            <div class="px-2 mt-1"> <strong><i class="fas fa-info-circle"></i> Proporções ideais
+                                    indicadas: </strong> 959 pixels por 265 pixels
+                                (Proporção:
+                                7 por 2)
+                            </div>
+                            <br>
+                            <br>
+                            <div class="alert alert-danger" role="alert">
+                                <h1 class="text-white"><i class="fas fa-skull-crossbones"></i> Atenção!</h1>
+                                <strong class="text-white mb-0">Apenas serão aceitos banners no formato
+                                    <strong>.jpeg</strong> para fins
+                                    de velocidade de
+                                    carregamento de página.</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="mr-auto btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Salvar Banner</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- New Banner modal -->
+<!-- Update Banner modal -->
+<form method="POST" enctype="multipart/form-data" id="updateBanner">
+    <div class="modal fade" id="updateBannerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content ">
+                <div class="modal-body">
+                    <div class="row">
+                        <input hidden type="text" name="update_banner_id" />
+                        <div class="col-lg-4">
+                            <h2 class="px-1"><i class="fas fa-mobile"></i> Banner para celulares e tables (Mobile):</h2>
+                            <div class="custom-file">
+                                <input type="file" name="update_banner_mobile" class="custom-file-input">
+                                <label class="custom-file-label"></label>
+                            </div>
+                            <br>
+                            <br>
+                            <h2 class="px-1"> <i class="far fa-image"></i> - Banner atual para Mobile:</h2>
+                            <img class="img-fluid" id="update-mobile-banner"
+                                src="https://templo-sagrado.com/assets/home/img/mobile-banner.png">
+                            <div class="px-2">
+                                <strong><i class="fas fa-info-circle"></i> Proporções ideais indicadas:</strong> <br>767
+                                pixels por 767x
+                                (Proporção: 1
+                                por 1)
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <h2 class="px-1"><i class="fas fa-desktop"></i> - Banner para computadores e televisões
+                                (Desktop):</h2>
+                            <div class="custom-file">
+                                <input type="file" name="update_banner_desktop" class="custom-file-input">
+                                <label class="custom-file-label"></label>
+                            </div>
+                            <br>
+                            <br>
+                            <h2 class="px-1"> <i class="far fa-image"></i> - Banner atual para Desktop:</h2>
+                            <img class="img-fluid" id="update-desktop-banner"
+                                src="https://templo-sagrado.com/assets/home/img/banner5.jpg">
+
+                            <div class="px-2 mt-1"> <strong><i class="fas fa-info-circle"></i> Proporções ideais
+                                    indicadas: </strong> 959 pixels por 265 pixels
+                                (Proporção:
+                                7 por 2)
+                            </div>
+                            <br>
+                            <br>
+                            <div class="alert alert-danger" role="alert">
+                                <h1 class="text-white"><i class="fas fa-skull-crossbones"></i> Atenção!</h1>
+                                <strong class="text-white mb-0">Apenas serão aceitos banners no formato
+                                    <strong>.jpeg</strong> para fins
+                                    de velocidade de
+                                    carregamento de página.</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="mr-auto btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Salvar Banner</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- Update Banner modal -->
+<script type="text/javascript">
+    $(document).ready(() => {
+        const parseData = (unix_timestamp) => {
+            var date = new Date(unix_timestamp);
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+            return day + '/' + month + '/' + year
+        }
+
+        const banner_btns = (banner_id, banner_mobile, banner_desktop) => {
+            let btns = `<button data-banner-id="${banner_id}"  data-banners='${JSON.stringify([banner_mobile, banner_desktop])}' class="update-banner btn btn-dark"><i data-banner-id="${banner_id}" data-banners='${JSON.stringify([banner_mobile, banner_desktop])}' class="fas fa-edit"></i> Alterar Banner</button>`;
+            btns += `<button data-banner-id="${banner_id}"  class="delete-banner btn btn-danger"><i data-banner-id="${banner_id}" class="fas fa-trash-alt"></i> Excluir Banner </button>`;
+            return btns;
+        }
+
+        var bannersTable = $('#bannersTable').DataTable({
+            "serverSide": true,
+            "order": [[0, "desc"]],
+            "ajax": {
+                url: '/admin/banners/list',
+                type: 'POST',
+            },
+            "ordering": true,
+            "info": true,
+            "processing": true,
+            "columns": [
+
+                {
+                    "data": "banner_creation_date", "render": (data, type, row) => {
+                        return "<strong> Foi adicionado em: </strong> " + parseData(Date.parse(data));
+                    },
+                },
+                {
+                    "data": "banner_mobile", "render": (data, type, row) => {
+                        return '<img style="height: 220px !important;" class="img-fluid" src="' + data + '"> ';
+                    },
+                },
+                {
+                    "data": "banner_desktop", "render": (data, type, row) => {
+                        return '<img class="img-fluid" src="' + data + '" height="40px"> ';
+                    },
+                },
+                {
+                    "data": "banner_id", "render": (data, type, row) => {
+                        return banner_btns(data, row.banner_mobile, row.banner_desktop);
+                    },
+                },
+            ],
+            "language":
+            {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": ">",
+                    "sPrevious": "<",
+                    "sFirst": "<<",
+                    "sLast": ">>"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                },
+                "select": {
+                    "rows": {
+                        "_": "Selecionado %d linhas",
+                        "0": "Nenhuma linha selecionada",
+                        "1": "Selecionado 1 linha"
+                    }
+                },
+                "buttons": {
+                    "copy": "Copiar para a área de transferência",
+                    "copyTitle": "Cópia bem sucedida",
+                    "copySuccess": {
+                        "1": "Uma linha copiada com sucesso",
+                        "_": "%d linhas copiadas com sucesso"
+                    }
+                }
+            }
+        });
+
+        $(document).on('click', '.delete-banner', (e) => {
+            $.get("/admin/banners/delete-banner/" + $(e.target).data('banner-id'), (event) => {
+                Swal.fire(
+                    'Pronto!',
+                    'O banner foi deletado e os registros atualizados.',
+                    'success'
+                );
+                bannersTable.ajax.reload();
+            });
+        });
+
+        $(document).on('click', '.update-banner', (e) => {
+            var [id, [mobile_banner, desktop_banner]] = [$(e.target).data('banner-id'), $(e.target).data('banners')];
+            $('input[name="update_banner_id"]').val(id);
+            $("#update-mobile-banner").attr("src", mobile_banner);
+            $("#update-desktop-banner").attr("src", desktop_banner);
+            $("#updateBannerModal").modal('show');
+        });
+
+
+        $(document).on('submit', '#updateBanner', (e) => {
+            e.preventDefault();
+            $(e.target).attr('disabled', "true");
+            var banner_data = new FormData();
+            banner_data.append('banner_id', $('input[name="update_banner_id"]').val());
+
+            if ($('input[name="update_banner_mobile"]')[0].files[0]) {
+                banner_data.append('banner_mobile', $('input[name="update_banner_mobile"]')[0].files[0] ?? null);
+            }
+
+            if ($('input[name="update_banner_desktop"]')[0].files[0]) {
+                banner_data.append('banner_desktop', $('input[name="update_banner_desktop"]')[0].files[0] ?? null);
+            }
+
+
+
+            $.ajax({
+                url: '/admin/banners/update-banner',
+                type: 'POST',
+                data: banner_data,
+                contentType: false,
+                processData: false,
+                success: (event) => {
+                    Swal.fire(
+                        'Banner Atualizado!',
+                        'O banner em questão foi atualizado com sucesso no banco de dados e está disponível.',
+                        'success'
+                    );
+                    $("#updateBannerModal").modal('hide');
+                    $(e.target).attr('disabled', "false");
+                    bannersTable.ajax.reload();
+                }
+            });
+        });
+
+        $(document).on('submit', '#newBanner', (e) => {
+            e.preventDefault();
+            $(e.target).attr('disabled', true);
+
+            var banner_data = new FormData();
+            banner_data.append('banner_mobile', $('input[name="banner_mobile"]')[0].files[0]);
+            banner_data.append('banner_desktop', $('input[name="banner_desktop"]')[0].files[0]);
+
+            $.ajax({
+                url: '/admin/banners/new-banner',
+                type: 'POST',
+                data: banner_data,
+                contentType: false,
+                processData: false,
+                success: (event) => {
+                    Swal.fire(
+                        'Banner Cadastrado!',
+                        'O novo banner foi cadastrado com sucesso no banco de dados e está disponível.',
+                        'success'
+                    );
+                    $("#newBannerModal").modal('hide');
+                    $(e.target).attr('disabled', false);
+                    bannersTable.ajax.reload();
+                }
+            });
+        });
+
+    });
+</script>

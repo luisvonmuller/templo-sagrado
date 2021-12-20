@@ -1,0 +1,687 @@
+{{> home/header}}
+
+<style>
+    /* home-bg-color */
+    .clerk-info-stars {
+        color: rgba(128, 42, 144, 1);
+    }
+
+    .valMinChat,
+    .valMinVoip,
+    .valMail {
+        color: rgba(128, 42, 144, 1);
+    }
+
+    .home-alter-atendent-picture {
+        width: 170px;
+        height: 170px;
+        max-width: 170px;
+        min-width: 170px;
+        max-height: 170px;
+        min-height: 170px;
+        border: 3px solid #ffffffff;
+    }
+
+    .home-bg-first-color {
+        background-color: rgba(128, 42, 144, 0.1);
+    }
+
+    .home-bg-second-color {
+        background-color: #f6f6f6;
+    }
+
+    .home-acordion-buttons:focus {
+        background-color:  rgba(128, 42, 144, 1);
+        color: rgba(255, 255, 255, 1);
+        box-shadow: 0 0 0 0;
+        border: 0 none;
+        outline: 0;
+    }
+
+</style>
+
+<input id="client-id" hidden value="{{ self_data.0.0.user_id }}">
+
+<main>
+    <section id="new-user" class="container mt-4 mb-5 home-main position-relative home-border">
+        <img src="/assets/home/img/arabesco.png" class="home-top-left-arabesque" alt="Arabesco" title="Arabesco">
+    	<img src="/assets/home/img/arabesco.png" class="home-top-right-arabesque" alt="Arabesco" title="Arabesco">
+
+        <div class="row mt-5 pt-5 justify-content-center">
+            <div class="col-lg-4 text-center">
+                <img class="rounded-circle home-alter-atendent-picture" src="{{self_data.1.1.clerk_image}}" alt="Perfil de {{self_data.1.1.clerk_info_exhibition}}" title="Perfil de {{self_data.1.1.clerk_info_exhibition}}">
+            </div>
+        </div>
+        <div class="row mt-4 justify-content-center">
+            <h5> {{self_data.1.1.clerk_info_exhibition}} </h5>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-xl-3 whole-status-btn" data-clerk-id="{{self_data.1.0.user_id}}">
+                <button class="btn text-white btn-block btn-dark notify-me" data-clerk-id="{{self_data.1.0.user_id}}"><i class="far fa-paper-plane"></i> Avise-me </button>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-12 text-center">
+                {{ self_data.1.1.clerk_description }}
+            </div>
+        </div>
+        <div class="row mx-3 my-5 pb-5">
+            <div class="col-lg-12 col-xl-12">
+                <div class="row border border-light">
+                    <button class="btn btn-lg btn-block home-bg-first-color rounded-0 border-0 home-acordion-buttons" type="button" data-toggle="collapse" data-target="#item1" aria-expanded="false" aria-controls="item1">
+                        <div class="row">
+                            <div class="col-lg-11 col-xl-11 text-left">
+                                <i class="fas fa-concierge-bell"></i> Atendimento
+                            </div>
+                            <div class="col-lg-1 col-xl-1 text-right">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+                <div class="row border border-light">
+                    <div class="collapse w-100" id="item1">
+                        <div class="card card-body p-0 border-0 text-center">
+                            <div class="row border border-light m-0">
+                                <button class="btn btn-lg btn-block rounded-0 home-bg-second-color text-dark py-2 logged-out-notify voice-chat-btn" type="button" disabled="true" data-clerk-id="{{self_data.1.0.user_id}}">
+                                    <i class="fas fa-phone-alt"></i> Telefone €<span class="valMinVoip text-dark p-0 m-0">Carregando...</span>/min
+                                </button>
+                            </div>
+                            <div class="row border border-light m-0">
+                                <button class="btn btn-lg btn-block rounded-0 home-bg-second-color text-dark py-2 logged-out-notify voice-chat-btn" type="button" disabled="true" data-clerk-id="{{self_data.1.0.user_id}}">
+                                    <i class="far fa-comments"></i> Chat €<span class="valMinChat text-dark p-0 m-0">Carregando...</span>/min
+                                </button>
+                            </div>
+                            <div class="row border border-light m-0">
+                                <button class="btn btn-lg btn-block rounded-0 home-bg-second-color text-dark py-2 logged-out-notify voice-chat-btn" type="button" disabled="true" data-clerk-id="{{self_data.1.0.user_id}}">
+                                    <i class="fas fa-envelope-open-text"></i> E-mail €<span class="valMail text-dark p-0 m-0">Carregando...</span> cada
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row border border-light">
+                    <button class="btn btn-lg btn-block home-bg-first-color rounded-0 border-0 home-acordion-buttons" type="button" data-toggle="collapse" data-target="#item0" aria-expanded="false" aria-controls="item0">
+                        <div class="row">
+                            <div class="col-lg-11 col-xl-11 text-left">
+                                <i class="far fa-calendar"></i> Disponibilidade
+                            </div>
+                            <div class="col-lg-1 col-xl-1 text-right">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+                <div class="row border border-light">
+                    <div class="collapse w-100" id="item0">
+                        <div class="card card-body text-center p-0 m-0 border-0 home-bg-second-color">
+                            <div id="carouselExampleControls" class="carousel slide w-100" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active py-2 home-bg-second-color border border-light">
+                                        <div class="row justify-content-center text-center">
+                                            Segunda-feira
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Das&nbsp;<span id="monday-init">--:--</span>
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Às&nbsp;<span id="monday-end">--:--</span>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item py-2 home-bg-second-color border border-light">
+                                        <div class="row justify-content-center text-center">
+                                            Terça-feira
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Das&nbsp;<span id="tuesday-init">--:--</span>
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Às&nbsp;<span id="tuesday-end">--:--</span>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item py-2 home-bg-second-color border border-light">
+                                        <div class="row justify-content-center text-center">
+                                            Quarta-feira
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Das&nbsp;<span id="wednesday-init">--:--</span>
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Às&nbsp;<span id="wednesday-end">--:--</span>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item py-2 home-bg-second-color border border-light">
+                                        <div class="row justify-content-center text-center">
+                                            Quinta-feira
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Das&nbsp;<span id="thursday-init">--:--</span>
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Às&nbsp;<span id="thursday-end">--:--</span>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item py-2 home-bg-second-color border border-light">
+                                        <div class="row justify-content-center text-center">
+                                            Sexta-feira
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Das&nbsp;<span id="friday-init">--:--</span>
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Às&nbsp;<span id="friday-end">--:--</span>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item py-2 home-bg-second-color border border-light">
+                                        <div class="row justify-content-center text-center">
+                                            Sábado
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Das&nbsp;<span id="wednesday-init">--:--</span>
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Às&nbsp;<span id="wednesday-end">--:--</span>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item py-2 home-bg-second-color border border-light">
+                                        <div class="row justify-content-center text-center">
+                                            Domingo
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Das&nbsp;<span id="sunday-init">--:--</span>
+                                        </div>
+                                        <div class="row justify-content-center text-center">
+                                            Às&nbsp;<span id="sunday-end">--:--</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                                    <i class="fas fa-chevron-left home-color carousel-control-prev-icon" aria-hidden="true"></i>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                                    <i class="fas fa-chevron-right home-color carousel-control-next-icon" aria-hidden="true"></i>
+                                </a>
+                            </div>    
+                        </div>
+                    </div>
+                </div>
+                <div class="row border border-light">
+                    <button class="btn btn-lg btn-block home-bg-first-color rounded-0 home-acordion-buttons" type="button" data-toggle="collapse" data-target="#item2" aria-expanded="false" aria-controls="item2">
+                        <div class="row">
+                            <div class="col-lg-11 col-xl-11 text-left">
+                                <i class="fas fa-hourglass-end"></i> Experiência
+                            </div>
+                            <div class="col-lg-1 col-xl-1 text-right">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+                <div class="row border border-light">
+                    <div class="collapse w-100" id="item2">
+                        <div class="card card-body text-center border-0 home-bg-second-color">
+                            {{self_data.1.1.clerk_info_experience }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row border border-light">
+                    <button class="btn btn-lg btn-block home-bg-first-color rounded-0 home-acordion-buttons" type="button" data-toggle="collapse" data-target="#item3" aria-expanded="false" aria-controls="item3">
+                        <div class="row">
+                            <div class="col-lg-11 col-xl-11 text-left">
+                                <i class="fas fa-tags"></i> Qualificações
+                            </div>
+                            <div class="col-lg-1 col-xl-1 text-right">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+                <div class="row border border-light">
+                    <div class="collapse w-100" id="item3">
+                        <div class="card card-body text-center p-0 m-0 border-0 home-bg-second-color" id="attendance-tags-container">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row border border-light">
+                    <button class="btn btn-lg btn-block home-bg-first-color rounded-0 home-acordion-buttons" type="button" data-toggle="collapse" data-target="#item4" aria-expanded="false" aria-controls="item4">
+                        <div class="row">
+                            <div class="col-lg-11 col-xl-11 text-left">
+                                <i class="fas fa-star-half-alt"></i> Avaliações
+                            </div>
+                            <div class="col-lg-1 col-xl-1 text-right">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+                <div class="row border border-light">
+                    <div class="collapse w-100" id="item4">
+                        <div class="card card-body p-0 m-0 text-center border-0 home-bg-second-color">
+                            <div class="row border border-light m-0 py-2">
+                                <div class="col-lg-12">
+                                    <div class="row justify-content-center">
+                                        <span class="clerk-info-stars">★★★★★</span>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        Favorito:&nbsp;<span id="5-star-rating">(...)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row border border-light m-0 py-2">
+                                <div class="col-lg-12">
+                                    <div class="row justify-content-center">
+                                        <span class="clerk-info-stars">★★★★★</span>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        Muito Satisfeito:&nbsp;<span id="4-star-rating">(...)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row border border-light m-0 py-2">
+                                <div class="col-lg-12">
+                                    <div class="row justify-content-center">
+                                        <span class="clerk-info-stars">★★★★</span>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        Satisfeito:&nbsp;<span id="3-star-rating">(...)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row border border-light m-0 py-2">
+                                <div class="col-lg-12">
+                                    <div class="row justify-content-center">
+                                        <span class="clerk-info-stars">★★</span>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        Regular:&nbsp;<span id="2-star-rating">(...)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row border border-light m-0 py-2">
+                                <div class="col-lg-12">
+                                    <div class="row justify-content-center">
+                                        <span class="clerk-info-stars">★</span>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        Insatisfeito:&nbsp;<span id="1-star-rating">(...)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row border border-light">
+                    <button class="btn btn-lg btn-block home-bg-first-color rounded-0 home-acordion-buttons" type="button" data-toggle="collapse" data-target="#item5" aria-expanded="false" aria-controls="item5">
+                        <div class="row">
+                            <div class="col-lg-11 col-xl-11 text-left">
+                                <i class="fas fa-comment-alt"></i> Comentários
+                            </div>
+                            <div class="col-lg-1 col-xl-1 text-right">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+                <div class="row border border-light">
+                    <div class="collapse w-100" id="item5">
+                        <div class="card card-body text-center p-0 m-0 border-0 home-bg-second-color" id="all-testimonials-container">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row border border-light">
+                    <button class="btn btn-lg btn-block home-bg-first-color rounded-0 home-acordion-buttons" type="button" data-toggle="collapse" data-target="#item6" aria-expanded="false" aria-controls="item6">
+                        <div class="row">
+                            <div class="col-lg-11 col-xl-11 text-left">
+                                <i class="fas fa-plus-circle"></i> Mais informações
+                            </div>
+                            <div class="col-lg-1 col-xl-1 text-right">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+                <div class="row border border-light">
+                    <div class="collapse w-100" id="item6">
+                        <div class="card card-body text-center border-0 home-bg-second-color border border-light">
+                            {{self_data.1.1.clerk_info_long_description}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <img src="/assets/home/img/arabesco.png" class="home-bottom-left-arabesque" alt="Arabesco" title="Arabesco">
+    	<img src="/assets/home/img/arabesco.png" class="home-bottom-right-left-arabesque" alt="Arabesco" title="Arabesco">
+    </section>
+</main>
+
+{{> home/footer}}
+
+<script>
+    $(document).ready(async function () {
+        var clerk_id;
+        var client_id;
+        const myBalance = await $.get("/my-balance", function (e) { return e; });
+        const socket = new WebSocket("wss://attend." + window.location.host.replace("www.", "") + "/ws");
+
+        $.get('/whats-my-id', async function (e) {
+            client_id = parseInt(e);
+            console.log(client_id);
+            if (client_id > 0) {
+                $(".text-chat-btn").removeClass("logged-out-notify").addClass("new-text-chat");
+                $(".voice-chat-btn").removeClass("logged-out-notify").addClass("new-voice-chat");
+                $(".mail-btn").removeClass("logged-out-notify").addClass("new-mail");
+            }
+        });
+
+        function parseData(unix_timestamp) {
+            var date = new Date(unix_timestamp);
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+            return day + '/' + month + '/' + year
+        }
+
+        var configs;
+
+        $.get('/admin/config/get-configs', function (e) {
+            configs = e[0]
+            $('.valMinChat').text(parseFloat(configs['absolute_min_value_chat']).toFixed(2).replace(".", ","));
+            $('.valMinVoip').text(parseFloat(configs['absolute_min_value_voice']).toFixed(2).replace(".", ","));
+            $('.valMail').text(parseFloat(configs['site_mail_val']).toFixed(2).replace(".", ","));
+        });
+
+        var clerk_slug = window.location.pathname.split("/").pop();
+
+        $.get("/clerk/id/" + clerk_slug, (id) => {
+            clerk_id = id;
+        })
+
+        $("#attendance-tags-container").hide();
+
+        $.get("/clerk/attendance-tags/" + clerk_slug, function (tags) {
+            tags.forEach(function (tag) {
+                let tmp_html = '<div class="row justify-content-center home-bg-second-color rounded-0 border border-light py-3 m-0"> ' + tag[1].attendance_tag_name + ' </div>';
+                $("#attendance-tags-container").append(tmp_html);
+            });
+            $("#attendance-tags-container").show();
+
+        });
+
+        $.get("/clerk/schedule/" + clerk_slug, function (schedule_info) {
+            if (schedule_info.length > 0) {
+                schedule_info = schedule_info[0];
+                if (schedule_info.clerk_schedule_fri) {
+                    $("#friday-init").html(schedule_info.clerk_schedule_fri_init);
+                    $("#friday-end").html(schedule_info.clerk_schedule_fri_end);
+                }
+                if (schedule_info.clerk_schedule_mon) {
+                    $("#monday-init").html(schedule_info.clerk_schedule_mon_init);
+                    $("#monday-end").html(schedule_info.clerk_schedule_mon_end);
+                }
+                if (schedule_info.clerk_schedule_sat) {
+                    $("#saturday-init").html(schedule_info.clerk_schedule_sat_init);
+                    $("#saturday-end").html(schedule_info.clerk_schedule_sat_end);
+                }
+                if (schedule_info.clerk_schedule_sun) {
+                    $("#sunday-init").html(schedule_info.clerk_schedule_sun_init);
+                    $("#sunday-end").html(schedule_info.clerk_schedule_sun_end);
+                }
+                if (schedule_info.clerk_schedule_thu) {
+                    $("#thursday-init").html(schedule_info.clerk_schedule_thu_init);
+                    $("#thursday-end").html(schedule_info.clerk_schedule_thu_end);
+                }
+                if (schedule_info.clerk_schedule_tue) {
+                    $("#tuesday-init").html(schedule_info.clerk_schedule_tue_init);
+                    $("#tuesday-end").html(schedule_info.clerk_schedule_tue_end);
+                }
+                if (schedule_info.clerk_schedule_wed) {
+                    $("#wednesday-init").html(schedule_info.clerk_schedule_wed_init);
+                    $("#wednesday-end").html(schedule_info.clerk_schedule_wed_end);
+                }
+            }
+        });
+
+        $.get("/clerk/testimonials-ratings/" + clerk_slug, function (ratings) {
+            var counter = 0;
+            ratings.forEach(function (rating) {
+                $("#" + counter + "-star-rating").html(rating.count);
+                counter++;
+            });
+        });
+
+        $.get("/clerk/testimonials/" + clerk_slug, async function (testimonials) {
+            testimonials.forEach(async function (testimonial) {
+                console.log(testimonial[0][0]);
+                $("#all-testimonials-container").append('<div class="row justify-content-center home-bg-second-color rounded-0 border border-light py-3 m-0"><div class="col-lg-12"><div class="row justify-content-center"><span class="clerk-info-stars">' + "★".repeat(testimonial[1].testimonials_value) + '</span></div><div class="row justify-content-center my-2 mx-2 text-lowercase">' + testimonial[1].testimonials_content + '</div><div class="row justify-content-center">  ' + testimonial[0][0][0][0]['user_name'] + '</div><div class="row justify-content-center my-1"><strong>' + parseData(testimonial[1].testimonials_date) + '</strong></div></div></div></div>');
+            });
+        });
+
+        function statusClerkButtons(user_id, status, text, voice, video) {
+            switch (status) {
+                case 1:
+                    if (text) {
+                        $('.text-chat-btn[data-clerk-id="' + user_id + '"]').removeAttr('disabled');
+                    } else {
+                        $('.text-chat-btn[data-clerk-id="' + user_id + '"]').attr('disabled', 'disabled');
+                    }
+
+                    if (voice) {
+                        $('.voice-chat-btn[data-clerk-id="' + user_id + '"]').removeAttr('disabled');
+                    } else {
+                        $('.voice-chat-btn[data-clerk-id="' + user_id + '"]').attr('disabled', 'disabled');
+                    }
+
+                    if (!text && !voice) {
+                        $('div[data-clerk-id="' + user_id + '"]').html('<button type="button" disabled class="btn home-change-all-card-buttons btn-lg btn-block text-white btn-dark"> Já volto! 😁 </button>');
+                    } else {
+                        $('.whole-status-btn[data-clerk-id="' + user_id + '"]').html('<button type="button" class="btn btn-block btn-lg btn-success mt-2 home-atendiments-forms-available"><i class="fas fa-rss"></i> Disponível</button>');
+                    }
+
+                    $('#clerksOnline').prepend($('div[data-clerk-id="' + user_id + '"]').parents('.home-alter-cards'));
+                    break;
+                case 2:
+                    // Is on a call, so do you wanna wait for it?
+                    $('div[data-clerk-id="' + user_id + '"]').html('<button type="button" disabled class="btn home-change-all-card-buttons btn-lg btn-block text-white btn-danger"> Em atendimento </button>');
+                    break;
+                case 3:
+                    $('div[data-clerk-id="' + user_id + '"]').html('<button type="button" class="btn btn-block mt-2 home-atendiments-forms-available"><i class="fas fa-rss"></i> Indisponível</button>');
+                    break;
+            }
+        }
+
+        /* When socket finally opens */
+        socket.onopen = function (event) {
+            socket.send(JSON.stringify({
+                action: 'new-client-entered-the-thread',
+                client_id: null,
+                clerk_id: null,
+                data: null,
+                from: 'Client',
+            }));
+        }
+
+        socket.onmessage = async function (event) {
+            var income_data = JSON.parse(event.data);
+
+            if (income_data.client_id === client_id) {
+                switch (income_data.action) {
+                    /* Processes and redraw clerks */
+                    case "clerks-available":
+                        [].map.call(income_data.data, (clerk) => {
+                            statusClerkButtons(clerk['clerk_id'], clerk['status'], clerk["text"], clerk["voice"], clerk["video"]);
+                        });
+                        break;
+                    /* Incoming advice to the client that clerk has accepted an text chat invitation */
+                    case "text-chat-acc":
+                        window.location = "/chat/" + income_data.data;
+                        break;
+                    /* Incoming advice to the client that clerk has accepted an voice chat invitation */
+                    case "voice-chat-acc":
+                        window.location = '/voip/' + income_data.data;
+                    /* Incoming advice to the client that clerk has refused an text chat invitation */
+                    case "text-chat-ref":
+                        Swal.fire({
+                            title: 'O atendente recusou sua solicitação.',
+                            text: "Por favor, aguarde ou selecione outro atendente.",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        break;
+                    /* Incoming advice to the client that clerk has refused an voice chat invitation */
+                    case "voice-chat-ref":
+                        Swal.fire({
+                            title: 'O atendente recusou sua solicitação.',
+                            text: "Por favor, aguarde ou selecione outro atendente.",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        break;
+                }
+            } else {
+                switch (income_data.action) {
+                    /* Processes and redraw clerks */
+                    case "clerks-available":
+                        [].map.call(income_data.data, (clerk) => {
+                            statusClerkButtons(clerk['clerk_id'], clerk['status'], clerk["is_available_chat"], clerk["is_available_voice"], clerk["is_available_video"]);
+                        });
+                        break;
+                }
+            }
+        }
+
+        //* Voice Chat implementation */
+        $(document).on('click', '.new-voice-chat', async function (e) {
+            if ($(e.target).data('clerk-id') > 0) {
+                if (parseFloat(myBalance) >= (configs['absolute_min_value_voice'] * 3)) {
+                    socket.send(JSON.stringify({
+                        action: "voice-chat-intend",
+                        client_id: client_id,
+                        clerk_id: $(e.target).data('clerk-id'),
+                        data: null,
+                        from: 'Client'
+                    }));
+
+
+                    Swal.fire({
+                        title: 'Esperando o atendente responder sua requisição de atendimento!',
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        cancelButtonText:
+                            'Cancelar',
+                        onBeforeOpen: function () {
+                            Swal.showLoading()
+                        },
+                    });
+
+                } else {
+                    Swal.fire({
+                        title: 'Você não possui créditos Suficientes..',
+                        text: "Você será redirecionado a página de compra de minutos.",
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    await new Promise(r => setTimeout(r, 2000));
+                    window.location = '/comprar-creditos';
+
+                }
+            } else {
+                Swal.fire({
+                    title: 'Sem suporte...',
+                    text: "Atualize a página, se o erro persistir por favor tente em outro navegador...",
+                    icon: 'warning',
+                });
+            }
+        });
+
+
+        /* Text chat inviter implementation */
+        $(document).on('click', '.new-text-chat', async function (e) {
+            if ($(e.target).data('clerk-id') > 0) {
+                if (parseFloat(myBalance) >= parseFloat(configs['absolute_min_value_chat'] * 3)) {
+                    socket.send(JSON.stringify({
+                        action: "text-chat-intend",
+                        client_id: client_id,
+                        clerk_id: $(e.target).data('clerk-id'),
+                        data: null,
+                        from: 'Client'
+                    }));
+
+                    Swal.fire({
+                        title: 'Esperando o atendente responder sua requisição de atendimento!',
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        cancelButtonText:
+                            'Cancelar',
+                        onBeforeOpen: function () {
+                            Swal.showLoading()
+                        },
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Você não possui créditos!',
+                        text: "Você será redirecionado a página de compra de minutos.",
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    await new Promise(r => setTimeout(r, 2000));
+                    window.location = '/comprar-creditos';
+                }
+            } else {
+                Swal.fire({
+                    title: 'Sem suporte...',
+                    text: "Atualize a página, se o erro persistir por favor tente em outro navegador...",
+                    icon: 'warning',
+                });
+            }
+        });
+        /* Mail attendance implementation */
+        $(document).on('click', '.new-mail', async function (e) {
+            if (parseFloat(myBalance) >= (configs['site_mail_val'])) {
+                window.location = '/atendimento-email/' + $(e.target).data('clerk-id');
+            } else {
+                Swal.fire({
+                    title: 'Você não possui créditos!',
+                    text: "Você será redirecionado a página de compra de créditos.",
+                    showConfirmButton: false,
+                    timer: 2500
+                });
+
+                await new Promise(r => setTimeout(r, 2000));
+                window.location = '/comprar-creditos';
+            }
+        });
+
+        $(document).on('click', '.notify-me', function (e) {
+            $.get("/notify-me/" + $(e.target).data('clerk-id'), function (e) {
+                Swal.fire(
+                    'Feito!',
+                    'Assim que o atendente ficar online te avisaremos por e-mail!',
+                    'success'
+                )
+            });
+        });
+
+        $(document).on('click', '.logged-out-notify', function (e) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Você precisa Entrar primeiro!',
+            })
+        })
+
+        $(document).on('click', '.notify-me', function (e) {
+            $.get("/notify-me/" + $(e.target).data('clerk-id'), (e) => {
+                Swal.fire(
+                    'Feito!',
+                    'Assim que o atendente ficar online te avisaremos por e-mail!',
+                    'success'
+                );
+            });
+        });
+    });
+</script>

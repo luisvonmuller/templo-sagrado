@@ -1,0 +1,413 @@
+{{> pages/header}}
+<!-- Header -->
+<div class="header pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-6">
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="/">Administrativo</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Blog da plataforma</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-6 clear-fix">
+                    <form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+                        <div class="form-group mb-0">
+                            <div class="input-group input-group-alternative input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="Procurar ... " type="text">
+                            </div>
+                        </div>
+                        <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+                            aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Page content -->
+<main class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <h2 class="card-header"><strong>Easy Blog - Seu Content Manager</strong><button
+                        data-target="#newPostModal" data-toggle="modal" class="float-right btn btn-sm btn-primary"><i
+                            class="fas fa-plus-circle"></i> Adicionar novo
+                        POST</button></h2>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="postsTable" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Imagem</th>
+                                    <th scope="col">Titulo</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Opções</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="https://cdn.tiny.cloud/1/z7v8t8d49cnfq4y1eodidfna4kflxqxlwyjou6051bxwkyas/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin" />
+</script>
+{{> pages/footer }}
+
+
+<script>
+    tinymce.init({
+        selector: '#postContent'
+    });
+
+    $(document).ready(() => {
+        var postsTable = $('#postsTable').DataTable({
+            "ordering": false,
+            "info": false,
+            "language":
+            {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": ">",
+                    "sPrevious": "<",
+                    "sFirst": "<<",
+                    "sLast": ">>"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                },
+                "select": {
+                    "rows": {
+                        "_": "Selecionado %d linhas",
+                        "0": "Nenhuma linha selecionada",
+                        "1": "Selecionado 1 linha"
+                    }
+                },
+                "buttons": {
+                    "copy": "Copiar para a área de transferência",
+                    "copyTitle": "Cópia bem sucedida",
+                    "copySuccess": {
+                        "1": "Uma linha copiada com sucesso",
+                        "_": "%d linhas copiadas com sucesso"
+                    }
+                }
+            }
+
+        });
+
+        const postButtons = (postId) => {
+            var tmpHtml = '<button class="see-post btn btn-light btn-sm" data-post-id="' + postId + '"> <i class="far fa-eye" data-post-id="' + postId + '"></i> Ver post </button>';
+            tmpHtml += ' <button class="edit-post btn btn-dark btn-sm" data-post-id="' + postId + '"> <i class="fas fa-edit" data-post-id="' + postId + '"></i> Editar Post </button>';
+            tmpHtml += ' <button class="delete-post btn btn-danger btn-sm" data-post-id="' + postId + '"> <i class="fas fa-trash-alt" data-post-id="' + postId + '"></i> Excluir Post </button>';
+            return tmpHtml;
+        };
+
+        $.get('/admin/blog/list', (incomingData) => {
+            var posts = JSON.parse(incomingData);
+            [].map.call(posts, (post) => {
+                postsTable.row.add([
+                    '<img src="' + post['post_image'] + '" class="img-fluid" />',
+                    post['post_title'],
+                    new Date(),
+                    postButtons(post['post_id'])
+                ]).draw(true);
+            });
+        });
+
+        $(document).on('click', '.see-post', (e) => {
+            /* Querys for a single post on back-end */
+            $.get('/admin/blog/single-post/' + $(e.target).data('post-id'), (data) => {
+                var post = JSON.parse(data)[0];
+                $('#seePostTitle').text(post['post_title']);
+                $('#seePostContent').html(post['post_content']);
+                $('#seePostSeoTags').text(post['post_seo_tags']);
+                $('#seePostSeoDesc').text(post['post_seo_desc']);
+                $('#seePostModal').modal('show');
+            });
+        });
+
+        /* This will go bananas */
+        $(document).on('click', '.delete-post', (e) => {
+            $(e.target).parents('tr').remove();
+            $.get('/admin/blog/delete-post/' + $(e.target).data('post-id'), (a) => {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Post deletado com sucesso.'
+                });
+            });
+        });
+
+        $(document).on('click', '.edit-post', (e) => {
+            $.get('/admin/blog/single-post/' + $(e.target).data('post-id'), (data) => {
+                var post = JSON.parse(data)[0];
+                $('#editPostTitle').val(post['post_title']);
+                $('#editPostId').val(post['post_id']);
+                $('#editPostContent').text(post['post_content']);
+                $('#editPostSeoTags').val(post['post_seo_tags']);
+                $('#editPostSeoDesc').val(post['post_seo_desc']);
+                $('#editPostModal').modal('show');
+                tinymce.init({
+                    selector: '#editPostContent'
+                });
+
+            });
+        });
+
+        $(document).on('submit', '#editPost', (e) => {
+            e.preventDefault();
+            var postData = new FormData();
+            postData.append('post_title', $('input[name="edit_post_title"]').val());
+            postData.append('post_id', $('#editPostId').val());
+            postData.append('post_image', $('input[name="edit_post_image"]')[0].files[0] ?? "none");
+            postData.append('post_seo_tags', $('input[name="edit_post_seo_tags"]').val());
+            postData.append('post_seo_desc', $('input[name="edit_post_seo_desc"]').val());
+            postData.append('post_content', $('textarea[name="edit_post_content"]').val());
+
+            $.ajax({
+                url: '/admin/blog/edit-post',
+                type: 'POST',
+                data: postData,
+                contentType: false,
+                processData: false,
+                success: async (event) => {
+                    Swal.fire(
+                        'Atualizado!',
+                        'O post foi atualizado, a página será atualizada.',
+                        'success'
+                    );
+                    await new Promise(r => setTimeout(r, 1000));
+                    window.location.reload();
+                    $("#newPostModal").modal('hide');
+                }
+            });
+        });
+
+
+        $(document).on('submit', '#newPost', (e) => {
+            e.preventDefault();
+            var postData = new FormData();
+            postData.append('post_title', $('input[name="post_title"]').val());
+            postData.append('post_image', $('input[name="post_image"]')[0].files[0]);
+            postData.append('post_seo_tags', $('input[name="post_seo_tags"]').val());
+            postData.append('post_seo_desc', $('input[name="post_seo_desc"]').val());
+            postData.append('post_content', $('textarea[name="post_content"]').val());
+
+            $.ajax({
+                url: '/admin/blog/new-post',
+                type: 'POST',
+                data: postData,
+                contentType: false,
+                processData: false,
+                success: (event) => {
+                    Swal.fire(
+                        'Novo POST Inserido!',
+                        'O novo post foi inserido com sucesso no banco de dados e está disponível.',
+                        'success'
+                    );
+                    window.location.reload();
+                    $("#newPostModal").modal('hide');
+                }
+            });
+        });
+    });
+</script>
+
+</main>
+<form id="newPost">
+    <!-- Modal -->
+    <div class="modal fade" id="newPostModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Escreva aqui seu novo POST:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label>Título do Post:</label>
+                                <input class="form-control form-control-alternative"
+                                    placeholder="Um nome bem engajante aqui!" name="post_title" id="postTitle">
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Imagem do Post:</label>
+                                <input type="file" class="form-control form-control-alternative" name="post_image"
+                                    id="postImage">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-6">
+                                <label>"Keywords" do post para SEO:</label>
+                                <input class="form-control form-control-alternative"
+                                    placeholder="Ex: Tarot, Cartas, Tarólogos, futuro, magia" name="post_seo_tags"
+                                    id="postSeoTags">
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Descrição do post para SEO:</label>
+                                <input placeholder="Exemplo: Saiba como descobrir o significado do seu futuro"
+                                    class="form-control form-control-alternative" name="post_seo_desc" id="postSeoDesc">
+                            </div>
+                        </div>
+                        <!-- Post content (With a rich text editor) -->
+                        <div class="row mt-4">
+                            <div class="col-lg-12">
+                                <label>Conteúdo do post:</label>
+                                <textarea class="form-control form-control-alternative" name="post_content"
+                                    id="postContent"></textarea>
+                                <small class="mt-2 text-center alert alert-default">Sugerimos usar técnicas de copy e
+                                    capital case
+                                    para palavras chave.</small>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="mr-auto btn btn-danger" data-dismiss="modal"><i
+                            class="fas fa-times-circle"></i> Cancelar</button>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar novo post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="editPost">
+    <!-- Modal -->
+    <div class="modal fade" id="editPostModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Alterando seu POST:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input id="editPostId" value="" type="hidden">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label>Título do Post:</label>
+                                <input class="form-control form-control-alternative"
+                                    placeholder="Um nome bem engajante aqui!" name="edit_post_title" id="editPostTitle">
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Imagem do Post:</label>
+                                <input type="file" class="form-control form-control-alternative" name="edit_post_image"
+                                    id="postImage">
+                                <small class="mt-2">
+                                    Se você não selecionar uma nova imagem, a antiga será mantida.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-6">
+                                <label>"Keywords" do post para SEO:</label>
+                                <input class="form-control form-control-alternative"
+                                    placeholder="Ex: Tarot, Cartas, Tarólogos, futuro, magia" name="edit_post_seo_tags"
+                                    id="editPostSeoTags">
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Descrição do post para SEO:</label>
+                                <input placeholder="Exemplo: Saiba como descobrir o significado do seu futuro"
+                                    class="form-control form-control-alternative" name="edit_post_seo_desc"
+                                    id="editPostSeoDesc">
+                            </div>
+                        </div>
+                        <!-- Post content (With a rich text editor) -->
+                        <div class="row mt-4">
+                            <div class="col-lg-12">
+                                <label>Conteúdo do post:</label>
+                                <textarea class="form-control form-control-alternative" name="edit_post_content"
+                                    id="editPostContent"></textarea>
+                                <small class="mt-2 text-center alert alert-default">Sugerimos usar técnicas de copy e
+                                    capital case
+                                    para palavras chave.</small>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="mr-auto btn btn-danger" data-dismiss="modal"><i
+                            class="fas fa-times-circle"></i> Cancelar Mudanças</button>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar Alterações no
+                        Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Show Post Modal -->
+<div class="modal fade" id="seePostModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Visualizando um Post:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="seePostTitle"></h2>
+                <small id="seePostDate"></small>
+                <hr>
+                <div id="seePostContent" class="mx-2 my-1">
+
+                </div>
+                <hr>
+                <div style="color: black !important;" class="alert alert-info">
+                    <h2>Informações de SEO</h2>
+                    <hr>
+                    <div class="card">
+                        <div id="seePostSeoTags" class="card-body">
+
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div id="seePostSeoDesc" class="card-body">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="mr-auto btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

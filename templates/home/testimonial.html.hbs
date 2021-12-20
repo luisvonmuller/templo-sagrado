@@ -1,0 +1,63 @@
+{{> home/header }}
+
+<main id="new-user" class="container home-main position-relative mt-4 mb-5 pb-5 home-border-depoiments">
+    <img src="/assets/home/img/arabesco.png" class="home-top-left-arabesque" alt="Arabesco" title="Arabesco">
+    <img src="/assets/home/img/arabesco.png" class="home-top-right-arabesque" alt="Arabesco" title="Arabesco">
+    <div class="row">
+        <div class="col-lg-12 py-4 px-5-lg ">
+            <h1 class="text-center mt-5 pb-0 mb-0"> Avalie o Atendimento... </h1>
+            <form id="newTestimonial" method="POST">
+                <input type="hidden" name="testimonial_clerk_id" value="{{self_data.1}}">
+                <div class="row px-5-lg mx-5-lg justify-content-center">
+                    <div class="rate">
+                        <input type="radio" id="star5" name="testimonial_value" value="5" />
+                        <label for="star5" title="text">5 stars</label>
+                        <input type="radio" id="star4" name="testimonial_value" value="4" />
+                        <label for="star4" title="text">4 stars</label>
+                        <input type="radio" id="star3" name="testimonial_value" value="3" />
+                        <label for="star3" title="text">3 stars</label>
+                        <input type="radio" id="star2" name="testimonial_value" value="2" />
+                        <label for="star2" title="text">2 stars</label>
+                        <input type="radio" id="star1" name="testimonial_value" value="1" />
+                        <label for="star1" title="text">1 star</label>
+                    </div>
+                </div>
+                <div class="row mt-5 px-5-lg mx-5-lg">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="d-none" for="clientComment"> Fale sobre o atendimento </label>
+                            <textarea id="tiny" class="form-control" id="clientComment" name="testimonial_content" rows="10"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block mt-3 mb-5"> Enviar depoimento</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <img src="/assets/home/img/arabesco.png" class="home-bottom-left-arabesque" alt="Arabesco" title="Arabesco">
+    <img src="/assets/home/img/arabesco.png" class="home-bottom-right-left-arabesque" alt="Arabesco" title="Arabesco">
+</main>
+
+{{> home/footer }}
+
+<script src="https://cdn.tiny.cloud/1/z7v8t8d49cnfq4y1eodidfna4kflxqxlwyjou6051bxwkyas/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+    tinymce.init({
+        selector: '#tiny' 
+    });
+
+    $(document).ready(() => {
+        $(document).on('submit', '#newTestimonial', (e) => {
+
+            e.preventDefault();
+
+            $.post('/submit-testimonial', $(e.target).serialize(), async () => {
+                Swal.fire('Depoimento dado.', 'O depoimento foi dado com sucesso, muito obrigado. Você será redirecionado para a sua conta.', 'success');
+
+                await new Promise(r => setTimeout(r, 3000));
+                window.location = '/my-acc';
+            })
+        })
+    });
+</script>

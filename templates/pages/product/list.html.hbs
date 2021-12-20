@@ -1,0 +1,542 @@
+{{> pages/header }}
+
+
+
+<div class="header pb-6">
+	<div class="container-fluid">
+		<div class="header-body">
+			<div class="row align-items-center py-4">
+				<div class="col-lg-6 col-6">
+					<nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+						<ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+							<li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+							<li class="breadcrumb-item"><a href="/">Administrativo</a></li>
+							<li class="breadcrumb-item active" aria-current="page">Clientes</li>
+						</ol>
+					</nav>
+				</div>
+				<div class="col-lg-6 col-6 clear-fix">
+					<form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+						<div class="form-group mb-0">
+							<div class="input-group input-group-alternative input-group-merge">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-search"></i></span>
+								</div>
+								<input class="form-control" placeholder="Procurar ... " type="text">
+							</div>
+						</div>
+						<button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+							aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<!-- Page content -->
+<main class="container-fluid mt--6">
+	<div class="row">
+		<div class="col-lg-12 py-1 px-2">
+			<div class="card">
+				<div class="card-header">
+					<h2 class="mb-0">Seus Produtos cadastrados no sistema 🛍
+						<button data-target="#newProductModal" id="newProductBtn" data-toggle="modal"
+							class="float-right btn btn-primary"><i class="fas fa-plus-circle"></i> Adicionar um
+							novo Produto</button>
+					</h2>
+					<p class="text-sm mb-0">
+						Aqui estão listados todos os produtos da plataforma... Ativos ou não, você pode gerenciar todos
+						por
+						aqui 😄
+					</p>
+				</div>
+				<div class="table-responsive py-4">
+					<table id="productTable" class="table">
+						<thead class="thead-light">
+							<tr>
+								<th scope="col">Imagem</th>
+								<th scope="col">Nome</th>
+								<th scope="col">Status</th>
+								<th scope="col">Valor</th>
+								<th scope="col">Opções</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</main>
+{{> pages/footer }}
+
+<!-- New product modal -->
+<form method="POST" enctype="multipart/form-data" id="newProduct">
+	<div class="modal fade" id="newProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalProcutTitle"><strong><i class="fas fa-shopping-bag"></i> -
+							Adicionando novo produto:</strong></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="product_title">
+							Nome do produto:
+						</label>
+						<input placeholder="Nome do novo produto" type="text" class="form-control" name="product_title"
+							id="product_title">
+					</div>
+					<div class="form-group">
+						<label for="product_desctiption">
+							Descrição do produto:
+						</label>
+						<textarea placeholder="Informe aqui uma Descrição do Produto" name="product_description"
+							id="product_description" class="form-control"></textarea>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-lg-6">
+								<label for="product_value">
+									Valor a ser pago (Euros):
+								</label>
+								<input name="product_value" type="text" id="product_value" class="form-control"
+									placeholder="30,50" />
+								<small>Valor pago pelo cliente</small>
+							</div>
+							<div class="col-lg-6">
+								<label for="product_bonus">
+									Valor do bônus (Euros):
+								</label>
+								<input name="product_bonus" type="text" id="product_bonus" class="form-control"
+									placeholder="2,50" />
+								<small>Valor bônus dado pelo gestor do sistema</small>
+							</div>
+
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="custom-file">
+							<input type="file" name="product_image" class="custom-file-input" id="product_image">
+							<label class="custom-file-label" for="product_image"></label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-primary">Salvar produto</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<!-- New product modal -->
+
+<!-- New product modal -->
+<form method="POST" enctype="multipart/form-data" id="editProduct">
+	<div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalProcutTitle"><strong>Adicionando novo produto:</strong></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<input type="hidden" name="edit_product_id" />
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="edit_product_title">
+							Nome do produto:
+						</label>
+						<input placeholder="Nome do novo produto" type="text" class="form-control"
+							name="edit_product_title" id="edit_product_title">
+					</div>
+
+					<div class="form-group">
+						<label for="edit_product_description">
+							Descrição do produto:
+						</label>
+						<textarea placeholder="Informe aqui uma Descrição do Produto" id="productDesc"
+							name="edit_product_description" id="edit_product_description"
+							class="form-control"></textarea>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-lg-6">
+								<label for="edit_product_value">
+									Valor a ser pago (Euros):
+								</label>
+								<input name="edit_product_value" id="edit_product_value" class="form-control"
+									placeholder="30,50" />
+								<small>Valor pago pelo cliente</small>
+							</div>
+							<div class="col-lg-6">
+								<label for="edit_product_bonus">
+									Valor de Bônus (Euros):
+								</label>
+								<input name="edit_product_bonus" id="edit_product_bonus" class="form-control"
+									placeholder="2,00" />
+								<small>Valor bônus dado pelo gestor do sistema</small>
+
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="custom-file">
+							<input type="file" name="edit_product_image" class="custom-file-input" id="editProductImg">
+							<label class="custom-file-label" for="customFile"></label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-primary">Salvar produto</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<!-- New product modal -->
+<script type="text/javascript">
+	$(document).ready(() => {
+		const product_buttons = (product_id) => {
+			let tmp_btn = '<button class="btn btn-dark edit-product btn-sm" data-product-id="' + product_id + '"><i data-product-id="' + product_id + '" class="fas fa-edit"></i> Editar</button>';
+			tmp_btn += '<button class="see-product-story ml-2 btn btn-sm btn-light" data-product-id="' + product_id + '"><i  data-product-id="' + product_id + '" class="fas fa-eye"></i> Ver registros relativos a este produto</button>';
+			return tmp_btn;
+		}
+
+		const status_buttons = (status, id) => {
+			console.log(status);
+			if (status) {
+				return '<button data-status="' + status + '" data-id="' + id + '" class="change-product-status btn btn-sm btn-success">Ativo</button>';
+			} else {
+				return '<button data-status="' + status + '" data-id="' + id + '" class="change-product-status btn btn-sm btn-danger">Desativado</button>';
+			}
+		}
+
+		const processStatus = (sale_status) => {
+			if (sale_status == null) {
+				return '<span class="badge badge-dark">' + ("Não processada") + '</span>'
+			} else {
+				if (sale_status == 0) {
+					return '<span class="badge badge-warning"> Aguardando pagamento </span>'
+				} else {
+					return '<span class="badge badge-success"> Pagamento confirmado </span>'
+				}
+			}
+
+		}
+		const timestamp = (unix_timestamp) => {
+			var date = new Date(unix_timestamp);
+			var hours = date.getHours();
+			var minutes = "0" + date.getMinutes();
+			var seconds = "0" + date.getSeconds();
+			let year = date.getFullYear();
+			let month = (1 + date.getMonth()).toString().padStart(2, '0');
+			let day = date.getDate().toString().padStart(2, '0');
+
+			var formattedTime = day + '/' + month + '/' + year + ' - ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+			return formattedTime;
+		}
+
+
+		$(document).on('click', '.see-product-story', (e) => {
+			$('#productStory').modal('show');
+			productHistoryTable.clear().draw(true);
+			$.get("/admin/product/product-history/" + $(e.target).data('product-id') + "/", (e) => {
+				[].map.call((e), async (transaction) => {
+					/* Will query for amount of registered transactions upon this chat */
+					user = await $.get('/admin/query-for-user-name/' + transaction[1]['user_id'], (data) => {
+						return data
+					});
+					/* Drawing chat row */
+					productHistoryTable.row.add([
+						JSON.parse(user)[0],
+						timestamp(Date.parse(transaction[1]['sale_date'])),
+						processStatus(transaction[1]['sale_status']),
+						parseFloat(transaction[1]['sale_real_value']).toFixed(2).replace('.', ','),
+						transaction[1]['sale_payment_source'],
+					]).draw(true);
+				})
+			});
+		});
+
+		$(document).on('click', '.change-product-status', (e) => {
+			var [product_id, product_status] = [$(e.target).data('id'), $(e.target).data('status')];
+
+			$.get("/admin/product/update-status/" + product_id + "/" + product_status + "/", (cb) => {
+				$(e.target).parent().html(status_buttons(!product_status, product_id));
+			});
+		});
+
+		var productTable = $('#productTable').DataTable({
+			"serverSide": true,
+			"order": [[2, "desc"]],
+			"ajax": {
+				url: '/admin/product/list',
+				type: 'POST',
+			},
+			"ordering": true,
+			"info": true,
+			"processing": true,
+			"columns": [
+				{
+					"data": "product_image", "render": (data, type, row) => {
+						return '<img style="max-height: 30px !important;" src="' + data + '" class="img-fluid">';
+					}
+				},
+				{
+					"data": "product_title"
+				},
+				{
+					"data": "product_is_active", "render": (data, type, row) => {
+						return status_buttons(data, row.product_id);
+					}
+				},
+				{
+					"data": "product_value", "render": (data, type, row) => {
+						return parseFloat(data).toFixed(2).replace('.', ',') + ' <strong>Euros</strong>'
+					}
+				},
+				{
+					"data": "product_id", "render": (data, type, row) => {
+						return product_buttons(data);
+					}
+				},
+
+			],
+			"language":
+			{
+				"sEmptyTable": "Nenhum registro encontrado",
+				"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+				"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+				"sInfoFiltered": "(Filtrados de _MAX_ registros)",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sLengthMenu": "_MENU_ resultados por página",
+				"sLoadingRecords": "Carregando...",
+				"sProcessing": "Processando...",
+				"sZeroRecords": "Nenhum registro encontrado",
+				"sSearch": "Pesquisar",
+				"oPaginate": {
+					"sNext": ">",
+					"sPrevious": "<",
+					"sFirst": "<<",
+					"sLast": ">>"
+				},
+				"oAria": {
+					"sSortAscending": ": Ordenar colunas de forma ascendente",
+					"sSortDescending": ": Ordenar colunas de forma descendente"
+				},
+				"select": {
+					"rows": {
+						"_": "Selecionado %d linhas",
+						"0": "Nenhuma linha selecionada",
+						"1": "Selecionado 1 linha"
+					}
+				},
+				"buttons": {
+					"copy": "Copiar para a área de transferência",
+					"copyTitle": "Cópia bem sucedida",
+					"copySuccess": {
+						"1": "Uma linha copiada com sucesso",
+						"_": "%d linhas copiadas com sucesso"
+					}
+				}
+			}
+		});
+
+
+		$(document).on('click', '.delete-product', (e) => {
+			$.get('/admin/product/delete/' + $(e.target).data('product-id') + '/', (e) => {
+				Swal.fire(
+					'Produto foi Ocultado!',
+					'O produto foi ocultado com sucesso no banco de dados e não está mais disponível para clientes.',
+					'success'
+				);
+			});
+		})
+
+
+		$(document).on('click', '.edit-product', (e) => {
+
+			$.get('/admin/product/single/' + $(e.target).data('product-id') + '/', (e) => {
+				let product_data = JSON.parse(e);
+				/* Meta data */
+				$('input[name="edit_product_id"]').val(product_data[0]['product_id']);
+
+				/* Infos */
+				$('textarea[name="edit_product_description"]').text("");
+				$('input[name="edit_product_title"]').val(product_data[0]['product_title']);
+				$('textarea[name="edit_product_description"]').text(product_data[0]['product_description']);
+				$('input[name="edit_product_bonus"]').val(parseFloat(product_data[0]['product_bonus']).toFixed(2).replace('.', ','));
+				$('input[name="edit_product_value"]').val(parseFloat(product_data[0]['product_value']).toFixed(2).replace('.', ','));
+
+				/* When everything has been render we will show the modal */
+				$('#editProductModal').modal('show');
+			});
+		});
+
+
+		$(document).on('submit', '#editProduct', (e) => {
+			e.preventDefault();
+			var product_data = new FormData();
+
+			/* Meta Data */
+			product_data.append('product_id', $('input[name="edit_product_id"]').val());
+
+			/* Content */
+			product_data.append('product_title', $('input[name="edit_product_title"]').val());
+			product_data.append('product_value', $('input[name="edit_product_value"]').val().replace(',', '.'));
+			product_data.append('product_bonus', $('input[name="edit_product_bonus"]').val().replace(',', '.'));
+			product_data.append('product_description', $('textarea[name="edit_product_description"]').val());
+			product_data.append('product_image', $('input[name="edit_product_image"]')[0].files[0]);
+
+			$.ajax({
+				url: '/admin/product/update-product',
+				type: 'POST',
+				data: product_data,
+				contentType: false,
+				processData: false,
+				success: (event) => {
+					Swal.fire(
+						'Produto Alterado!',
+						'O novo produto foi alterado com sucesso no banco de dados e está disponível.',
+						'success'
+					);
+
+					/* When everything has been send we`ll hide the modal */
+					$('#editProductModal').modal('hide');
+
+					/* Redraws table */
+					productTable.ajax.reload();
+				}
+			});
+		});
+
+		$(".custom-file-input").on("change", function () {
+			var fileName = $(this).val().split("\\").pop();
+			$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+		});
+
+		/* Getting right elemns for adding a new product */
+		$(document).on('click', '#newProductBtn', (e) => {
+			/* Clear forms after submitting a new product */
+			$('textarea[name="product_description"]').text("");
+			$('input[type="text"]').val("");
+		});
+
+		$(document).on('submit', '#newProduct', (e) => {
+			e.preventDefault();
+			var product_data = new FormData();
+			product_data.append('product_title', $('input[name="product_title"]').val());
+			product_data.append('product_value', $('input[name="product_value"]').val().replace(',', '.'));
+			product_data.append('product_bonus', $('input[name="product_bonus"]').val().replace(',', '.'));
+			product_data.append('product_description', $('textarea[name="product_description"]').val());
+			product_data.append('product_image', $('input[name="product_image"]')[0].files[0]);
+
+			$.ajax({
+				url: '/admin/product/new-product',
+				type: 'POST',
+				data: product_data,
+				contentType: false,
+				processData: false,
+				success: (event) => {
+					$("#newProductModal").modal('hide');
+					productTable.ajax.reload();
+
+					Swal.fire(
+						'Produto Inserido!',
+						'O novo produto foi inserido com sucesso no banco de dados e já está disponível.',
+						'success'
+					);
+				}
+			});
+		});
+
+		var productHistoryTable = $('#productStoryTable').DataTable({
+			"language":
+			{
+				"sEmptyTable": "Nenhum registro encontrado",
+				"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+				"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+				"sInfoFiltered": "(Filtrados de _MAX_ registros)",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sLengthMenu": "_MENU_ resultados por página",
+				"sLoadingRecords": "Carregando...",
+				"sProcessing": "Processando...",
+				"sZeroRecords": "Nenhum registro encontrado",
+				"sSearch": "Pesquisar",
+				"oPaginate": {
+					"sNext": ">",
+					"sPrevious": "<",
+					"sFirst": "<<",
+					"sLast": ">>"
+				},
+				"oAria": {
+					"sSortAscending": ": Ordenar colunas de forma ascendente",
+					"sSortDescending": ": Ordenar colunas de forma descendente"
+				},
+				"select": {
+					"rows": {
+						"_": "Selecionado %d linhas",
+						"0": "Nenhuma linha selecionada",
+						"1": "Selecionado 1 linha"
+					}
+				},
+				"buttons": {
+					"copy": "Copiar para a área de transferência",
+					"copyTitle": "Cópia bem sucedida",
+					"copySuccess": {
+						"1": "Uma linha copiada com sucesso",
+						"_": "%d linhas copiadas com sucesso"
+					}
+				}
+			}
+		});
+	});
+</script>
+
+
+<!-- Modal Attendance History -->
+<div class="modal fade" id="productStory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2>Exibindo registros de compras relativas ao produto:</h2>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table id="productStoryTable" class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Cliente</th>
+							<th scope="col">Data</th>
+							<th scope="col">Status</th>
+							<th scope="col">Valor</th>
+							<th scope="col">Fonte</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

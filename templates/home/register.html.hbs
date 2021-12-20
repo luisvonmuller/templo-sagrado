@@ -1,0 +1,177 @@
+{{> home/header }}
+
+<section id="new-user" class="container mt-4 bg-white position-relative home-border">
+    <img src="/assets/home/img/arabesco.png" class="home-top-left-arabesque" alt="Arabesco" title="Arabesco">
+    <img src="/assets/home/img/arabesco.png" class="home-top-right-arabesque" alt="Arabesco" title="Arabesco">
+    <div class="row">
+        <div class="col-lg-12 py-4 px-3">
+            <h1 class="text-center">
+                Faça seu cadastro aqui:
+            </h1>
+            <hr>
+            <form id="form-new-user" method="POST" action="/user/new-user" class="px-5">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label for="user_name">Nome: <span style="color: red;">*</span></label>
+                        <input required type="text" name="user_name" class="form-control" id="user_name"
+                            placeholder="Seu nome completo.">
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="user_email">E-mail: <span style="color: red;">*</span></label>
+                        <input required type="text" name="user_email" class="form-control" id="user_email"
+                            placeholder="Seu E-mail.">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label for="user_birthdate">Sua Data de Nascimento:<span style="color: red;">*</span></label>
+                        <input required type="date" name="user_birthdate" class="form-control" id="user_birthdate"
+                            placeholder="dd/mm/yyyy">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="user_genre">Gênero:<span style="color: red;">*</span></label>
+                        <select name="user_genre" class="form-control" id="user_genre">
+                            <option value="Masculino">Masculino</option>
+                            <option value="Feminino">Feminino</option>
+                            <option value="Prefere não informar">Prefiro não informar</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="user_phone">Telefone/Celular:
+                            <span style="color: red;">*</span></label>
+                        <input required type="text" name="user_phone" class="form-control" id="user_phone"
+                            placeholder="X XXXX-XXXX">
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label for="user_zip_code">Código Postal: <span style="color: red;">*</span></label>
+
+                        <input required type="text" name="user_zip_code" class="form-control" id="user_zip_code"
+                            placeholder="Qual o seu código postal?">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="user_city">Cidade: <span style="color: red;">*</span></label>
+                        <input required type="text" name="user_city" class="form-control" id="user_city"
+                            placeholder="Qual a sua cidade?">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="user_uni">NIF: <span style="color: red;">*</span></label>
+
+                        <input required type="text" name="user_uni" class="form-control" id="user_uni"
+                            placeholder="Qual o seu NIF?">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <label for="user_street">Endereço: <span style="color: red;">*</span></label>
+                        <input required type="text" name="user_street" class="form-control" id="user_street"
+                            placeholder="A sua Rua, avenida ou alameda">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="user_addr_num">Número: <span style="color: red;">*</span></label>
+                        <input required type="text" name="user_addr_num" class="form-control" id="user_addr_num"
+                            placeholder="Número">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label for="user_alias">Usuário: <span style="color: red;">*</span></label>
+                        <input required type="text" name="user_alias" class="form-control" id="user_alias"
+                            placeholder="Escolha seu nome de usuário Usuário">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="user_pass">Senha: <span style="color: red;">*</span></label>
+                        <input required type="password" name="user_pass" class="form-control" id="user_pass"
+                            placeholder="Digite a senha desejada">
+                    </div>
+
+                    <div class="col-lg-4">
+                        <label for="user_pass">Confirmação de senha: <span style="color: red;">*</span></label>
+                        <input required type="password" class="form-control" id="user_pass" placeholder="Confirme sua senha">
+                    </div>
+                </div>
+                <div class="row py-4">
+                    <div class="mx-3 form-check control">
+                        <input class="form-check-input" type="checkbox" value="true" checked name="user_news_letter"
+                            id="userNewsLetter">
+                        <label class="form-check-label" for="userNewsLetter">
+                            Desejo receber E-mails sobre novidades, ofertas e promoções!
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row" id="password-tip"></div>
+                <div class="row" id="mail-tip"></div>
+                <div class="row" id="server-results"><!-- For server results --></div>
+                <hr>
+                <button type="submit" class="btn btn-light btn-block">Cadastrar-se</button>
+            </form>
+        </div>
+    </div>
+    <img src="/assets/home/img/arabesco.png" class="home-bottom-left-arabesque" alt="Arabesco" title="Arabesco">
+    <img src="/assets/home/img/arabesco.png" class="home-bottom-right-left-arabesque" alt="Arabesco" title="Arabesco">
+</section>
+
+{{> home/footer }}
+
+<script>
+    function getError(errorName){
+        var errors = [];
+        errors["user_error"] = "Ocorreu um erro: Verifique se seus dados pessoais estão preenchidos corretamente.";
+        errors["address_error"] = "Ocorreu um erro: Verifique se seu endereço está preenchido corretamente.";
+        errors["phone_error"] = "Ocorreu um erro: Verifique se seu número de telefone está preenchido corretamente.";
+        errors["invalid_date_error"] = "Ocorreu um erro: Sua data de nascimento parece estar incorreta. Preencha novamente.";
+        return errors[errorName];
+    }
+
+    $("#form-new-user").submit(function(event){
+        event.preventDefault(); //prevent default action 
+        var post_url = $(this).attr("action"); //get form action url
+        var request_method = $(this).attr("method"); //get form GET/POST method
+        var form_data = $(this).serialize(); //Encode form elements for submission
+        $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data
+        }).done(function(response){ 
+            if (response == "success") {
+                location.replace("/my-acc");
+            } else {
+                $("#server-results").html('<div class="alert col-lg-12 alert-danger"> ' + getError(response) + '</div>');
+            }
+        });
+    });
+
+    $(document).ready(() => {
+        $('#pass2, #pass1').keyup((e) => {
+            if ($("#pass2").val() == $("#pass1").val()) {
+                /* When equals */
+                $('button[type="submit"]').removeAttr('disabled');
+                $("#password-tip").html('<div class="alert col-lg-12 alert-success"> As senhas são iguais. </div>');
+            } else {
+                /* When not equals */
+                $('button[type="submit"]').attr('disabled', 'true');
+                $("#password-tip").html('<div class="alert col-lg-12 alert-danger"> As senhas não são iguais. </div>');
+            }
+        });
+
+        $(document).on('blur', '#user_email', (e) => {
+            $.get('/check-mail/' + $(e.target).val(), (income) => {
+                if (JSON.parse(income)) {
+                    $('button[type="submit"]').removeAttr('disabled');
+                    $("#mail-tip").html('<div class="alert col-lg-12 alert-success"> E-mail OK. </div>');
+                } else {
+                    $('button[type="submit"]').attr('disabled', 'true');
+                    $("#mail-tip").html('<div class="alert col-lg-12 alert-danger"> Esse e-mail já está cadastrado na plataforma. </div>');
+
+                }
+            })
+        });
+    });
+</script>

@@ -1,0 +1,52 @@
+[package]
+name = "templo_sagrado"
+version = "1.1.2"
+authors = ["Luis Von Müller <luis@easywebusa.com>"]
+edition = "2018"
+
+[dependencies]
+rdatatables = "0.0.9"
+rocket-multipart-form-data = "0.9.1"
+blake2 = "0.7"
+new-tokio-smtp = "0.9.1"
+mail = "0.7.0"
+futures = "0.1"
+mail-template = "0.6.1"
+bytes = "0.4"
+tokio = "0.1.11"
+tokio-io = "0.1.9"
+tokio-tls = "0.2.0"
+base64 = "0.9.3"
+hostname = "0.1.5"
+vec1 = "1.5.0"
+rpassword = "4.0.5"
+digest = { version = "0.7", features = ["std"]}
+chrono = { version = "0.4", features = ["serde", "rustc-serialize"] }
+rocket = { version = "0.4.4"}
+diesel = { version = "1.4.4",  features = ["postgres", "chrono"] }
+rust-crypto = "0.2.36"
+sha2 = "0.7"
+handlebars = "3.2.1"
+rand = "0.7.3"
+ws = "0.9.1"
+dotenv = "0.15.0"
+multipart = "0.16.1"
+rocket_codegen = "0.4.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rocket_cors = "0.5.0"
+serde_derive = "1.0"
+env_logger = "0.7.1"
+native-tls = "0.2.4"
+curl = "0.4.29"
+roxmltree = "0.13.0"
+log = "0.4.11"
+sitemap = "0.4.1"
+
+[profile.release]
+opt-level = 3
+
+[dependencies.rocket_contrib]
+version = "0.4.4"
+default-features = false
+features = ["handlebars_templates", "json"]

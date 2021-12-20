@@ -1,0 +1,815 @@
+<link href="/assets/home/lib/css/emoji.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+<style type="text/css">
+    #chat-holder {
+        height: 50vh !important;
+        overflow-y: scroll !important;
+        position: relative;
+        background-attachment: fixed;
+        background-image: url("/assets/home/img/fundo_site_02.jpg");
+    }
+
+    .msg-in {
+        border-radius: 1em !important;
+        background-color: white;
+        -webkit-box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        -moz-box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+    }
+
+    .msg-out {
+        background-color: #dcf8c6;
+        border-radius: 1em !important;
+        -webkit-box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        -moz-box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+    }
+
+    *::-webkit-scrollbar {
+        width: 6px !important;
+        height: 6px !important;
+        width: 6px !important;
+        height: 6px !important;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    *::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .user-info-row {
+        background-color: #ededed;
+        border-top-right-radius: 0.5em;
+        border-top-left-radius: 0.5em;
+    }
+
+    .emoji-wysiwyg-editor {
+        border-radius: 1em !important;
+        background-color: white !important;
+        line-height: 1.5 !important;
+        padding-top: auto;
+        padding-bottom: auto;
+        font-family: "Segoe UI", "Helvetica Neue", "Helvetica", "Lucida Grande", Arial, "Ubuntu", "Cantarell", "Fira Sans", sans-serif !important;
+    }
+
+    .emoji-picker-icon {
+        padding-right: 1em;
+        padding-top: 0.5em;
+    }
+
+    .btn-circle {
+        border-radius: 15px;
+    }
+
+
+
+    @media (max-width: 768px) {
+        .home-picture-from-client {
+            max-width: 50% !important;
+            margin-left: 25%;
+        }
+
+        .home-name-from-client {
+            text-align: center;
+        }
+
+        .home-alert-clerk-inf {
+            text-align: center;
+        }
+
+        .emoji-picker-container {
+            max-width: 90%;
+        }
+
+        .home-button-send-a-new-message {
+            max-width: 6%;
+        }
+
+        .home-info-client {
+            min-width: 100% !important;
+            margin-left: 0px !important;
+        }
+    }
+
+    @media (max-width: 425px) {
+        .emoji-picker-container {
+            margin-left: -2 !important;
+            max-width: 85%;
+        }
+
+        .home-button-send-a-new-message {
+            margin-left: -3%;
+        }
+
+        .home-button-send-a-new-message button {
+            margin-left: -15px !important;
+        }
+    }
+</style>
+{{> home/header}}
+
+<main>
+    <section id="new-user" class="container mt-4 home-alter-sapce-call-with-footer">
+        <div class="chat-total-wrapper">
+            <div class="row">
+                <div class="col-lg-12 pt-4 px-3">
+                    <h1 class="text-center">
+                        Bem-vindo ao Atendimento ao Cliente
+                    </h1>
+                    <hr>
+                </div>
+            </div>
+            <div class="user-info-row mx-2">
+                <div class="row mx-2 py-1">
+                    <div class="col-lg-3 d-none d-lg-block">
+                        <img class="img-fluid img-thumbnail home-picture-from-client" alt="Imagem do cliente"
+                            src="/assets/home/img/logo-topo.png">
+                    </div>
+                    <div class="col-lg-3 my-auto home-name-from-client">
+                        <h4><span class="user_name"></span></h4>
+                        <button id="exit" class="btn btn-sm btn btn-danger">Desconectar</button>
+                    </div>
+                    <div class="col-lg-6 my-auto">
+                        <div class="alert alert-info mt-2">
+                            <div class="row">
+                                <div class="col-lg-4 d-flex justify-content-center">
+                                    <i class="d-none d-lg-block fas fa-award"></i> Ganho: €<span
+                                        id="chat-owned-minutes">0,00</span>
+                                </div>
+                                <div class="d-none d-lg-block col-lg-8 alert-success"
+                                    style="border-radius: 30px; border: 1px solid white;">
+                                    <i class="fas fa-money-bill-wave"></i> Valor a ganhar por minuto: € <span
+                                        id="site-chat-min-val"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="progress mt-2">
+                                        <div id="credits-bar-balance" data-toggle="tooltip" data-placement="top"
+                                            class="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar">
+                                        </div>
+                                        <div id="credits-bar-owned" data-toggle="tooltip" data-placement="top"
+                                            class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                            role="progressbar"></div>
+                                    </div>
+                                    <small class="d-block d-lg-none alert-danger text-center">Clique na bara para ver
+                                        valores.</small>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row px-2">
+                <div class="col-lg-12">
+                    <div id="chat-holder" class="py-2">
+                        <div id="messages">
+
+                        </div>
+                    </div>
+                    <form id="form" class="user-info-row home-form-from-send-message">
+                        <div class="row py-2 pl-3">
+                            <div class="col-lg-11 emoji-picker-container">
+                                <input id="msg" name="msg" data-emojiable="true" type="text"
+                                    class="form-control px-3 form-control-lg" placeholder="Digite aqui sua mensagem..."
+                                    required>
+                            </div>
+                            <div class="col-lg-1 my-auto home-button-send-a-new-message">
+                                <button id="send-msg" class="btn btn-large">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                        <path fill="currentColor"
+                                            d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Meta Client -->
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-12 px-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <h5> <span class="d-none d-lg-block">Informações do seu cliente 💁‍♂️</span></h5>
+                            </div>
+                            <div class="col-lg-4">
+                                <button id="collapse-button-listner"
+                                    class="float-right btn btn-block btn-sm btn-primary collapsed" type="button"
+                                    data-toggle="collapse" data-target="#collapse-client-information"
+                                    aria-expanded="true" aria-controls="collapseExample">
+                                    👀 Mostrar informações
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body collapse" id="collapse-client-information">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <h6>😎 Outras informações:</h6>
+                                <hr>
+                                <strong> Nome: </strong> <span class="user_name"></span> <br>
+                                <strong> Aniversário: </strong> <span class="user_birthdate"></span> <br>
+                                <strong> Gênero: </strong> <span class="user_genre"></span> <br>
+                            </div>
+                            <div class="col-lg-4 alert alert-info">
+                                <h5>💰 Saldo do cliente: € <strong id="client-total-balance"></strong></h5>
+                                <hr>
+                                <div class="">
+                                    <div class="progress mt-2">
+                                        <div id="client-credits-bar-balance" data-toggle="tooltip" data-placement="top"
+                                            class="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar">
+                                        </div>
+                                        <div id="client-credits-bar-bonus" data-toggle="tooltip" data-placement="top"
+                                            class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                            role="progressbar"></div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <small class="alert-danger">⚠️ Essa seção será ativada após 1 minuto de
+                                            chat</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 alert alert-success">
+                                <h5>📊 Performance:</h5>
+                                <hr>
+                                <div class="">
+                                    <div class="progress mt-2">
+                                        <div id="left-time" data-toggle="tooltip" data-placement="top"
+                                            class="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                                            role="progressbar">
+                                        </div>
+                                        <div id="earned-time" data-toggle="tooltip" data-placement="top"
+                                            class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                            role="progressbar"></div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <small class="alert-danger">⌛ Máx. de atendimento: <span
+                                                id="client-max-time"></span> min.</small>
+                                        <small class="float-right alert-info">Feitos: <strong
+                                                id="total-time"></strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- [Meta Data] --->
+<!-- My Id (Clerk Id) -->
+<input type="hidden" id="my-id" value="{{self_data.0.0.user_id }}">
+<!-- Clerk Id -->
+<input type="hidden" id="client-id" value="{{self_data.1}}">
+<!-- Clerk Id -->
+<input type="hidden" id="chat-id" value="{{self_data.2}}">
+<!-- [Meta Data] --->
+
+
+{{> home/footer}}
+
+<script src="https://kit.fontawesome.com/80f8c2cb09.js"></script>
+<script src="/assets/home/lib/js/config.js"></script>
+<script src="/assets/home/lib/js/util.js"></script>
+<script src="/assets/home/lib/js/jquery.emojiarea.js"></script>
+<script src="/assets/home/lib/js/emoji-picker.js"></script>
+<script type="text/javascript">
+    $(document).ready(async function () {
+        /* Our websocket connection */
+        const socket = new WebSocket("wss://chat." + window.location.host.replace("www.", "") + "/ws");
+        /* Pree init the meta vars */
+        var chat_id = parseInt(window.location.pathname.split("/").pop());
+        var timeEnrolled = 0;
+        /** 
+        @func
+        ------------------------------------ ------------------------------------ ------------------------------------ 
+        ----- @name anonymous
+        ----- @description Changue the name + emoji from the button
+        ----- @receives (
+                e => target.
+        );
+        ------------------------------------ ------------------------------------ ------------------------------------ 
+        @binds_to @element  #collapse-button-listner
+        ------------------------------------ ------------------------------------ ------------------------------------ 
+        @returns {void} 
+        **/
+
+        /** @var bntSate => records collapse button state */
+        var btnState = 0;
+        $(document).on("click", "#collapse-button-listner", function (e) {
+            if (btnState) {
+                /* Change to show */
+                $(e.target).text("👀 Mostrar informações");
+                btnState = 0;
+            } else {
+                $(e.target).text("🙈 Esconder informações");
+                /* Change to hide */
+                btnState = 1;
+            }
+        });
+
+
+        function bar_color(amount) {
+            if ((amount / valMinChat) > 3 && (amount / valMinChat) <= 10) {
+                /* The implementation to update the paid-balance */
+                $("#client-credits-bar-balance").addClass('bg-warning');
+            } else if ((amount / valMinChat) <= 3) {
+                /* The implementation to update the paid-balance */
+                $("#client-credits-bar-balance").addClass('bg-danger');
+            }
+        }
+
+
+        /**
+             @func 
+             * @name client_credits_bar A good name, I do think
+             * @desc Will draw the bar, and the credits (by a text) 
+             * @bindsto  #credits-bar-balance 
+             * @bindsto  #credits-bar-owned
+             -------------------------
+             * @param {Float 64} balance           || The balance (paid) that corresponds to the owned on the bar.
+             * @param {Float 64} owned             || The amount that corresponds to the owned on the bar.
+             -------------------------
+             * @returns {void}
+         **
+         */
+
+
+        function time_bar(balance, bonus) {
+            /* To a better behave on no balance */
+            if (bonus > 0) {
+                /* Proportion */
+                var bonus_proportion = ((balance * 100) / (balance + bonus)) - 100;
+                var balance_proportion = ((bonus * 100) / (balance + bonus)) - 100;
+
+
+                /* The implementation to update the paid-balance */
+                $("#left-time").attr("style", "width:" + (balance_proportion * -1) + "%");
+
+                /* Balance tooltip */
+                $("#left-time").attr("data-original-title", "Tempo restante (minutos): " + parseInt(balance));
+                $("#left-time").tooltip();
+
+
+                /* The implementation to update the bonus-balance */
+                $("#earned-time").attr("style", "width:" + (bonus_proportion * -1) + "%");
+
+
+                /* Bonus tooltip */
+                $("#earned-time").attr("data-original-title", "Tempo Decorrido (minutos): " + parseInt(bonus));
+                $("#earned-time").tooltip();
+
+            } else {
+                var balance_proportion = 1;
+                /* The implementation to update the paid-balance */
+                $("#left-time").attr("style", "width:" + (balance_proportion * 100) + "%");
+
+
+                /* The implementation to update the bonus-balance */
+                $("#earned-time").attr("style", "width:" + (0) + "%");
+                $("#earned-time").attr("data-original-title", "Tempo Decorrido (minutos): ");
+
+
+                /* Balance tooltip */
+                $("#left-time").attr("data-original-title", "Tempo restante (minutos): " + parseInt(balance));
+                $("#left-time").tooltip();
+
+            }
+
+            //bar_color(balance + bonus);
+        }
+
+        /**
+               @func 
+               * @name client_credits_bar A good name, I do think
+               * @desc Will draw the bar, and the credits (by a text) 
+               * @bindsto  #credits-bar-balance 
+               * @bindsto  #credits-bar-owned
+               -------------------------
+               * @param {Float 64} balance           || The balance (paid) that corresponds to the owned on the bar.
+               * @param {Float 64} owned             || The amount that corresponds to the owned on the bar.
+               -------------------------
+               * @returns {void}
+           **
+           */
+
+
+        function client_credits_bar(balance, bonus) {
+            /* To a better behave on no balance */
+            if (bonus > 0) {
+                /* Proportion */
+                var bonus_proportion = ((balance * 100) / (balance + bonus)) - 100;
+                var balance_proportion = ((bonus * 100) / (balance + bonus)) - 100;
+
+
+                /* The implementation to update the paid-balance */
+                $("#client-credits-bar-balance").attr("style", "width:" + (balance_proportion * -1) + "%");
+
+                /* Balance tooltip */
+                $("#client-credits-bar-balance").attr("data-original-title", "Saldo pago €" + parseFloat(balance).toFixed(2).replace(".", ","));
+                $("#client-credits-bar-balance").tooltip();
+
+
+                /* The implementation to update the bonus-balance */
+                $("#client-credits-bar-bonus").attr("style", "width:" + (bonus_proportion * -1) + "%");
+
+
+                /* Bonus tooltip */
+                $("#client-credits-bar-bonus").attr("data-original-title", "Saldo ganho por bônus €" + parseFloat(bonus).toFixed(2).replace(".", ","));
+                $("#client-credits-bar-bonus").tooltip();
+
+            } else {
+                var balance_proportion = 1;
+                /* The implementation to update the paid-balance */
+                $("#client-credits-bar-balance").attr("style", "width:" + (balance_proportion * 100) + "%");
+
+
+                /* The implementation to update the bonus-balance */
+                $("#client-credits-bar-bonus").attr("style", "width:" + (0) + "%");
+                $("#client-credits-bar-bonus").attr("data-original-title", "Saldo por bônus €0,00");
+
+
+                /* Balance tooltip */
+                $("#client-credits-bar-balance").attr("data-original-title", "Saldo pago €" + parseFloat(balance).toFixed(2).replace(".", ","));
+                $("#client-credits-bar-balance").tooltip();
+
+            }
+
+            bar_color(balance + bonus);
+
+            /* Draw things into the user view */
+            $("#client-total-balance").html((parseFloat(balance + bonus).toFixed(2).replace('.', ',')));
+        }
+
+        /**
+               @func 
+               * @name credits_bar Represents the clerk bar, will grow over owned
+               * @desc Will draw the bar, and the credits (by a text) 
+               * @bindsto  #credits-bar-balance 
+               * @bindsto  #credits-bar-owned
+               -------------------------
+               * @param {Float 64} balance           || The balance (paid) that corresponds to the owned on the bar.
+               * @param {Float 64} owned             || The amount that corresponds to the owned on the bar.
+               -------------------------
+               * @returns {void}
+           **
+           */
+
+        function credits_bar(balance, owned) {
+
+            /* To a better behave on no balance */
+            if (owned > 0) {
+                /* Proportion */
+                var owned_proportion = ((balance * 100) / (balance + owned)) - 100;
+                var balance_proportion = ((owned * 100) / (balance + owned)) - 100;
+
+
+                /* The implementation to update the paid-balance */
+                $("#credits-bar-balance").attr("style", "width:" + (balance_proportion * -1) + "%");
+
+                /* Balance tooltip */
+                $("#credits-bar-balance").attr("data-original-title", "Seu saldo inicial era €" + parseFloat(balance).toFixed(2).replace(".", ",") + " Agora o total é (ganho + inicial): €" + parseFloat(balance + owned).toFixed(2).replace(".", ","));
+                $("#credits-bar-balance").tooltip();
+
+
+                /* The implementation to update the owned-balance */
+                $("#credits-bar-owned").attr("style", "width:" + (owned_proportion * -1) + "%");
+
+
+                /* owned tooltip */
+                $("#credits-bar-owned").attr("data-original-title", "Seu saldo ganho neste chat €" + parseFloat(owned).toFixed(2).replace(".", ","));
+                $("#credits-bar-owned").tooltip();
+
+            } else {
+                var balance_proportion = 1;
+                /* The implementation to update the paid-balance */
+                $("#credits-bar-balance").attr("style", "width:" + (balance_proportion * 100) + "%");
+
+
+                /* The implementation to update the owned-balance */
+                $("#credits-bar-owned").attr("style", "width:" + (0) + "%");
+                $("#credits-bar-owned").attr("data-original-title", "Seu saldo ganho por bônus €0,00");
+
+
+                /* Balance tooltip */
+                $("#credits-bar-balance").attr("data-original-title", "Seu saldo inicial é €" + parseFloat(balance).toFixed(2).replace(".", ","));
+                $("#credits-bar-balance").tooltip();
+
+            }
+        }
+
+
+        /** 
+        @func
+        ------------------------------------ ------------------------------------ ------------------------------------ 
+        ----- @name calculate_payout
+        ----- @description Receives the % that clerks earn times the val chat min amount and draws it to screen.
+        ----- @receives (
+        ------ -----  @var commision_rate {Float}
+        ------ -----  @var absolute_text_chat_min_value {Float}
+        );
+        ------------------------------------ ------------------------------------ ------------------------------------ 
+        @binds_to @element  #site-chat-min-val
+        ------------------------------------ ------------------------------------ ------------------------------------ 
+        @returns {void} 
+        **/
+
+        function calculate_payout(rate, value) {
+            $("#site-chat-min-val").html("<strong>" + parseFloat((parseFloat(value) * parseFloat(rate)) / 100).toFixed(2) + "</strong>")
+        }
+
+
+        /**
+        ------------------------------------ 
+                @Get_comission_rate 
+        ------------------------------------
+        **/
+
+        const comission_rate = await $.get("/get-my-comission-rate", (data) => {
+            return data;
+        });
+
+
+        /**
+        ------------------------------------ 
+                 @Get_site_configs 
+        ------------------------------------
+        **/
+
+        /** @var valMinChat
+             @desc Whats thee payrate.
+        */
+
+        var valMinChat = 0;
+
+        /* Parsing and drawing the cost per minute of this site */
+        await $.get('/admin/config/get-configs', function (e) {
+            configs = e[0];
+            valMinChat = parseFloat(configs['absolute_min_value_chat']).toFixed(2);
+        });
+        /**
+
+        /**
+        ------------------------------------ 
+                 @Draw_into_view 
+        ------------------------------------
+        **/
+        calculate_payout(comission_rate, valMinChat);
+
+
+        /**
+        @func
+        ---- @name anonymous (could be meta data generator)
+        ---- @description Update the vars with its needed variables to access.
+        ---- @receiveis a tuple(json), 0 beeing client_id and 1 beeing clerk_id
+        -------------------------
+        @returns void
+        */
+
+        const data = await $.get("/chat-meta-info/" + chat_id, function (data) {
+            return data;
+        });
+
+        var my_id = parseInt(data[1]);
+        var client_id = parseInt(data[0]);
+
+        /** @var  clientInitialBalance @desc {How much he has} */
+        var clientInitialBalance = 0;
+
+
+        /* My balance will change over time, thats why we had to change this back to var from a const statement */
+        var totalBalance = await $.get("/my-credits", function (e) {
+            return e;
+        });
+
+        /* First bar Draw */
+        const myInitialBalance = (parseFloat(totalBalance[0][0]) + parseFloat(totalBalance[0][1])).toFixed(2);
+        credits_bar(myInitialBalance, 0);
+
+        /** View Stuff 
+        @var  messages // Stands for whole-chat-container
+        */
+
+        const messages = document.getElementById("messages");
+
+        function getDateTime() {
+            const today = new Date();
+            const date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+            const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            const payload = date + ' ' + time;
+            return payload;
+        }
+
+        function scrollSmoothToBottom(id) {
+            var div = document.getElementById(id);
+            $('#' + id).animate({
+                scrollTop: div.scrollHeight
+            }, 500);
+        }
+
+        var ownedMin = 0;
+
+        $.post('/get_client_info', { client_id: client_id }, function (response) {
+            response = JSON.parse(response);
+            $('.user_name').html(response[0][0]['user_name']);
+            $('.user_birthdate').html(response[0][0]['user_birthdate'].split("-").reverse().join("/"));
+            $('.user_genre').html(response[0][0]['user_genre']);
+            $('.address_state').html(response[0][1]['address_state']);
+            $('.address_city').html(response[0][1]['address_city']);
+        });
+
+        socket.onopen = function (event) {
+            var p = document.createElement("div");
+            p.innerHTML = '<div class="row clear-fix mx-2 mb-2"><div class="my-auto col-lg-12 mr-auto alert alert-success">Bem vindo ao chat! Agora você pode conversar com cliente. Boa consulta! <br><small class="float-right"> Recebido em:  ' + getDateTime() + '</small> </div> </div>';
+            messages.append(p);
+        };
+
+
+        /**
+        @func 
+        * @name message_generator 
+        * @desc Will stringfy our common text-chat JSON structure.
+        -------------------------
+        * @param {String} action            // It MUST be either "leave", "message" or "new-transaction" (Stands for how to behave on the json object on the other side)
+        * @param {String} msg               // The message content (Nullable on leave action.)
+        * @param {i32 (int)} transaction_id // When the client made a payout, this should be also announced via the websocket.
+        -------------------------
+        * @returns {String} // The return its a stringfyed JSON object that will be deseralized later on the socket and also reparsed on the clerk side.
+        */
+        function message_generator(action, msg = null, transaction_id = null) {
+            var message_parsed = JSON.stringify({
+                "from": my_id,
+                "to": client_id,
+                "chat_id": chat_id,
+                "action": action,
+                "message": msg,
+                "transaction": transaction_id
+            });
+            console.log(message_parsed);
+            return message_parsed;
+        }
+        /**
+        * @anonymous_func 
+        * @binds_to #exit @on click @do leave the chat + socket, or for better understaing, it just stop chatting.
+        * @redirects @to /atendimento
+        */
+        const exit = document.getElementById("exit");
+
+        exit.onclick = async function () {
+            await $.get("/register-event-by-clerk/4", function (e) { });
+            socket.send(message_generator("clerk-leave"));
+            socket.close();
+            window.location = "/atendimento";
+        }
+
+
+        /**
+        * @anonymous_func 
+        * @binds_to #form @on submit @do sends over socket the message wrote on the form (if, and only if its length is more than 0 characters).
+        * @sends_to socket (connection)
+        */
+        const form = document.getElementById("form");
+        form.onsubmit = function (event) {
+            event.preventDefault();
+            if (document.getElementsByClassName("emoji-wysiwyg-editor").length > 0) {
+                if (document.getElementsByClassName("emoji-wysiwyg-editor")[0].innerHTML.length > 0) {
+                    var message = document.getElementsByClassName("emoji-wysiwyg-editor")[0].innerHTML;
+                    socket.send(message_generator("message", message));
+                    document.getElementsByClassName("emoji-wysiwyg-editor")[0].innerHTML = "";
+                    var p = document.createElement("div");
+                    p.innerHTML = '<div class="row clear-fix mx-2"><div class="msg-out col-lg-6 ml-auto alert">' + message + '<br><small class="float-right"> Enviado em:  ' + getDateTime() + '</small> </div> </div>';
+                    messages.append(p);
+                }
+            } else {
+                if ($(document).find("#msg").val().length > 0) {
+                    var message = $(document).find("#msg").val();
+                    socket.send(message_generator("message", message));
+                    $(document).find("#msg").val("");
+                    var p = document.createElement("div");
+                    p.innerHTML = '<div class="row clear-fix mx-2"><div class="msg-out col-lg-6 ml-auto alert">' + message + '<br><small class="float-right"> Enviado em:  ' + getDateTime() + '</small> </div> </div>';
+                    messages.append(p);
+                }
+
+            }
+        };
+
+
+        socket.onmessage = async function (event) {
+            /* Scroll till the bottom of the chat (msgs holder) div */
+            scrollSmoothToBottom('chat-holder');
+
+            /* Parses the content over the common text-chat-structure */
+            var content = JSON.parse(event.data);
+
+            console.log(content);
+            if ((parseInt(content.to) == my_id) && (parseInt(content.from) === client_id)) {
+                switch (content.action) {
+                    /* Behave on clerk leaving the chat */
+                    case "client-leave":
+                        var p = document.createElement("div");
+                        p.innerHTML = '<div class="row clear-fix mx-2"><div class="msg-in col-lg-6 mr-auto alert alert-danger">' + "O cliente decidiu encerrar a chamada" + '<br><small class="float-right"> Recebido em:  ' + getDateTime() + '</small> </div> </div>';
+                        messages.append(p);
+                        await $.get("/register-event-by-clerk/4", function (e) { });
+                        await new Promise(r => setTimeout(r, 2000));
+                        window.location = "/atendimento";
+                        break;
+                    case "message":
+                        var p = document.createElement("div");
+                        p.innerHTML = '<div class="row clear-fix mx-2"><div class="msg-in col-lg-6 mr-auto alert">' + content.message + '<br><small class="float-right"> Recebido em:  ' + getDateTime() + '</small> </div> </div>';
+                        messages.append(p);
+                        break;
+                    case "new-transaction":
+                        $.get("/clerk-sign-text-chat-transaction/" + content.transaction + "/", (e) => {
+                            if (e) {
+                                $.get("/clerk-text-chat-amount-owned/" + chat_id, (income) => {
+                                    timeEnrolled++;
+                                    /* Display amount owned on this chat */
+                                    credits_bar(parseFloat(myInitialBalance), parseFloat(income[0]));
+                                    $("#total-time").html(timeEnrolled);
+                                    if (income) {
+                                        $("#chat-owned-minutes").html(parseFloat(income[0]).toFixed(2).replace('.', ','));
+                                    } else {
+                                        console.error("No values provided");
+                                    }
+                                });
+                            } else {
+                                /* Shit happens */
+                                console.error("Error happned while parsing stuff");
+                            }
+                        });
+                        break;
+                    case "client-balance-update":
+                        var balance_data = JSON.parse(content.message);
+                        /* Draws bar */
+                        client_credits_bar(parseFloat(balance_data[0]), parseFloat(balance_data[1]));
+
+                        /* Make know the initial balance  */
+                        if (clientInitialBalance == 0) {
+                            clientInitialBalance = parseFloat(balance_data[0]) + parseFloat(balance_data[1]);
+                            $("#client-max-time").html(parseInt(parseFloat(clientInitialBalance) / valMinChat));
+
+                        }
+
+                        time_bar(parseInt(parseInt(parseFloat(clientInitialBalance) / valMinChat) - timeEnrolled), timeEnrolled);
+
+                        $("#total-time")
+
+                        break;
+                    default:
+                        //Nothing
+                        break;
+                }
+            }
+        };
+
+        socket.onclose = async (event) => {
+            socket.send(message_generator("clerk-leave"));
+            var p = document.createElement("div");
+            p.innerHTML = '<div class="row clear-fix mx-2"><div class="my-auto col-lg-12 mr-auto alert alert-danger mb-2">Os minutos do <b>Cliente</b> acabaram ou ele decidiu fechar a conexão. <br><small class="float-right"> Recebido em:  ' + getDateTime() + '</small> </div> </div>';
+            messages.append(p);
+            $.get('/end-chat/' + chatId, (e) => {
+                //does nothing again
+            });
+            await $.get("/register-event-by-clerk/4", function (e) { });
+
+            await new Promise(function (r) {
+                setTimeout(r, 1500)
+            });
+            /* Update the end time of this chat - > chatId */
+            window.location = "/atendimento";
+
+        };
+
+        window.emojiPicker = new EmojiPicker({
+            emojiable_selector: '[data-emojiable=true]',
+            assetsPath: '/assets/home/lib/img/',
+            popupButtonClasses: 'far fa-laugh-wink'
+        });
+
+        $(document).on('keydown', '.emoji-wysiwyg-editor', (e) => {
+            if (e.which == 13) {
+                e.preventDefault();
+                $("#form").submit();
+            }
+        });
+
+        window.emojiPicker.discover();
+    });
+</script>

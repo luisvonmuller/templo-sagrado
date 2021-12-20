@@ -1,0 +1,40 @@
+{{> home/header }}
+
+<style>
+    .home-button-buy-pack:hover {
+        color: #fff !important;
+    }
+
+    .home-define-min-height-from-posts-images {
+        height: 250px;
+        min-height: 250px;
+        max-height: 250px;
+    }
+</style>
+
+<main id="new-user" class="container-fluid home-main position-relative home-border mt-4">
+    <h1 class="text-center pt-3 mt-3 pb-5"> Conheça o nosso Blog! </h1>
+    <div id="blog-post-container" class="py-2 mx-5 my-3 row mb-5 pb-3" style="height: 100% !important;" data-aos="fade-up">
+
+    </div>
+</main>
+
+{{> home/footer }}
+
+<script>
+    AOS.init();
+    $(document).ready(() => {
+        const generatePostSlug = (postTitle) => {
+            if (postTitle) {
+                return postTitle.replace('.', '').split(' ').join('-').toLowerCase();
+            }
+        }
+
+        $.get("/posts/all/", (e) => {
+            var data = JSON.parse(e);
+            [].map.call(data, (post) => {
+                $('#blog-post-container').append('<div class="col-lg-4 pt-3 pb-3"> <div class="card text-center h-100" style="border: 1px solid rgba(128, 42, 144, 1);"> <img class="card-img-top p-2 home-define-min-height-from-posts-images" src="' + post['post_image'] + '" alt="Post sobre ' + post['post_title'] + '" title="Post sobre ' + post['post_title'] + '"> <div class="card-body"> <h5 class="card-title text-uppercase" style="color: rgba(128, 42, 144, 1);"> ' + post['post_title'] + ' </h5> </div> <div class="card-footer border-0 bg-transparent text-center"> <a class="text-decoration-none" href="/blog-post/' + generatePostSlug(post['post_title']) + '"><button type="button" style="background-color: rgba(46, 49, 146, 1);" class="btn btn-primary btn-lg btn-block text-uppercase">Ver post</button> </div> </div> </div>');
+            })
+        });
+    });
+</script>

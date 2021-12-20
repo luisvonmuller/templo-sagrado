@@ -1,0 +1,703 @@
+{{> home/header}}
+<style>
+    .stars {
+        text-shadow: 2px 3px rgba(255, 255, 255, 0.2);
+        font-size: 3em;
+    }
+
+    .given-star {
+        color: gold;
+    }
+
+    .not-given-star {
+        color: grey;
+    }
+
+    *::-webkit-scrollbar {
+        width: 6px !important;
+        height: 6px !important;
+        width: 6px !important;
+        height: 6px !important;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    *::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+
+
+    #testimonials-container {
+        height: 34vh;
+        background-color: #f3f3f3;
+        overflow-y: scroll !important;
+    }
+
+
+    #all-testimonials-container {
+        overflow-y: scroll !important;
+    }
+
+    #clerk-card {
+        border-radius: 2em;
+        background-image: url("/assets/home/img/fundo_site_02.jpg");
+    }
+
+    #clerk-info-exhibition {
+        color: white;
+    }
+
+    .flex-item {
+        width: 100%;
+    }
+
+    #clerk-image {
+        border-radius: 50%;
+        width: 70%;
+    }
+
+    .clerk-info-stars {
+        color: gold;
+    }
+
+    .attendance-boxes {
+        border: 10px solid rgba(128, 42, 144, 1);
+        border-radius: 2em;
+        width: 100%;
+    }
+
+    .attendance-boxes-icon {
+        border: 3px solid rgba(128, 42, 144, 1);
+        border-radius: 100%;
+        background-color: white;
+        margin-top: -50%;
+
+    }
+
+    .badge-site {
+        background-color: rgba(128, 42, 144, 1);
+        color: white;
+        border-radius: 1em;
+        cursor: pointer;
+    }
+
+    .schedule-item {
+        color: white;
+        background-size: cover;
+        border: 1px solid white;
+        background-image: url("/assets/home/img/fundo_site_02.jpg");
+        height: 20vh;
+        text-align: center;
+    }
+
+    .schedule-item-title {
+        border-bottom: 1px solid white;
+    }
+
+    @media (max-width: 1200px) {
+        .schedule-item {
+            color: white;
+            background-size: cover;
+            border: 1px solid white;
+            background-image: url("/assets/home/img/fundo_site_02.jpg");
+            text-align: center;
+            height: auto;
+            margin-bottom: 0.4em !important;
+            padding-bottom: 1em !important;
+        }
+
+        .schedule-sub-item {
+            color: white;
+            font-size: 1.3em;
+            margin-bottom: 0.4em !important;
+
+        }
+    }
+
+    .valMinChat,
+    .valMinVoip,
+    .valMail {
+        color: rgba(128, 42, 144, 1);
+    }
+
+    .schedule-sub-item {
+        color: white;
+        font-size: 1.3em;
+    }
+</style>
+<input id="client-id" hidden value="{{ self_data.0.0.user_id }}">
+
+<main>
+    <section style="background-color: white;" class="container mt-4 mb-4 py-3 home-main position-relative home-border">
+
+        <div class="py-2 my-5 px-5 mx-4 mb-3">
+            <!-- First section -->
+            <div class="row">
+                <div id="clerk-card" class="col-lg-4 py-auto">
+                    <div class="text-center d-flex align-content-between flex-wrap py-4" style="height: 100%;">
+                        <div class="flex-item my-2">
+                            <i class="fas fa-user fa-2x text-white"></i>
+                        </div>
+                        <br>
+                        <div class="flex-item my-2">
+                            <h3 class="text-center" id="clerk-info-exhibition">{{self_data.1.1.clerk_info_exhibition}}
+                            </h3>
+                        </div>
+                        <div class="flex-item my-2">
+                            <h3 class="text-center clerk-info-stars">
+                                ★★★★★
+                            </h3>
+                        </div>
+                        <div class="flex-item my-2">
+                            <img src="{{self_data.1.1.clerk_image}}" id="clerk-image" />
+                        </div>
+                        <div class="flex-item my-2 whole-status-btn" data-clerk-id="{{self_data.1.0.user_id}}">
+                            <button type="button" data-clerk-id="{{self_data.1.0.user_id}}"
+                                class="notify-me btn btn-block btn-lg btn-dark"> <i class="far fa-paper-plane"></i>
+                                Avise-me
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 mt-3 mb-sm-0 mb-xs-0 mt-lg-0 px-4">
+                    <h2><i class="fas fa-address-card"></i> Descrição</h2>
+                    <hr>
+                    {{ self_data.1.1.clerk_description }}
+                    <div class="row mt-3 ml-lg-1" id="testimonials-container">
+                        <div class="col-lg-12">
+                            <h4 class="my-3">
+                                <i class="fab fa-discourse"></i> Avaliações e comentários
+                            </h4>
+                            <hr>
+                        </div>
+                        <div class="col-lg-5">
+                            <h5>
+                                <span class="clerk-info-stars">★★★★★</span>
+                                <br>
+                                Favorito: <span id="5-star-rating">(...)</span>
+                            </h5>
+                            <hr>
+                            <h5>
+                                <span class="clerk-info-stars">★★★★</span>
+                                <br>
+                                Muito Satisfeito: <span id="4-star-rating">(...)</span>
+                            </h5>
+                            <hr>
+                            <h5>
+                                <span class="clerk-info-stars">★★★</span>
+                                <br>
+                                Satisfeito: <span id="3-star-rating">(...)</span>
+                            </h5>
+                            <hr>
+                            <h5>
+                                <span class="clerk-info-stars">★★</span>
+                                <br>
+                                Regular: <span id="2-star-rating">(...)</span>
+                            </h5>
+                            <hr>
+                            <h5>
+                                <span class="clerk-info-stars">★</span>
+                                <br>
+                                Insatisfeito: <span id="1-star-rating">(...)</span>
+                            </h5>
+                        </div>
+                        <div class="col-lg-7" id="all-testimonials-container">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Attendance Boxes -->
+            <div class="row py-3  d-flex justify-content-center mt-2">
+                <div class="attendance-boxes text-center mx-2 mt-5 py-1 col-lg-3">
+                    <i class="fas attendance-boxes-icon p-3 fa-phone-alt fa-3x"></i>
+                    <h4>Via Telefone</h4>
+                    <h4>€<span class="valMinVoip">Carregando...</span>/min</h4>
+                    <button data-clerk-id="{{self_data.1.0.user_id}}" disabled="true" type="button"
+                        class="logged-out-notify voice-chat-btn btn btn-block home-bg-button">
+                        LIGUE AGORA!
+                    </button>
+
+                </div>
+                <div class="attendance-boxes text-center mx-2 mt-5 py-1 col-lg-3">
+                    <i class="far attendance-boxes-icon p-3 fa-comments fa-3x"></i>
+
+                    <h4>Via Chat</h4>
+                    <h4>€<span class="valMinChat">Carregando...</span>/min</h4>
+                    <button data-clerk-id="{{self_data.1.0.user_id}}" disabled="true" type="button"
+                        class="logged-out-notify voice-chat-btn btn btn-block home-bg-button">
+                        LIGUE AGORA!
+                    </button>
+
+                </div>
+                <div class="attendance-boxes text-center py-1 mx-2 mt-5 col-lg-3">
+                    <i class="fas attendance-boxes-icon p-3 fa-envelope-open-text fa-3x"></i>
+                    <h4>Via E-mail</h4>
+                    <h4>€<span class="valMail">Carregando...</span> cada</h4>
+                    <button data-clerk-id="{{self_data.1.0.user_id}}" disabled="true" type="button"
+                        class="logged-out-notify voice-chat-btn btn btn-block home-bg-button">
+                        LIGUE AGORA!
+                    </button>
+                </div>
+            </div>
+            <!-- Schedule -->
+            <div class="row mt-sm-3 d-none d-lg-block mt-xs-3 pt-3">
+                <div class="col-lg-12 ">
+                    <h2><i class="far fa-calendar"></i> Disponibilidade do Atendente</h2>
+                    <hr>
+                </div>
+            </div>
+            <div class="row pb-3 mt-2">
+                <div class="col-lg schedule-item">
+                    <div class="schedule-item-title py-3">
+                        <h5>Horários <br> Segunda</h5>
+                    </div>
+                    <div class="text-center pt-4 d-flex align-content-around justify-content-center flex-wrap">
+                        <div class="schedule-sub-item text-center">
+                            Das <span id="monday-init">--:--</span>
+                        </div>
+                        <div class="schedule-sub-item text-center"> <span class="d-lg-none"> &nbsp;- </span>
+                            Às <span id="monday-end">--:--</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg pb-sm-3 pb-xs-3 schedule-item">
+                    <div class="schedule-item-title py-3">
+                        <h5>Horários <br> Terça</h5>
+                    </div>
+                    <div class="text-center pt-4 d-flex align-content-around justify-content-center flex-wrap">
+                        <div class="schedule-sub-item text-center">
+                            Das <span id="tuesday-init">--:--</span>
+                        </div>
+                        <div class="schedule-sub-item text-center"> <span class="d-lg-none"> &nbsp;- </span>
+                            Às <span id="tuesday-end">--:--</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg pb-sm-3 pb-xs-3 schedule-item">
+                    <div class="schedule-item-title py-3">
+                        <h5>Horários <br> Quarta</h5>
+                    </div>
+                    <div class="text-center pt-4 d-flex align-content-around justify-content-center flex-wrap">
+                        <div class="schedule-sub-item text-center">
+                            Das <span id="wednesday-init">--:--</span>
+                        </div>
+                        <div class="schedule-sub-item text-center"> <span class="d-lg-none"> &nbsp;- </span>
+                            Às <span id="wednesday-end">--:--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg pb-sm-3 pb-xs-3 schedule-item">
+                    <div class="schedule-item-title py-3">
+                        <h5>Horários <br> Quinta</h5>
+                    </div>
+                    <div class="text-center pt-4 d-flex align-content-around justify-content-center flex-wrap">
+                        <div class="schedule-sub-item text-center">
+                            Das <span id="thursday-init">--:--</span>
+                        </div>
+                        <div class="schedule-sub-item text-center"> <span class="d-lg-none">&nbsp; - </span>
+                            Às <span id="thursday-end">--:--</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg pb-3 schedule-item">
+                    <div class="schedule-item-title py-3">
+                        <h5>Horários <br> Sexta</h5>
+                    </div>
+                    <div class="text-center pt-4 d-flex align-content-around justify-content-center flex-wrap">
+                        <div class="schedule-sub-item text-center">
+                            Das <span id="friday-init">--:--</span>
+                        </div>
+                        <div class="schedule-sub-item text-center"> <span class="d-lg-none"> &nbsp;- </span>
+                            Às <span id="friday-end">--:--</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg pb-sm-3 pb-xs-3 schedule-item">
+                    <div class="schedule-item-title py-3">
+                        <h5>Horários <br> Sábado</h5>
+                    </div>
+                    <div class="text-center pt-4 d-flex align-content-around justify-content-center flex-wrap">
+                        <div class="schedule-sub-item text-center">
+                            Das <span id="saturday-init">--:--</span>
+                        </div>
+                        <div class="schedule-sub-item text-center"> <span class="d-lg-none"> &nbsp;- </span>
+                            Às <span id="saturday-end">--:--</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg pb-sm-3 pb-xs-3 schedule-item">
+                    <div class="schedule-item-title py-3">
+                        <h5>Horários <br> Domingo</h5>
+                    </div>
+                    <div class="text-center pt-4 d-flex align-content-around justify-content-center flex-wrap">
+                        <div class="schedule-sub-item text-center">
+                            Das <span id="sunday-init">--:--</span>
+                        </div>
+                        <div class="schedule-sub-item text-center"> <span class="d-lg-none"> &nbsp; - </span>
+                            Às <span id="sunday-end">--:--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Complete infos -->
+            <div class="row d-none d-lg-block pb-3 mt-3">
+                <div class="col-lg-12 text-center">
+                    <h2><i class="fas fa-clipboard-list"></i> Veja o Perfil Completo de
+                        {{self_data.1.1.clerk_info_exhibition}}</h2>
+                </div>
+            </div>
+            <div class="row pb-2">
+                <div class="col-lg-6 mt-2 text-center">
+                    <h3><i class="fas fa-hourglass-end"></i> Experiência</h3>
+                    <hr>
+                    {{self_data.1.1.clerk_info_experience }}
+
+                </div>
+                <div class="col-lg-6 mt-2 text-center">
+                    <h3><i class="fas fa-tags"></i> Qualificações</h3>
+                    <hr>
+                    <div id="attendance-tags-container">
+                    </div>
+                </div>
+                <div class="col-lg-12 mt-3 text-center">
+                    <h3><i class="fas fa-plus-circle"></i> Mais informações</h3>
+                    <hr>
+                </div>
+                {{{self_data.1.1.clerk_info_long_description}}}
+            </div>
+        </div>
+    </section>
+</main>
+
+{{> home/footer}}
+<script>
+    $(document).ready(async function () {
+        var clerk_id;
+        var client_id;
+        const myBalance = await $.get("/my-balance", function (e) { return e; });
+        const socket = new WebSocket("wss://attend." + window.location.host.replace("www.", "") + "/ws");
+
+        $.get('/whats-my-id', async function (e) {
+            client_id = parseInt(e);
+            console.log(client_id);
+            if (client_id > 0) {
+                $(".text-chat-btn").removeClass("logged-out-notify").addClass("new-text-chat");
+                $(".voice-chat-btn").removeClass("logged-out-notify").addClass("new-voice-chat");
+                $(".mail-btn").removeClass("logged-out-notify").addClass("new-mail");
+            }
+        });
+
+        function parseData(unix_timestamp) {
+            var date = new Date(unix_timestamp);
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+            return day + '/' + month + '/' + year
+        }
+
+        var configs;
+
+        $.get('/admin/config/get-configs', function (e) {
+            configs = e[0]
+            $('.valMinChat').text(parseFloat(configs['absolute_min_value_chat']).toFixed(2).replace(".", ","));
+            $('.valMinVoip').text(parseFloat(configs['absolute_min_value_voice']).toFixed(2).replace(".", ","));
+            $('.valMail').text(parseFloat(configs['site_mail_val']).toFixed(2).replace(".", ","));
+        });
+
+        var clerk_slug = window.location.pathname.split("/").pop();
+
+        $.get("/clerk/id/" + clerk_slug, (id) => {
+            clerk_id = id;
+        })
+
+        $("#attendance-tags-container").hide();
+
+        $.get("/clerk/attendance-tags/" + clerk_slug, function (tags) {
+            tags.forEach(function (tag) {
+                let tmp_html = '<span class="badge badge-site mx-2">' + tag[1].attendance_tag_name + '</span>';
+                $("#attendance-tags-container").append(tmp_html);
+            });
+            $("#attendance-tags-container").show();
+
+        });
+
+        $.get("/clerk/schedule/" + clerk_slug, function (schedule_info) {
+            if (schedule_info.length > 0) {
+                schedule_info = schedule_info[0];
+                if (schedule_info.clerk_schedule_fri) {
+                    $("#friday-init").html(schedule_info.clerk_schedule_fri_init);
+                    $("#friday-end").html(schedule_info.clerk_schedule_fri_end);
+                }
+                if (schedule_info.clerk_schedule_mon) {
+                    $("#monday-init").html(schedule_info.clerk_schedule_mon_init);
+                    $("#monday-end").html(schedule_info.clerk_schedule_mon_end);
+                }
+                if (schedule_info.clerk_schedule_sat) {
+                    $("#saturday-init").html(schedule_info.clerk_schedule_sat_init);
+                    $("#saturday-end").html(schedule_info.clerk_schedule_sat_end);
+                }
+                if (schedule_info.clerk_schedule_sun) {
+                    $("#sunday-init").html(schedule_info.clerk_schedule_sun_init);
+                    $("#sunday-end").html(schedule_info.clerk_schedule_sun_end);
+                }
+                if (schedule_info.clerk_schedule_thu) {
+                    $("#thursday-init").html(schedule_info.clerk_schedule_thu_init);
+                    $("#thursday-end").html(schedule_info.clerk_schedule_thu_end);
+                }
+                if (schedule_info.clerk_schedule_tue) {
+                    $("#tuesday-init").html(schedule_info.clerk_schedule_tue_init);
+                    $("#tuesday-end").html(schedule_info.clerk_schedule_tue_end);
+                }
+                if (schedule_info.clerk_schedule_wed) {
+                    $("#wednesday-init").html(schedule_info.clerk_schedule_wed_init);
+                    $("#wednesday-end").html(schedule_info.clerk_schedule_wed_end);
+                }
+            }
+        });
+
+        $.get("/clerk/testimonials-ratings/" + clerk_slug, function (ratings) {
+            var counter = 0;
+            ratings.forEach(function (rating) {
+                $("#" + counter + "-star-rating").html(rating.count);
+                counter++;
+            });
+        });
+
+        $.get("/clerk/testimonials/" + clerk_slug, async function (testimonials) {
+            testimonials.forEach(async function (testimonial) {
+                console.log(testimonial[0][0]);
+                $("#all-testimonials-container").append('<span class="clerk-info-stars">' + "★".repeat(testimonial[1].testimonials_value) + '</span><br>' + testimonial[1].testimonials_content + '</p><span>' + testimonial[0][0][0][0]['user_name'] + ' em, <strong>' + parseData(testimonial[1].testimonials_date) + '</strong></span><hr>');
+            });
+        });
+
+        function statusClerkButtons(user_id, status, text, voice, video) {
+            switch (status) {
+                case 1:
+                    if (text) {
+                        $('.text-chat-btn[data-clerk-id="' + user_id + '"]').removeAttr('disabled');
+                    } else {
+                        $('.text-chat-btn[data-clerk-id="' + user_id + '"]').attr('disabled', 'disabled');
+                    }
+
+                    if (voice) {
+                        $('.voice-chat-btn[data-clerk-id="' + user_id + '"]').removeAttr('disabled');
+                    } else {
+                        $('.voice-chat-btn[data-clerk-id="' + user_id + '"]').attr('disabled', 'disabled');
+                    }
+
+                    if (!text && !voice) {
+                        $('div[data-clerk-id="' + user_id + '"]').html('<button type="button" disabled class="btn home-change-all-card-buttons btn-lg btn-block text-white btn-dark"> Já volto! 😁 </button>');
+                    } else {
+                        $('.whole-status-btn[data-clerk-id="' + user_id + '"]').html('<button type="button" class="btn btn-block btn-lg btn-success mt-2 home-atendiments-forms-available"><i class="fas fa-rss"></i> Disponível</button>');
+                    }
+
+                    $('#clerksOnline').prepend($('div[data-clerk-id="' + user_id + '"]').parents('.home-alter-cards'));
+                    break;
+                case 2:
+                    // Is on a call, so do you wanna wait for it?
+                    $('div[data-clerk-id="' + user_id + '"]').html('<button type="button" disabled class="btn home-change-all-card-buttons btn-lg btn-block text-white btn-danger"> Em atendimento </button>');
+                    break;
+                case 3:
+                    $('div[data-clerk-id="' + user_id + '"]').html('<button type="button" class="btn btn-block mt-2 home-atendiments-forms-available"><i class="fas fa-rss"></i> Indisponível</button>');
+                    break;
+            }
+        }
+
+        /* When socket finally opens */
+        socket.onopen = function (event) {
+            socket.send(JSON.stringify({
+                action: 'new-client-entered-the-thread',
+                client_id: null,
+                clerk_id: null,
+                data: null,
+                from: 'Client',
+            }));
+        }
+
+        socket.onmessage = async function (event) {
+            var income_data = JSON.parse(event.data);
+
+            if (income_data.client_id === client_id) {
+                switch (income_data.action) {
+                    /* Processes and redraw clerks */
+                    case "clerks-available":
+                        [].map.call(income_data.data, (clerk) => {
+                            statusClerkButtons(clerk['clerk_id'], clerk['status'], clerk["text"], clerk["voice"], clerk["video"]);
+                        });
+                        break;
+                    /* Incoming advice to the client that clerk has accepted an text chat invitation */
+                    case "text-chat-acc":
+                        window.location = "/chat/" + income_data.data;
+                        break;
+                    /* Incoming advice to the client that clerk has accepted an voice chat invitation */
+                    case "voice-chat-acc":
+                        window.location = '/voip/' + income_data.data;
+                    /* Incoming advice to the client that clerk has refused an text chat invitation */
+                    case "text-chat-ref":
+                        Swal.fire({
+                            title: 'O atendente recusou sua solicitação.',
+                            text: "Por favor, aguarde ou selecione outro atendente.",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        break;
+                    /* Incoming advice to the client that clerk has refused an voice chat invitation */
+                    case "voice-chat-ref":
+                        Swal.fire({
+                            title: 'O atendente recusou sua solicitação.',
+                            text: "Por favor, aguarde ou selecione outro atendente.",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        break;
+                }
+            } else {
+                switch (income_data.action) {
+                    /* Processes and redraw clerks */
+                    case "clerks-available":
+                        [].map.call(income_data.data, (clerk) => {
+                            statusClerkButtons(clerk['clerk_id'], clerk['status'], clerk["is_available_chat"], clerk["is_available_voice"], clerk["is_available_video"]);
+                        });
+                        break;
+                }
+            }
+        }
+
+        //* Voice Chat implementation */
+        $(document).on('click', '.new-voice-chat', async function (e) {
+            if ($(e.target).data('clerk-id') > 0) {
+                if (parseFloat(myBalance) >= (configs['absolute_min_value_voice'] * 3)) {
+                    socket.send(JSON.stringify({
+                        action: "voice-chat-intend",
+                        client_id: client_id,
+                        clerk_id: $(e.target).data('clerk-id'),
+                        data: null,
+                        from: 'Client'
+                    }));
+
+
+                    Swal.fire({
+                        title: 'Esperando o atendente responder sua requisição de atendimento!',
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        cancelButtonText:
+                            'Cancelar',
+                        onBeforeOpen: function () {
+                            Swal.showLoading()
+                        },
+                    });
+
+                } else {
+                    Swal.fire({
+                        title: 'Você não possui créditos Suficientes..',
+                        text: "Você será redirecionado a página de compra de minutos.",
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    await new Promise(r => setTimeout(r, 2000));
+                    window.location = '/comprar-creditos';
+
+                }
+            } else {
+                Swal.fire({
+                    title: 'Sem suporte...',
+                    text: "Atualize a página, se o erro persistir por favor tente em outro navegador...",
+                    icon: 'warning',
+                });
+            }
+        });
+
+
+        /* Text chat inviter implementation */
+        $(document).on('click', '.new-text-chat', async function (e) {
+            if ($(e.target).data('clerk-id') > 0) {
+                if (parseFloat(myBalance) >= parseFloat(configs['absolute_min_value_chat'] * 3)) {
+                    socket.send(JSON.stringify({
+                        action: "text-chat-intend",
+                        client_id: client_id,
+                        clerk_id: $(e.target).data('clerk-id'),
+                        data: null,
+                        from: 'Client'
+                    }));
+
+                    Swal.fire({
+                        title: 'Esperando o atendente responder sua requisição de atendimento!',
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        cancelButtonText:
+                            'Cancelar',
+                        onBeforeOpen: function () {
+                            Swal.showLoading()
+                        },
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Você não possui créditos!',
+                        text: "Você será redirecionado a página de compra de minutos.",
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    await new Promise(r => setTimeout(r, 2000));
+                    window.location = '/comprar-creditos';
+                }
+            } else {
+                Swal.fire({
+                    title: 'Sem suporte...',
+                    text: "Atualize a página, se o erro persistir por favor tente em outro navegador...",
+                    icon: 'warning',
+                });
+            }
+        });
+        /* Mail attendance implementation */
+        $(document).on('click', '.new-mail', async function (e) {
+            if (parseFloat(myBalance) >= (configs['site_mail_val'])) {
+                window.location = '/atendimento-email/' + $(e.target).data('clerk-id');
+            } else {
+                Swal.fire({
+                    title: 'Você não possui créditos!',
+                    text: "Você será redirecionado a página de compra de créditos.",
+                    showConfirmButton: false,
+                    timer: 2500
+                });
+
+                await new Promise(r => setTimeout(r, 2000));
+                window.location = '/comprar-creditos';
+            }
+        });
+
+        $(document).on('click', '.notify-me', function (e) {
+            $.get("/notify-me/" + $(e.target).data('clerk-id'), function (e) {
+                Swal.fire(
+                    'Feito!',
+                    'Assim que o atendente ficar online te avisaremos por e-mail!',
+                    'success'
+                )
+            });
+        });
+
+        $(document).on('click', '.logged-out-notify', function (e) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Você precisa Entrar primeiro!',
+            })
+        })
+
+        $(document).on('click', '.notify-me', function (e) {
+            $.get("/notify-me/" + $(e.target).data('clerk-id'), (e) => {
+                Swal.fire(
+                    'Feito!',
+                    'Assim que o atendente ficar online te avisaremos por e-mail!',
+                    'success'
+                );
+            });
+        });
+    });
+</script>

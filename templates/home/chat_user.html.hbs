@@ -1,0 +1,657 @@
+{{> home/header}}
+<link href="/assets/home/lib/css/emoji.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<style type="text/css">
+    #chat-holder {
+        height: 60vh;
+        overflow-y: scroll !important;
+        position: relative;
+        background-attachment: fixed;
+        background-image: url("/assets/home/img/fundo_site_02.jpg");
+    }
+
+    @media (max-width: 768px) {
+        #chat-holder {
+            height: 45vh !important;
+            overflow-y: scroll !important;
+            position: relative;
+            background-attachment: fixed;
+            background-image: url("/assets/home/img/fundo_site_02.jpg");
+        }
+    }
+
+    *::-webkit-scrollbar {
+        width: 6px !important;
+        height: 6px !important;
+        width: 6px !important;
+        height: 6px !important;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    *::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .user-info-row {
+        background-color: #ededed;
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+    }
+
+    form {
+        border-bottom-right-radius: 5px !important;
+        border-bottom-left-radius: 5px !important;
+    }
+
+    .msg-in {
+        border-radius: 1em !important;
+        background-color: white;
+        -webkit-box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        -moz-box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+    }
+
+    .msg-out {
+        background-color: #dcf8c6;
+        border-radius: 1em !important;
+        -webkit-box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        -moz-box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+    }
+
+    .clerk-img {
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+
+    .user-info-row {
+        background-color: #ededed;
+    }
+
+    .emoji-wysiwyg-editor {
+        border-radius: 1em !important;
+        background-color: white !important;
+        line-height: 1.5 !important;
+        padding-top: auto;
+        padding-bottom: auto;
+        font-family: "Segoe UI", "Helvetica Neue", "Helvetica", "Lucida Grande", Arial, "Ubuntu", "Cantarell", "Fira Sans", sans-serif !important;
+    }
+
+    .emoji-picker-icon {
+        padding-right: 1em;
+        padding-top: 0.5em;
+    }
+
+    @media (max-width: 768px) {
+        .home-picture-from-client {
+            max-width: 50% !important;
+        }
+
+        .home-name-from-client {
+            text-align: center;
+        }
+
+        .home-alert-client-inf {
+            text-align: center;
+        }
+
+        .emoji-picker-container {
+            max-width: 90%;
+        }
+
+        .home-button-send-a-new-message {
+            max-width: 6%;
+        }
+
+        .home-off-call {
+            min-width: 100% !important;
+            margin-left: 0px !important;
+        }
+    }
+
+    #minus-min {
+        z-index: 9999;
+        position: absolute;
+        animation-duration: 3s;
+        margin-bottom: 2em;
+    }
+
+    @media (max-width: 425px) {
+        .emoji-picker-container {
+            margin-left: -2 !important;
+            max-width: 85%;
+        }
+
+        .home-button-send-a-new-message {
+            margin-left: -3%;
+        }
+
+        .home-button-send-a-new-message button {
+            margin-left: -15px !important;
+        }
+    }
+
+    #faq-chat {
+        bottom: 0;
+        text-align: right;
+    }
+
+    #faq-chat-btn {
+        transition: 0.3s;
+    }
+
+    #faq-chat-btn:hover {
+        background-color: rgba(128, 42, 144, 1);
+        color: white;
+    }
+
+    @media (max-width: 625px) {
+        .mobile-behave-img {
+            display: flex;
+            justify-content: center;
+            align-self: center;
+            width: 30% !important;
+        }
+    }
+</style>
+<main>
+    <section id="new-user" class="container mt-4">
+        <div class="row">
+            <div class="col-lg-12 py-4 pr-4">
+                <div class="row">
+                    <div class="col-lg-1 d-flex justify-content-center">
+                        <img class="ml-lg-4 img-fluid mobile-behave-img" src="/assets/img/ciganinha.png">
+                    </div>
+                    <div class="col-lg-8 pl-4 mt-1">
+                        <h3>
+                            Olá <strong id="client-name"> {{self_data.0.0.user_name}}</strong> <br> seja bem vindo a
+                            nossa
+                            sala de
+                            chat 😉
+                        </h3>
+                    </div>
+                    <div id="faq-chat" class="col-lg-3 d-none d-lg-block">
+                        <div class="ml-auto mr-2">
+                            <p> Está com dúvidas? 🤔 <br>
+                                <button id="faq-chat-btn" class="btn btn-sm" data-toggle="modal"
+                                    data-target="faq-chat-modal">Clique aqui</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="user-info-row mx-2 py-1">
+            <div class="row px-2 pt-2">
+                <div class="col-lg-1 image-cropper my-auto align-items-center d-flex justify-content-center">
+                    <img class="clerk-img-chat ml-lg-5 clerk-img home-picture-from-client"
+                        src="https://abad.com.br/wp-content/uploads/2019/11/user-icon.svg">
+                </div>
+                <div class="col-lg-5 home-name-from-client">
+                    <h4 class="pl-4">
+                        <small>Atendimento com:</small>
+                        <br>
+                        <span class="pl-2 clerk-name"></span>
+                        <br>
+                        <button id="exit" class="btn btn-sm  mt-2 btn-danger" data-toggle="tooltip"
+                            data-placement="right" title="Clique aqui para sair (finalizar) a conversa"> <i
+                                class="fas fa-sign-out-alt"></i>
+                            Desconectar
+                        </button>
+                    </h4>
+                </div>
+                <div class="col-lg-6 py-auto my-auto">
+                    <div class="alert alert-info home-alert-client-inf">
+                        <div class="row">
+                            <span id="minus-min" class="alert alert-danger d-none">💰 €<span
+                                    id="valChatMinPopOver">0,70</span> foram descontados.</span>
+
+                            <div class="col-lg-8 " data-toggle="tooltip" data-placement="top"
+                                title="Seu saldo total, corresponde ao saldo pago + bônus">
+                                <strong class="mr-1">Seus Créditos: € </strong><span id="myMinutes"> </span>
+                            </div>
+                            <div class="col-lg-4 alert-success text-center" data-toggle="tooltip" data-placement="top"
+                                title="Valor do minuto na plataforma"
+                                style="border-radius: 30px; border: 1px solid white;">
+                                <strong>€ </strong><span id="valChatMin">Carregando...</span>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 pl-4">
+                                <div class="progress mt-2">
+                                    <div id="credits-bar-balance" data-toggle="tooltip" data-placement="top"
+                                        class="progress-bar progress-bar-striped progress-bar-animated"
+                                        role="progressbar">
+                                    </div>
+                                    <div id="credits-bar-bonus" data-toggle="tooltip" data-placement="top"
+                                        class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                        role="progressbar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="row px-2 pb-3">
+            <div class="col-lg-12">
+                <div id="chat-holder" class="px-3 py-2">
+                    <div id="messages"></div>
+                </div>
+                <form id="form" class="user-info-row">
+                    <div class="row py-2 pl-3">
+                        <div class="col-lg-11 emoji-picker-container">
+                            <input id="msg" data-emojiable="true" type="text" class="form-control px-3 form-control-lg"
+                                placeholder="Digite aqui sua mensagem..." required>
+                        </div>
+                        <div class="col-lg-1 home-button-send-a-new-message">
+                            <button class="btn btn-large" data-toggle="tooltip" data-placement="top"
+                                title="Clique para enviar a mensagem digitada ou aperte a tecla ENTER">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path fill="currentColor"
+                                        d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="clear"></div>
+        </div>
+    </section>
+</main>
+
+<!-- [Meta Data] --->
+<!-- My Id (Client Id) -->
+<input type="hidden" id="my-id" value="{{self_data.0.0.user_id }}">
+<!-- Clerk Id -->
+<input type="hidden" id="clerk-id" value="{{self_data.1}}">
+<!-- Clerk Id -->
+<input type="hidden" id="chat-id" value="{{self_data.2}}">
+<!-- [Meta Data] --->
+
+{{> home/footer}}
+<script src="https://kit.fontawesome.com/80f8c2cb09.js"></script>
+
+<script src="/assets/home/lib/js/config.js"></script>
+<script src="/assets/home/lib/js/util.js"></script>
+<script src="/assets/home/lib/js/jquery.emojiarea.js"></script>
+<script src="/assets/home/lib/js/emoji-picker.js"></script>
+<script type="text/javascript">
+    $(document).ready(async function () {
+        /* Our websocket connection */
+        const socket = new WebSocket("wss://chat." + window.location.host.replace("www.", "") + "/ws");
+
+        /* Values metas */
+        var valMinChat = 0;
+
+        /* Parsing and drawing the cost per minute of this site */
+        $.get('/admin/config/get-configs', function (e) {
+            configs = e[0];
+            valMinChat = parseFloat(configs['absolute_min_value_chat']).toFixed(2);
+            $('#valChatMin').text(parseFloat(configs['absolute_min_value_chat']).toFixed(2).replace(".", ",") + " / min");
+            $('#valChatMinPopOver').text(parseFloat(configs['absolute_min_value_chat']).toFixed(2).replace(".", ","));
+        });
+
+        /* Pree init the meta vars */
+        var chat_id = parseInt(window.location.pathname.split("/").pop());
+
+
+        /**
+        @func
+        ---- @name anonymous (could bemeta data generator)
+        ---- @desctiption Update the vars with its needed variables to access.
+        ---- @receiveis this json structure:
+        { 
+            clerk_id xxxx,
+            chat_id: xxxx,
+        }
+        -------------------------
+        @returns void
+        */
+
+        const data = await $.get("/chat-meta-info/" + chat_id, function (data) {
+            return data;
+        });
+        var my_id = parseInt(data[0]);
+        var clerk_id = parseInt(data[1]);
+        var firstMinuteGoing = 1;
+
+        /* Debug stuff */
+        console.log("Chat with id: " + chat_id + " has been innited on: " + getDateTime());
+        console.log("My id (User): " + my_id);
+        console.log("The clerk id: " + clerk_id);
+
+
+        /**
+            @var time // The amount of seconds * 1000 (to convert into ms) for taking minutes out.
+        */
+        const time = 60000;
+
+        /** View Stuff 
+        @var  messages // Stands for the messages container
+        */
+        const messages = document.getElementById("messages");
+
+        /* Time stamp generator */
+        function getDateTime() {
+            const today = new Date();
+            const date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+            const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            const payload = date + ' ' + time;
+            return payload;
+        }
+
+        /* Runs smooth to the bottom */
+        function scrollSmoothToBottom(id) {
+            var div = document.getElementById(id);
+            $('#' + id).animate({
+                scrollTop: div.scrollHeight
+            }, 500);
+        }
+
+        /* My balance will change over time, thats why we had to change this back to var from a const statement */
+        var totalBalance = await $.get("/my-credits", function (e) {
+            return e;
+        });
+
+        /* First redraw */
+        credits_bar(totalBalance[0][0], totalBalance[0][1]);
+
+        /* Separate stuff into two vars */
+        myBalance = totalBalance[0][0];
+        myBonus = totalBalance[0][1];
+
+        /* Initialize tooltips */
+        $('[data-toggle="tooltip"]').tooltip();
+
+        function bar_color(amount) {
+            if ((amount / valMinChat) > 3 && (amount / valMinChat) <= 10) {
+                /* The implementation to update the paid-balance */
+                $("#credits-bar-balance").addClass('bg-warning');
+            } else if ((amount / valMinChat) <= 3) {
+                /* The implementation to update the paid-balance */
+                $("#credits-bar-balance").addClass('bg-danger');
+            }
+        }
+
+        /**
+            @func 
+            * @name credits_bar A good name, I do think
+            * @desc Will draw the bar, and the credits (by a text) 
+            * @bindsto  #credits-bar-balance 
+            * @bindsto  #credits-bar-bonus
+            -------------------------
+            * @param {Float 64} balance           || The balance (paid) that corresponds to the bonus on the bar.
+            * @param {Float 64} bonus             || The amount that corresponds to the bonus on the bar.
+            -------------------------
+            * @returns {void}
+        **
+        */
+
+        function credits_bar(balance, bonus) {
+            /* To a better behave on no balance */
+            if (bonus > 0) {
+                /* Proportion */
+                var bonus_proportion = ((balance * 100) / (balance + bonus)) - 100;
+                var balance_proportion = ((bonus * 100) / (balance + bonus)) - 100;
+
+                /* The implementation to update the paid-balance */
+                $("#credits-bar-balance").attr("style", "width:" + (balance_proportion * -1) + "%");
+
+                /* Balance tooltip */
+                $("#credits-bar-balance").attr("data-original-title", "Seu saldo pago €" + parseFloat(balance).toFixed(2).replace(".", ","));
+                $("#credits-bar-balance").tooltip();
+
+
+                /* The implementation to update the bonus-balance */
+                $("#credits-bar-bonus").attr("style", "width:" + (bonus_proportion * -1) + "%");
+
+
+                /* Bonus tooltip */
+                $("#credits-bar-bonus").attr("data-original-title", "Seu saldo ganho por bônus €" + parseFloat(bonus).toFixed(2).replace(".", ","));
+                $("#credits-bar-bonus").tooltip();
+
+            } else {
+                var balance_proportion = 1;
+                /* The implementation to update the paid-balance */
+                $("#credits-bar-balance").attr("style", "width:" + (balance_proportion * 100) + "%");
+
+
+                /* The implementation to update the bonus-balance */
+                $("#credits-bar-bonus").attr("style", "width:" + (0) + "%");
+                $("#credits-bar-bonus").attr("data-original-title", "Seu saldo ganho por bônus €0,00");
+
+
+                /* Balance tooltip */
+                $("#credits-bar-balance").attr("data-original-title", "Seu saldo pago €" + parseFloat(balance).toFixed(2).replace(".", ","));
+                $("#credits-bar-balance").tooltip();
+
+            }
+
+            bar_color(balance + bonus);
+
+            /* Draw things into the user view */
+            $("#myMinutes").html((parseFloat(balance + bonus).toFixed(2).replace('.', ',')));
+        }
+
+
+        async function minutesOut() {
+
+            if (firstMinuteGoing) {
+                /* Enroll a fast minute */
+                 await new Promise(function (r) {
+                    setTimeout(r, 10000);
+                });
+                firstMinuteGoing = 0;
+            } else {
+                /* Enroll a true minute */
+                await new Promise(function (r) {
+                    setTimeout(r, time);
+                });
+            }
+
+            $.get("/register-new-text-chat-transaction/" + chat_id + "/" + clerk_id + "/", function (e) {
+                $.get("/client-sign-text-chat-transaction/" + e[0] + '/', async function (transaction_stat) {
+                    if (transaction_stat) {
+                        $('#minus-min').removeClass('d-none').addClass('animate__animated animate__fadeOutUp');
+                        socket.send(message_generator("new-transaction", "This client Has been generated a new transaction", e[0]));
+
+                        /* My balance will change over time, thats why we had to change this back to var from a const statement */
+                        var totalBalance = await $.get("/my-credits", function (e) {
+                            return e;
+                        });
+
+                        /* Redraws bar */
+                        credits_bar(totalBalance[0][0], totalBalance[0][1]);
+                        socket.send(message_generator("client-balance-update", JSON.stringify(totalBalance[0])));
+
+
+                        /* Self call, recursive*/
+                        minutesOut();
+                    } else {
+                        socket.send(message_generator("client-no-credits"));
+                        Swal.fire("Seus minutos acabaram! Você será desconectado!");
+
+                        /* Enroll a minute */
+                        await new Promise(function (r) {
+                            setTimeout(r, 3000)
+                        });
+
+                        $("#exit").click();
+                    }
+                });
+            });
+        };
+
+        minutesOut();
+
+        /**
+        @func 
+        * @name message_generator 
+        * @desc Will stringfy our common text-chat JSON structure.
+        -------------------------
+        * @param {String} action            // It MUST be either "client-leave", "message" or "new-transaction" (Stands for how to behave on the json object on the other side)
+        * @param {<Option<String>>} msg               // The message content (Nullable on leave action.)
+        * @param {<Option<i32>} transaction_id // When the client made a payout, this should be also announced via the websocket.
+        -------------------------
+        * @returns {String} // The return its a stringfyed JSON object that will be deseralized later on the socket and also reparsed on the clerk side.
+        */
+        function message_generator(action, msg = null, transaction_id = null) {
+            var message_parsed =
+                JSON.stringify({
+                    "from": my_id,
+                    "to": clerk_id,
+                    "chat_id": chat_id,
+                    "action": action,
+                    "message": msg,
+                    "transaction": transaction_id
+                });
+
+            console.log(message_parsed);
+
+            return message_parsed;
+        }
+
+        $.get('/whoClerk/' + clerk_id, function (e) {
+            var clerk_data = JSON.parse(e)[0];
+            $('.clerk-name').html(clerk_data[1]);
+            $('.clerk-img').attr('src', clerk_data[0]);
+        });
+
+        socket.onopen = function (event) {
+            const p = document.createElement("div");
+            p.innerHTML = '<div class="animate__animated animate__fadeIn row text-center clear-fix mx-2 mb-2"><div class="my-auto col-lg-12  mr-auto alert alert-success">👋 Seja muito Bem vindo ao nosso chat! <br> <strong>Tenha uma Ótima consulta 😊</strong> </div> </div>';
+            messages.append(p);
+        };
+
+        /**
+        * @anonymous_func 
+        * @binds_to #exit @on click @do leave the chat + socket, or for better understaing, it just stop chatting.
+        * @redirects @to /depoimento/<clerk_id> 
+        */
+
+        const exit = document.getElementById("exit");
+
+        exit.onclick = function () {
+            socket.send(message_generator("client-leave"));
+            socket.close();
+            window.location = "/depoimento/" + clerk_id;
+        }
+
+        /**
+        * @anonymous_func 
+        * @binds_to #form @on submit @do sends over socket the message wrote on the form (if, and only if its length is more than 0 characters).
+        * @sends_to socket (connection)
+        */
+        const form = document.getElementById("form");
+        form.onsubmit = function (event) {
+            event.preventDefault();
+            if (document.getElementsByClassName("emoji-wysiwyg-editor").length > 0) {
+                if (document.getElementsByClassName("emoji-wysiwyg-editor")[0].innerHTML.length > 0) {
+                    var message = document.getElementsByClassName("emoji-wysiwyg-editor")[0].innerHTML;
+                    socket.send(message_generator("message", message));
+                    document.getElementsByClassName("emoji-wysiwyg-editor")[0].innerHTML = "";
+                    var p = document.createElement("div");
+                    p.innerHTML = '<div class="animate__animated animate__fadeInRight row clear-fix mx-2"><div class="msg-out col-lg-6 ml-auto alert">' + message + '<br><small class="float-right"> <i> Enviado em:  ' + getDateTime() + '</i></small> </div> </div>';
+                    messages.append(p);
+                }
+            } else {
+                if ($(document).find("#msg").val().length > 0) {
+                    if ($(document).find("#msg").val().length > 0) {
+                        var message = $(document).find("#msg").val();
+                        socket.send(message_generator("message", message));
+                        $(document).find("#msg").val("");
+                        var p = document.createElement("div");
+                        p.innerHTML = '<div class="row clear-fix mx-2"><div class="msg-out col-lg-6 ml-auto alert">' + message + '<br><small class="float-right"> Enviado em:  ' + getDateTime() + '</small> </div> </div>';
+                        messages.append(p);
+                    }
+
+                }
+            }
+        };
+        /**
+        * @anonymous_func 
+        * @binds_to socket @on message @do Behave on the message action.
+        * @sends_to socket (connection)
+        */
+        socket.onmessage = function (event) {
+            /* Scroll till the bottom of the chat (msgs holder) div */
+            scrollSmoothToBottom('chat-holder');
+
+            /* Parses the content over the common text-chat-structure */
+            var content = JSON.parse(event.data);
+            console.log(content);
+
+            if ((parseInt(content.to) === my_id) && (parseInt(content.from) === clerk_id)) {
+                switch (content.action) {
+                    /* Behave on clerk leaving the chat */
+                    case "clerk-leave":
+                        var p = document.createElement("div");
+                        p.innerHTML = '<div class="row animate__animated animate__fadeInLeft clear-fix mx-2 mb-2"><div class="msg-in col-lg-12 text-center mr-auto alert alert-danger">' + "O atendente fechou a conexão." + '<br><small class="float-right"> Recebido em:  ' + getDateTime() + '</small> </div> </div>';
+                        messages.append(p);
+                        $("#exit").click();
+                        break;
+                    case "message":
+                        var p = document.createElement("div");
+                        p.innerHTML = '<div class="row animate__animated animate__fadeInLeft clear-fix mx-2"><div class="msg-in col-lg-6 mr-auto alert">' + content.message + '<br><small class="float-right"> Recebido em:  ' + getDateTime() + '</small> </div> </div>';
+                        messages.append(p);
+                        break;
+                    default:
+                        //Nothing
+                        break;
+                }
+            }
+        };
+
+        socket.onclose = async function (event) {
+            var p = document.createElement("div");
+            p.innerHTML = '<div class="row clear-fix mx-2"><div class="my-auto col-lg-12 mr-auto alert alert-danger">Seus minutos acabaram ou o Atendente fechou a conexão. <br><small class="float-right"> Recebido em:  ' + getDateTime() + '</small> </div> </div>';
+            messages.append(p);
+
+            await new Promise(function (r) {
+                setTimeout(r, 2000)
+            });
+
+            window.location = "/depoimento/" + clerk_id;
+
+            /* Update the end time of this chat - > chatId */
+            $.get('/end-chat/' + chat_id, function (e) {
+                /* Does nothing */
+            });
+        };
+
+        /* Emojis */
+        window.emojiPicker = new EmojiPicker({
+            emojiable_selector: '[data-emojiable=true]',
+            assetsPath: '/assets/home/lib/img/',
+            popupButtonClasses: 'far fa-laugh-wink'
+        });
+
+        /* On Key press sends the text tipped */
+        $(document).on('keydown', '.emoji-wysiwyg-editor', function (e) {
+            if (e.which == 13) {
+                e.preventDefault();
+                $("#form").submit();
+            }
+        });
+
+        /* The phantom pop over that happens when a minutes is gone */
+        $("#minus-min").on('animationend', function () {
+            $('#minus-min').addClass('d-none');
+        });
+
+        window.emojiPicker.discover();
+    });
+
+</script>

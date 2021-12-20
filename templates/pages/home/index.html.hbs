@@ -1,0 +1,979 @@
+{{> pages/header}}
+<style type="text/css">
+    .clerk-img {
+        height: 95px !important;
+    }
+</style>
+
+<div class="header pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-6">
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Bem-vindo</li>
+                        </ol>
+                    </nav>
+                    <h6 class="ml-2 h2 text-white d-inline-block mb-0">👋 Seja bem vindo à sua Área
+                        Administrativa!</h6>
+                </div>
+                <div class="col-lg-6 col-6 clear-fix">
+                    <form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+                        <div class="form-group mb-0">
+                            <div class="input-group input-group-alternative input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="Procurar ... " type="text">
+                            </div>
+                        </div>
+                        <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+                            aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-stats">
+                        <!-- Card body -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Atendentes</h5>
+                                    <span class="h2 font-weight-bold mb-0"><span id="totalClerks"></span></span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                                        <i class="fas fa-user-friends"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-sm">
+                                <span class="text-success mr-2"><i class="fas fa-user-check mr-1"></i> <span
+                                        id="activeClerks"></span></span>
+                                <span class="text-nowrap">Deles está(ão) ativo(s).</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-stats">
+                        <!-- Card body -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Novos Clientes neste
+                                        Mês</h5>
+                                    <span id="monthNewUsers" class="h2 font-weight-bold mb-0"></span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                                        <i class="ni ni-chart-pie-35"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> <span
+                                        id="percentRelative"></span>%</span>
+                                <!-- valor em porcentagem -->
+                                <span class="text-nowrap"> Em relação ao mês passado</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-stats">
+                        <!-- Card body -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Vendas neste Mês</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="monthSales"></span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                                        <i class="ni ni-money-coins"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> <span
+                                        id="percentRelativeSales"></span>%</span>
+                                <span class="text-nowrap"> Em relação ao mês passado</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-stats">
+                        <!-- Card body -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Total de clientes</h5>
+                                    <span class="h2 font-weight-bold mb-0"><span id="totalClients"></span></span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                                        <i class="ni ni-chart-bar-32"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-sm">
+                                <span class="text-success mr-2"><i class="fas fa-user-check mr-1"></i> <span
+                                        id="activeClients"></span></span>
+                                <span class="text-nowrap">De total de clientes ativos </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Page content -->
+<main class="container-fluid mt--6">
+    <!-- Months -->
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="card bg-default">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="text-light text-uppercase mb-1">Visão Geral das vendas 👀</h6>
+                            <h5 class="h3 text-white mb-0">Valor das vendas realizadas na plataforma 💰</h5>
+                        </div>
+
+                        <div class="col">
+                            <ul class="nav nav-pills justify-content-end">
+                                <li id="chart-sales-toggle-months" class="nav-item mr-2 mr-md-0">
+                                    <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
+                                        <span class="d-none d-md-block">Mês</span>
+                                        <span class="d-md-none">M</span>
+                                    </a>
+                                </li>
+                                <li id="chart-sales-toggle-weeks" class="nav-item">
+                                    <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                                        <span class="d-none d-md-block">Semana</span>
+                                        <span class="d-md-none">S</span>
+                                    </a>
+                                </li>
+                                <li id="chart-sales-toggle-days" class="nav-item">
+                                    <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                                        <span class="d-none d-md-block">Dia</span>
+                                        <span class="d-md-none">D</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Chart -->
+                    <div class="chart">
+                        <div class="chartjs-size-monitor">
+                            <div class="chartjs-size-monitor-expand">
+                                <div class=""></div>
+                            </div>
+                            <div class="chartjs-size-monitor-shrink">
+                                <div class=""></div>
+                            </div>
+                        </div>
+                        <!-- Chart wrapper -->
+                        <canvas id="chart-sales" class="chart-canvas chartjs-render-monitor" width="1004" height="350"
+                            style="display: block; width: 1004px; height: 350px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1">📊 Performance de vendas</h6>
+                            <h5 class="h3 mb-0">De maneira unitária ⭐</h5>
+                        </div>
+                        <div class="col">
+                            <ul class="nav nav-pills justify-content-end">
+                                <li id="chart-cnt-toggle-months" class="nav-item mr-2 mr-md-0">
+                                    <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
+                                        <span class="d-none d-md-block">Mês</span>
+                                        <span class="d-md-none">M</span>
+                                    </a>
+                                </li>
+                                <li id="chart-cnt-toggle-days" class="nav-item">
+                                    <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                                        <span class="d-none d-md-block">Dia</span>
+                                        <span class="d-md-none">D</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Chart -->
+                        <div class="chart">
+                            <div class="chartjs-size-monitor">
+                                <div class="chartjs-size-monitor-expand">
+                                    <div class=""></div>
+                                </div>
+                                <div class="chartjs-size-monitor-shrink">
+                                    <div class=""></div>
+                                </div>
+                            </div>
+                            <canvas id="chart-un-sales" class="chart-canvas chartjs-render-monitor"
+                                style="display: block; width: 463px; height: 350px;" width="463" height="350"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tables -->
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">💁‍♂️ - Registros do módulo de atendimento</h3>
+                        </div>
+                        <div class="col text-right">
+                            <a href="/admin/intends" class="btn btn-sm btn-primary">Clique e veja todos com mais
+                                detalhes</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Intends table -->
+                    <table id="intends-table" class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Cliente</th>
+                                <th scope="col">Atendente</th>
+                                <th scope="col">Data resposta</th>
+                                <th scope="col">Resposta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="card-footer">
+                    <small class="px-3">* Esse valor pode ser nulo, ou seja, não houve nenhuma resposta do
+                        atendente.</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">🍰 Aniversariantes em 7 dias</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            <button id="30-days-birthdates" class="btn btn-sm btn-primary">30 dias</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="birthday-table" class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Data</th>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Infos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="birthday-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer pt-0">
+        <div class="row align-items-center justify-content-lg-between">
+            <div class="col-lg-6">
+                <div class="copyright text-center  text-lg-left  text-muted">
+                    © 2020 <a href="https://www.vonmuller.com.br/" class="font-weight-bold ml-1" target="_blank">Feito com
+                        ❤️ pela Von Müller Software</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                    <li class="nav-item">
+                        <a href="https://www.vonmuller.com.br/" class="nav-link" target="_blank">Clique aqui e saiba
+                            mais
+                            sobre a gente</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="https://mywhats.net/easywebusa" class="nav-link badge badge-danger px-3"
+                            target="_blank"> 🚨 Suporte Emergencial 🚨 </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+</main>
+{{> pages/footer}}
+
+<script type="text/javascript">
+    $(document).ready(async () => {
+        /* Returns a time stamp */
+        const timestamp = (unix_timestamp) => {
+            var date = new Date(unix_timestamp);
+            var hours = date.getHours();
+            var minutes = "0" + date.getMinutes();
+            var seconds = "0" + date.getSeconds();
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+
+            var formattedTime = day + '/' + month + '/' + year + ' - ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+            return formattedTime;
+        }
+        /* Switch for the right drawing type */
+        const intendType = (type) => {
+            if (type) {
+                return '<div class="badge badge-dark"> 💬 Atendimento por texto </div>';
+            } else {
+                return '<div class="badge badge-dark"> ☎️ Atendimento por voz </div>';
+            }
+        }
+
+        /* Function that generates the "User information button" */
+        const generateInfoButton = (user_id) => {
+            let tmp_html = '<button class="btn btn-sm btn-light client-show-profile" data-user-id="' + user_id + '"><i class="fas fa-id-card client-show-profile" data-user-id="' + user_id + '"></i> Perfil</button> ';
+
+            return tmp_html;
+        }
+
+        /* The status of the intend */
+        const intendStatus = (status) => {
+            switch (status) {
+                case 0:
+                    return '<div class="badge badge-secondary"> Intenção apenas registrada 😱 </div>';
+                    break;
+                case 1:
+                    return '<div class="badge badge-info"> Intenção Recebida 👀 </div>';
+                    break;
+                case 2:
+                    return '<div class="badge badge-success"> Intenção Aceita 😁 </div>';
+                    break;
+                case 3:
+                    return '<div class="badge badge-danger"> Intenção Recusada 😖 </div>';
+                    break;
+            }
+        }
+
+        const parseData = (unix_timestamp) => {
+            var date = new Date(unix_timestamp);
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+            return day + '/' + month + '/' + year
+        }
+
+        /**********************************************************************************/
+        /* INTENDS INTENDS INTENDS INTENDS INTENDS INTENDS INTENDS INTENDS INTENDS INTENDS */
+        /**********************************************************************************/
+        const intendsTable = $('#intends-table').DataTable({
+            "serverSide": true,
+            "bFilter": true,
+            "ordering": true,
+            "info": true,
+            "paging": true,
+            "order": [[2, "asc"]],
+            "ajax": {
+                url: '/admin/intends/list',
+                type: 'POST',
+                length: 5,
+            },
+            "columns": [
+                { "data": "2.user_name" },
+                {
+                    "data": "1.clerk_info_exhibition"
+                },
+                {
+                    "data": "0.intend_answer_time", "render": (data, type, row) => {
+                        return data ? timestamp(new Date(data).getTime()) : '<div class="badge badge-danger"> Não houve Resposta. </div>';
+                    }
+                },
+                {
+                    "data": "0.intend_status", "render": (data, type, row) => {
+                        return intendStatus(data);
+                    }
+                },
+            ],
+            "language":
+            {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": ">",
+                    "sPrevious": "<",
+                    "sFirst": "<<",
+                    "sLast": ">>"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                },
+                "select": {
+                    "rows": {
+                        "_": "Selecionado %d linhas",
+                        "0": "Nenhuma linha selecionada",
+                        "1": "Selecionado 1 linha"
+                    }
+                },
+                "buttons": {
+                    "copy": "Copiar para a área de transferência",
+                    "copyTitle": "Cópia bem sucedida",
+                    "copySuccess": {
+                        "1": "Uma linha copiada com sucesso",
+                        "_": "%d linhas copiadas com sucesso"
+                    }
+                }
+            }
+
+        });
+        /**********************************************************************************/
+        /* INTENDS INTENDS INTENDS INTENDS INTENDS INTENDS INTENDS INTENDS INTENDS INTENDS */
+        /**********************************************************************************/
+
+        /* Listner on 30 days */
+        $(document).on('click', '#30-days-birthdates', async (e) => {
+            $.get("/admin/clients/get-birthdates/30", (birthdates) => {
+                /* Opens the modal */
+                birthdates.map(dude => {
+                    let tr = document.createElement("tr");
+
+                    /* Date column (1st) */
+                    let date_column = document.createElement("td");
+                    date_column.innerText = parseData(dude.user_birthdate);
+
+                    /* Name column (2nd) */
+                    let name_column = document.createElement("td");
+                    name_column.innerText = dude.user_name;
+
+                    /* That button, actualy rhis is a function call */
+                    let button_column = document.createElement("td");
+                    button_column.innerHTML = generateInfoButton(dude.user_id);
+
+                    /* Insert into each row */
+                    tr.innerHTML = date_column.outerHTML + name_column.outerHTML + button_column.outerHTML;
+
+                    /* Add this row to thte table */
+                    $("#30-birthdates-table-body").append(tr.outerHTML);
+                });
+                $("#30-days-birthdates-modal").modal('show');
+            });
+        });
+
+        /* Birthday Table  on home */
+        try {
+            /* 
+             Get (get-birthdates/<days_ahead>) days_ahead birthdates via this route, as a JSON (i32, String, NaiveDate) tuple.
+            */
+            $.get("/admin/clients/get-birthdates/7", (birthdates) => {
+                birthdates.map((dude) => {
+                    let tr = document.createElement("tr");
+
+                    /* Date column (1st) */
+                    let date_column = document.createElement("td");
+                    date_column.innerText = parseData(dude.user_birthdate);
+
+                    /* Name column (2nd) */
+                    let name_column = document.createElement("td");
+                    name_column.innerText = dude.user_name;
+
+                    /* That button, actualy rhis is a function call */
+                    let button_column = document.createElement("td");
+                    button_column.innerHTML = generateInfoButton(dude.user_id);
+
+                    /* Insert into each row */
+                    tr.innerHTML = date_column.outerHTML + name_column.outerHTML + button_column.outerHTML;
+
+                    /* Add this row to thte table */
+                    $("#birthday-table-body").append(tr.outerHTML);
+
+                });
+            });
+        } catch (e) {
+            console.log("Capturamos um novo erro!");
+            console.error(e);
+        }
+
+        /* Get total clients absolute value */
+        $.get('/admin/stats/total-clients/', (data) => {
+            var parsedData = JSON.parse(data);
+            $('#totalClients').html(parsedData[0]);
+        });
+
+        /* Get active clients */
+        $.get('/admin/stats/total-active-clients/', (data) => {
+            var parsedData = JSON.parse(data);
+            $('#activeClients').html(parsedData[0]);
+        });
+
+        /* Get total clients absolute value */
+        $.get('/admin/stats/total-clerks/', (data) => {
+            var parsedData = JSON.parse(data);
+            $('#totalClerks').html(parsedData[0]);
+        });
+
+        /* Get active clients */
+        $.get('/admin/stats/total-active-clerks/', (data) => {
+            var parsedData = JSON.parse(data);
+            $('#activeClerks').html(parsedData[0]);
+        });
+
+        $.get('/admin/stats/new-clients/' + 0, async (data) => {
+            var this_month = data.count;
+            var last_month = await $.get('/admin/stats/new-clients/' + 1, (e) => {
+                return e
+            });
+            $('#monthNewUsers').text(this_month);
+            $('#percentRelative').text((this_month * 100 / last_month.count).toFixed(2));
+        });
+
+
+        /* Get (count) new clients on last thirty days */
+        $.get('/admin/stats/new-sales/' + 0, async (data) => {
+            var this_month = data.count;
+            $('#monthSales').text(this_month);
+        });
+
+        $.get('/admin/stats/new-sales/' + 0, async (data) => {
+            var this_month = data.count;
+            var last_month = await $.get('/admin/stats/new-sales/' + 1, (e) => {
+                return e
+            });
+            $('#percentRelativeSales').text((this_month * 100 / last_month.count).toFixed(2));
+        });
+
+
+        var ctx = document.getElementById('chart-un-sales').getContext('2d');
+        var cty = document.getElementById('chart-sales').getContext('2d');
+
+
+        /* Meta stuff */
+        var monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        var weekDays = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+        var weekAlias = ["Esta semana", "Semana Passada", "Semana Retrasada"];
+
+        var today = new Date();
+        var d;
+        var month = Array();
+
+        /* Month ones */
+        var perMonthCnt = Array();
+        var perMonthVal = Array();
+
+        /* By days */
+        var days = Array();
+        var perDayCnt = Array();
+        var perDayVal = Array();
+
+        /* By Weeks */
+        var weeks = Array();
+        var perWeekCnt = Array();
+        var perWeekVal = Array();
+
+        /* To guarantee the correct name of the day of the week, the index of the day is returned from server started with 0 as sunday 
+        *  This function convert the index to the appropriate name
+        */
+        function GetWeekDaysByID(IDs) {
+            var days = Array();
+            for (i = 0; i <= weekDays.length; i++) {
+                days.push(weekDays[IDs[i]]);
+            }
+            return days;
+        }
+
+        /* To guarantee the correct alias to the week, the index of the alias is returned from server started with 0 as actual week 
+        *  This function convert the index to the appropriate name
+        */
+        function GetWeekAliasByID(IDs) {
+            var week_alias = Array();
+            for (i = 0; i < IDs.length; i++) {
+                week_alias.push(weekAlias[IDs[i]]);
+            }
+            return week_alias;
+        }
+        /* To guarantee the correct alias to the month, the index of the alias is returned from server started with 1 as January 
+        *  This function convert the index to the appropriate name
+        */
+        function GetMonthNameByID(IDs) {
+            var month_names = Array();
+            for (i = 0; i < IDs.length; i++) {
+                month_names.push(monthNames[IDs[i]-1]);
+            }
+            return month_names;
+        }
+
+        /**********************************************************************************/
+        /* Day stuff (Todays gonna be the day, focus man! Today + (-6) days back in time) */
+        /**********************************************************************************/
+        try {
+            await $.get('/admin/stats/new-sales-days-before/7', (data) => {
+                perDayVal = data.sum;
+                perDayCnt = data.count;
+                days = GetWeekDaysByID(data.week_day);
+            });
+        } catch (e) {
+            console.log("Capturamos um novo erro!");
+            console.error(e);
+        }
+        /**********************************************************************************/
+        /* END DAY STUFF  END DAY STUFF  END DAY STUFF  END DAY STUFF  END DAY STUFF  END */
+        /**********************************************************************************/
+
+        /**********************************************************************************/
+        /* WEEK stuff (Todays gonna be the day, focus man! Today + (-3) WEEK back in time)*/
+        /**********************************************************************************/
+        try {
+            await $.get('/admin/stats/new-sales-weeks-before/3', (data) => {
+                perWeekVal = data.sum;
+                perWeekCnt = data.count;
+                weeks = GetWeekAliasByID(data.week_alias);
+            });
+
+        } catch (e) {
+            console.log("Capturamos um novo erro!");
+            console.error(e);
+        }
+        /**********************************************************************************/
+        /* END WEEK STUFF  END WEEK STUFF  END WEEK STUFF  END WEEK STUFF  END WEEK STUFF */
+        /**********************************************************************************/
+        /**********************************************************************************/
+        /* MONTH stuff ( Today + (-5) Month back in time) MONTH stuff (Today + (-5) Month)*/
+        /**********************************************************************************/
+        try {
+            await $.get('/admin/stats/new-sales-months-before/6', (data) => {
+                perMonthVal = data.sum;
+                perMonthCnt = data.count;
+                month = GetMonthNameByID(data.month);
+            });
+        } catch (e) {
+            console.log("Capturamos um novo erro!");
+            console.error(e);
+        }
+        /**********************************************************************************/
+        /* END MNTH STUFF  END MNTH STUFF  END MNTH STUFF  END MNTH STUFF  END MNTH STUFF */
+        /**********************************************************************************/
+
+        /* Listner to make show clients profile */
+        $(document).on('click', '.client-show-profile', async (e) => {
+            $("#30-days-birthdates-modal").modal('hide');
+            await $.get('/admin/clients/single/' + $(e.target).data('user-id'), (tmp_data) => {
+				var data = tmp_data[0];
+                $('#_user_name').text(data[0]['user_name']);
+                $('#_user_genre').text(data[0]['user_genre']);
+                $('#_user_alias').text(data[0]['user_alias']);
+                $('#_user_creation_date').text(data[0]['user_creation'].split('T')[0].split('-').reverse().join('/'));
+                $('#_user_email').text(data[0]['user_email']);
+                $('#_user_birthdate').text(data[0]['user_birthdate'].split('-').reverse().join('/'));
+                $('#_address_city').text(data[1]['address_city']);
+                $('#_address_number').text(data[1]['address_number']);
+                $("#newPass").data('user-id', $(e.target).data('user-id'));
+                $('#_adress_zip_code').text(data[1]['address_postalcode']);
+                $('#_address_street').text(data[1]['address_street']);
+                $('#_address_state').text(data[1]['address_state']);
+                $('#_address_state').text(data[1]['address_state']);
+                $('#_phone_number').text(data[2]['phone_number']);
+            });
+            $('#clientProfile').modal('show');
+        })
+
+        /* Birthday Table  on Modal (Datatables immplementation) */
+        const options = {
+            maintainAspectRatio: false,
+            spanGaps: false,
+            elements: {
+                line: {
+                    tension: 0.3
+                }
+            },
+            plugins: {
+                filler: {
+                    propagate: false
+                }
+            },
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 0
+                    }
+                }]
+            }
+        };
+
+        const valChart = new Chart(cty, {
+            type: 'line',
+            scales: {
+                xAxes: [{
+                    display: true
+                }],
+                yAxes: [{
+                    display: true
+                }]
+            },
+            data: {
+                labels: month,
+                datasets: [{
+                    label: 'Neste mês (em Euros)',
+                    data: perMonthVal,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#ffffff',
+                    borderColor: "#5e72e4",
+                    backgroundColor: "#5e72e4"
+                }]
+            },
+            options: options,
+        });
+
+        var cntChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: month,
+                datasets: [{
+                    label: 'Neste mês (em unidades)',
+                    data: perMonthCnt,
+                    backgroundColor: [
+                        '#172b4d',
+                        '#172b4d',
+                        '#172b4d',
+                        '#172b4d',
+                        '#172b4d',
+                        '#172b4d',
+                        '#172b4d',
+                        '#172b4d'
+                    ],
+                    borderColor: [
+                        '#5e72e4',
+                        '#5e72e4',
+                        '#5e72e4',
+                        '#5e72e4',
+                        '#5e72e4',
+                        '#5e72e4',
+                        '#5e72e4',
+                        '#5e72e4'
+                    ],
+                    borderWidth: 5
+                }]
+            }
+        });
+
+        $(document).on('click', '#chart-sales-toggle-days', () => {
+            $.get('/admin/stats/new-sales-days-before/7', (data) => {
+                perDayVal = data.sum;
+                perDayCnt = data.count;
+                days = GetWeekDaysByID(data.week_day);
+                valChart.config.data.datasets[0].data = perDayVal;
+                valChart.config.data.datasets[0].label = 'Neste dia (em euros)';
+                valChart.config.data.labels = days;
+                valChart.update();
+            });
+        });
+
+        $(document).on('click', '#chart-cnt-toggle-days', () => {
+            $.get('/admin/stats/new-sales-days-before/7', (data) => {
+                perDayVal = data.sum;
+                perDayCnt = data.count;
+                days = GetWeekDaysByID(data.week_day);
+                cntChart.config.data.datasets[0].data = perDayCnt;
+                cntChart.config.data.datasets[0].label = 'Neste dia (em unidades)';
+                cntChart.config.data.labels = days;
+                cntChart.update();
+            });
+        });
+
+        $(document).on('click', '#chart-sales-toggle-weeks', () => {
+            $.get('/admin/stats/new-sales-weeks-before/3', (data) => {
+                perWeekVal = data.sum;
+                perWeekCnt = data.count;
+                weeks = GetWeekAliasByID(data.week_alias);
+                valChart.config.data.datasets[0].data = perWeekVal;
+                valChart.config.data.datasets[0].label = 'Nesta semana (em euros)';
+                valChart.config.data.labels = weeks;
+                valChart.update();
+            });
+        });
+
+        $(document).on('click', '#chart-sales-toggle-months', () => {
+            $.get('/admin/stats/new-sales-months-before/6', (data) => {
+                perMonthVal = data.sum;
+                perMonthCnt = data.count;
+                month = GetMonthNameByID(data.month);
+                valChart.config.data.datasets[0].data = perMonthVal;
+                valChart.config.data.datasets[0].label = 'Neste mês (em euros)';
+                valChart.config.data.labels = month;
+                valChart.update();
+            });
+        });
+
+        $(document).on('click', '#chart-cnt-toggle-months', () => {
+            $.get('/admin/stats/new-sales-months-before/6', (data) => {
+                perMonthVal = data.sum;
+                perMonthCnt = data.count;
+                month = GetMonthNameByID(data.month);
+                cntChart.config.data.datasets[0].data = perMonthCnt;
+                cntChart.config.data.datasets[0].label = 'Neste mês (em unidades)';
+                cntChart.config.data.labels = month;
+                cntChart.update();
+            });
+        });
+    });
+</script>
+
+
+<!-- Modal Client Profile -->
+<div class="modal fade" id="clientProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Exibindo perfil do Client selecionado:</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                Informações do atendente:
+                            </div>
+                            <div class="card-body">
+                                <div class="col-lg-12">
+                                    <strong>Nome: </strong> <span id="_user_name"></span>
+                                    <hr>
+                                </div>
+                                <div class="col-lg-12">
+                                    <strong>Gênero: </strong> <span id="_user_genre"></span>
+                                    <hr>
+                                </div>
+                                <div class="col-lg-12">
+                                    <strong>Nome de usuário: </strong> <span id="_user_alias"></span>
+                                    <hr>
+                                </div>
+                                <div class="col-lg-12">
+                                    <strong>Data de inserção: </strong><span id="_user_creation_date"></span>
+                                    <hr>
+                                </div>
+                                <div class="col-lg-12">
+                                    <strong>E-mail: </strong><span id="_user_email"></span>
+                                    <hr>
+                                </div>
+                                <div class="col-lg-12">
+                                    <strong>Data de nascimento: </strong> <span id="_user_birthdate"></span>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                Informações de Endereço:
+                            </div>
+                            <div class="card-body">
+                                <div class="col-lg-12">
+                                    <strong>Estado: </strong> <span id="_address_state"></span> - <strong>CEP:
+                                    </strong> <span id="_adress_zip_code"></span>
+                                    <hr>
+                                </div>
+                                <div class="col-lg-12">
+                                    <strong>Cidade: </strong><span id="_address_city"></span>
+                                    <hr>
+                                </div>
+                                <div class="col-lg-12">
+                                    <strong>Logradouro: </strong><span id="_address_street"></span>
+                                    <hr>
+                                </div>
+                                <div class="col-lg-12">
+                                    <strong>Número: </strong><span id="_address_number"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                Informações de Contato Móvel:
+                            </div>
+                            <div class="card-body">
+                                <div class="col-lg-12">
+                                    <strong>Número de telefone: </strong> <span id="_phone_number"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-block btn-primary" id="newPass" data-user-id=""><i
+                                class="fas fa-envelope mr-2"></i>
+                            Enviar nova senha por e-mail</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 30 days birthdates modal -->
+<div class="modal fade" id="30-days-birthdates-modal" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Listando aniversários nos próximos 30 dias:</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="table-responsive">
+                            <table id="birthday-table" class="table align-items-center table-flush">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Data</th>
+                                        <th scope="col">Nome</th>
+                                        <th scope="col">Infos</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="30-birthdates-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

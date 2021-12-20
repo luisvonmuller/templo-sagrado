@@ -1,0 +1,963 @@
+{{>home/header}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<style>
+    @-webkit-keyframes rotating
+
+    /* Safari and Chrome */
+        {
+        from {
+            -webkit-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+
+        to {
+            -webkit-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+
+    .clerk-img {
+        border-radius: 30px;
+    }
+
+    #minus-min {
+        z-index: 9999;
+        position: absolute;
+        animation-duration: 3s;
+        margin-bottom: 2em;
+    }
+
+    @keyframes rotating {
+        from {
+            -ms-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+
+        to {
+            -ms-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+
+    .rotating {
+        -webkit-animation: rotating 2s linear infinite;
+        -moz-animation: rotating 2s linear infinite;
+        -ms-animation: rotating 2s linear infinite;
+        -o-animation: rotating 2s linear infinite;
+        animation: rotating 2s linear infinite;
+    }
+
+    #detailed-status-list li:before {
+        content: '✅';
+        margin-left: -20px;
+        margin-right: 10px;
+    }
+
+    audio {
+        display: inline-block !important;
+        position: relative !important;
+        top: 9px !important;
+        width: calc(100% - 120px) !important;
+    }
+
+    #grantPermissions:hover {
+        text-decoration: underline;
+    }
+
+    #feedbacks {
+        transition: 2s;
+    }
+</style>
+
+<main class="mt-3 py-2 px-2">
+    <div class="container">
+
+        <audio id="received_audio" autoplay></audio>
+        <audio id="local_audio" autoplay muted></audio>
+        <!--- Metas -->
+        <input id="my-mail" type="hidden" value="{{ self_data.2.0 }}">
+        <input id="target-mail" type="hidden" value="{{ self_data.2.1 }}">
+        <input id="call-id" type="hidden" value="{{ self_data.1.0.call_id }}">
+        <input id="clerk-id" type="hidden" value="{{ self_data.1.0.clerk_id }}">
+        <input id="client-id" type="hidden" value="{{ self_data.1.0.user_id }}">
+        <!--- Metas -->
+
+        <a id="download" href="#" style="display: none !important;">Download</a>
+        <div class="row">
+            <div class="col-lg-12 py-4 pr-4">
+                <div class="row">
+                    <div class="col-lg-1 d-flex justify-content-center">
+                        <img class="ml-lg-4 img-fluid mobile-behave-img" src="/assets/img/ciganinha.png">
+                    </div>
+                    <div class="col-lg-8 pl-4 mt-1">
+                        <h3>
+                            Olá <strong id="client-name"> {{self_data.0.0.user_name}}</strong> <br> Desejamos muita luz
+                            nas sua
+                            consulta! 😉
+                        </h3>
+                    </div>
+                    <div id="faq-chat" class="col-lg-3 d-none d-lg-block">
+                        <div class="float-right text-right mr-2 d-none">
+                            <p> Está com duvidas? 🤔 <br>
+                                <button id="faq-chat-btn" class="btn btn-sm text-right" data-toggle="modal"
+                                    data-target="faq-chat-modal">Clique para sana-las 😉</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="col-lg-6 py-auto my-auto">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <img class="img-fluid img-thumbnail  clerk-img"
+                            src="https://abad.com.br/wp-content/uploads/2019/11/user-icon.svg">
+                    </div>
+                    <div class="col-lg-8 my-auto">
+                        <h3 class="pl-2">
+                            <small>Em Atendimento com:</small>
+                            <br>
+                            <h2><strong class="pl-2 clerk-name"></strong></h2>
+                        </h3>
+                    </div>
+                </div>
+
+
+                <div class="alert alert-info mt-2">
+                    <div class="row">
+                        <span id="minus-min" class="alert alert-danger d-none">💰 €<span
+                                id="valChatMinPopOver">1,00</span> foram descontados.</span>
+
+                        <div class="col-lg-8 " data-toggle="tooltip" data-placement="top"
+                            title="Seu saldo total, corresponde ao saldo pago + bônus">
+                            <strong class="mr-1">Seus Créditos: € </strong><span id="myMinutes"> </span>
+                        </div>
+                        <div class="col-lg-4 alert-success text-center" data-toggle="tooltip" data-placement="top"
+                            title="Valor do minuto na plataforma" style="border-radius: 30px; border: 1px solid white;">
+                            <strong>€ </strong><span id="valChatMin">Carregando...</span>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 pl-4">
+                            <div class="progress mt-2">
+                                <div id="credits-bar-balance" data-toggle="tooltip" data-placement="top"
+                                    class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar">
+                                </div>
+                                <div id="credits-bar-bonus" data-toggle="tooltip" data-placement="top"
+                                    class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                    role="progressbar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div id="auth-rolling" class="collapse show">
+                    <div class="alert alert-danger">
+                        <h5 class="text-center my-2 ">Suas permissões de audio: <span id="permision-status">Não
+                                Autorizadas. <br> <a id="grantPermissions" href="#"
+                                    class="btn btn-danger my-2 take-attention animate__animated animate__tada"> <i
+                                        class="fas  fa-info-circle"></i> Clique Aqui
+                                    para Autorizar </a></span>
+                        </h5>
+
+                        <small>** A chamada não iniciará enquanto você não fornecer as autorizações necessárias. <a
+                                id="permissions-help" href="#" class="d-none">Clique aqui para obter ajuda.</a></small>
+                    </div>
+                </div>
+
+                <div class="after-permissions py-2 px-1 mt-4">
+                    <div id="feedbacks" class="alert alert-danger">
+                        <h5 id="waiting-client" class="collapse show text-center my-2 "><i
+                                class="rotating fas fa-hourglass my-auto mr-3"></i>
+                            Esperando o
+                            Atendente entrar na
+                            chamada... *
+
+                            <hr>
+                        </h5>
+                        <strong>Detalhes da chamada:</strong>
+                        <ul id="detailed-status-list" class="px-2">
+                        </ul>
+                        <button class="btn btn-block btn-danger btn-sm" id="hangup-button" role="button" disabled>
+                            Encerrar chamada
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="background-color: #ffcc00; font-weight: 600; border: 2px dashed white;"
+            class="alert col-lg-12 text-center">
+            <strong>⚠️ ATENÇÃO! ⚠️ </strong>
+            <hr>
+            <ul>
+                <li id="no-clerk"> Caso o Atendente não entre em até um minuto, você
+                    será retirado desta tela e
+                    nada lhe será descontado.
+                </li>
+                <li>
+                    Os créditos só começaram a ser consumidos quando a conexão se estabilizar e os dois derem as
+                    autorizações.
+                </li>
+            </ul>
+        </div>
+        <a id="download" href="#" style="display: none !important;">Download</a>
+        <div class="empty-container"></div>
+    </div>
+</main>
+
+{{>home/footer}}
+<script src="/assets/js/adapter.js"></script>
+<script type="text/javascript">
+
+
+    const mediaConstraints = {
+        audio: true,
+        video: false
+    };
+
+    // Output logging information to console.
+
+    function log(text) {
+        var time = new Date();
+
+        console.log("[" + time.toLocaleTimeString() + "] " + text);
+    }
+
+    // Output an error message to console.
+
+    function log_error(text) {
+        var time = new Date();
+
+        console.trace("[" + time.toLocaleTimeString() + "] " + text);
+    }
+
+    function reportError(errMessage) {
+        log_error(`Error ${errMessage.name}: ${errMessage.message}`);
+    }
+    /* Metas */
+    var my_mail = null;
+    var target_mail = null;
+
+    /* Bug solvers */
+    var add = 0;
+    var offered = 0;
+    var answered = 0;
+
+    /* 2th step - WebRTC implementations */
+    var myPeerConnection = null;    /* RTCPeerConnection       */
+    var transceiver = null;         /* RTCRtpTransceiver       */
+    var microphoneStream = null;    /* MediaStream from webcam */
+    var socket = null;
+
+    /* Audio Recorder */
+    var blobs;
+    var blob;
+    var rec;
+    var stream;
+
+    /* RECORD both audio sources */
+    function mergeAudioStreams(localStream, remoteStream) {
+        const context = new AudioContext();
+        const destination = context.createMediaStreamDestination();
+
+        if (localStream && localStream.getAudioTracks().length > 0) {
+            const source1 = context.createMediaStreamSource(localStream);
+            source1.connect(destination);
+        }
+
+        if (remoteStream && remoteStream.getAudioTracks().length > 0) {
+            const source2 = context.createMediaStreamSource(remoteStream);
+            source2.connect(destination);
+        }
+        return destination.stream.getAudioTracks();
+    }
+
+    $(document).ready(async function () {
+        /* Pree init the meta vars */
+        var chat_id = parseInt(window.location.pathname.split("/").pop());
+
+        const data = await $.get("/voip-meta-info/" + chat_id, function (data) {
+            return console.log(data);
+        });
+
+        /* Meta Info for WebRTC */
+        const my_mail = data[2][0];
+        const target_mail = data[2][1];
+
+        /* Call Meta Info */
+        const call_id = chat_id;
+        const clerk_id = data[1][0].clerk_id;
+        const client_id = data[1][0].user_id;
+
+        const valMinChat = parseFloat(data[3]);
+
+        $.get('/whoClerk/' + clerk_id, function (e) {
+            var clerk_data = JSON.parse(e)[0];
+            $('.clerk-name').html(clerk_data[1]);
+            $('.clerk-img').attr('src', clerk_data[0]);
+        });
+
+
+        /* 
+        -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+         MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  MYBARS  
+        -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        */
+
+        /* Parsing and drawing the cost per minute of this site */
+        $.get('/admin/config/get-configs', function (e) {
+            configs = e[0];
+            $('#valChatMin').text(parseFloat(configs['absolute_min_value_voice']).toFixed(2).replace(".", ",") + " / min");
+            $('#valChatMinPopOver').text(parseFloat(configs['absolute_min_value_voice']).toFixed(2).replace(".", ","));
+        });
+
+        /* My balance will change over time, thats why we had to change this back to var from a const statement */
+        var totalBalance = await $.get("/my-credits", function (e) {
+            return e;
+        });
+
+        /* First redraw */
+        credits_bar(totalBalance[0][0], totalBalance[0][1]);
+
+        /* Separate stuff into two vars */
+        myBalance = totalBalance[0][0];
+        myBonus = totalBalance[0][1];
+
+        /* Initialize tooltips */
+        $('[data-toggle="tooltip"]').tooltip();
+
+        function bar_color(amount) {
+            if ((amount / valMinChat) > 3 && (amount / valMinChat) <= 10) {
+                /* The implementation to update the paid-balance */
+                $("#credits-bar-balance").addClass('bg-warning');
+            } else if ((amount / valMinChat) <= 3) {
+                /* The implementation to update the paid-balance */
+                $("#credits-bar-balance").addClass('bg-danger');
+            }
+        }
+
+
+        /**
+            @func 
+            * @name credits_bar A good name, I do think
+            * @desc Will draw the bar, and the credits (by a text) 
+            * @bindsto  #credits-bar-balance 
+            * @bindsto  #credits-bar-bonus
+            -------------------------
+            * @param {Float 64} balance           || The balance (paid) that corresponds to the bonus on the bar.
+            * @param {Float 64} bonus             || The amount that corresponds to the bonus on the bar.
+            -------------------------
+            * @returns {void}
+        **
+        */
+
+        function credits_bar(balance, bonus) {
+            /* To a better behave on no balance */
+            if (bonus > 0) {
+                /* Proportion */
+                var bonus_proportion = ((balance * 100) / (balance + bonus)) - 100;
+                var balance_proportion = ((bonus * 100) / (balance + bonus)) - 100;
+
+                /* The implementation to update the paid-balance */
+                $("#credits-bar-balance").attr("style", "width:" + (balance_proportion * -1) + "%");
+
+                /* Balance tooltip */
+                $("#credits-bar-balance").attr("data-original-title", "Seu saldo pago €" + parseFloat(balance).toFixed(2).replace(".", ","));
+                $("#credits-bar-balance").tooltip();
+
+
+                /* The implementation to update the bonus-balance */
+                $("#credits-bar-bonus").attr("style", "width:" + (bonus_proportion * -1) + "%");
+
+
+                /* Bonus tooltip */
+                $("#credits-bar-bonus").attr("data-original-title", "Seu saldo ganho por bônus €" + parseFloat(bonus).toFixed(2).replace(".", ","));
+                $("#credits-bar-bonus").tooltip();
+
+            } else {
+                var balance_proportion = 1;
+                /* The implementation to update the paid-balance */
+                $("#credits-bar-balance").attr("style", "width:" + (balance_proportion * 100) + "%");
+
+
+                /* The implementation to update the bonus-balance */
+                $("#credits-bar-bonus").attr("style", "width:" + (0) + "%");
+                $("#credits-bar-bonus").attr("data-original-title", "Seu saldo ganho por bônus €0,00");
+
+
+                /* Balance tooltip */
+                $("#credits-bar-balance").attr("data-original-title", "Seu saldo pago €" + parseFloat(balance).toFixed(2).replace(".", ","));
+                $("#credits-bar-balance").tooltip();
+
+            }
+
+            bar_color(balance + bonus);
+
+            /* Draw things into the user view */
+            $("#myMinutes").html((parseFloat(balance + bonus).toFixed(2).replace('.', ',')));
+        }
+
+        const time = 60000;
+        var firstMinuteGoing = 1;
+
+        async function minutesOut() {
+            /* Enroll a minute */
+            if (firstMinuteGoing) {
+                /* Enroll a fast minute */
+                await new Promise(function (r) {
+                    setTimeout(r, 10000);
+                });
+                firstMinuteGoing = 0;
+            } else {
+                /* Enroll a true minute */
+                await new Promise(function (r) {
+                    setTimeout(r, time);
+                });
+            }
+
+
+            $.get("/register-new-voice-chat-transaction/" + call_id + "/" + clerk_id + "/", function (e) {
+                $.get("/client-sign-voice-chat-transaction/" + e[0] + '/', async function (transaction_stat) {
+                    if (transaction_stat) {
+                        $('#minus-min').removeClass('d-none').addClass('animate__animated animate__fadeOutUp');
+                        socket.send(JSON.stringify({
+                            id: call_id,
+                            from: my_mail,
+                            to: target_mail,
+                            type: "new-transaction",
+                            transaction_id: e[0]
+                        }));
+                        /* My balance will change over time, thats why we had to change this back to var from a const statement */
+                        var totalBalance = await $.get("/my-credits", function (e) {
+                            return e;
+                        });
+
+                        /* Redraws bar */
+                        credits_bar(totalBalance[0][0], totalBalance[0][1]);
+                        socket.send(JSON.stringify({
+                            id: call_id,
+                            from: my_mail,
+                            to: target_mail,
+                            type: "client-balance-update",
+                            transaction_id: totalBalance[0]
+                        }));
+
+                        /* Self call, recursive*/
+                        minutesOut();
+                    } else {
+                        socket.send(JSON.stringify({
+                            id: call_id,
+                            from: my_mail,
+                            to: target_mail,
+                            type: "no-more-credits",
+                        }));
+
+                        Swal.fire("Seus minutos acabaram!", "Você será desconectado em 5 segundos!", "alert");
+
+                        /* Enroll a minute */
+                        await new Promise(function (r) {
+                            setTimeout(r, 5000)
+                        });
+
+                        window.location = "/depoimento/" + clerk_id;
+                    }
+                });
+            });
+        };
+
+        var firstRun = 1;
+        var hasShownUp = 0;
+
+        async function shownUp() {
+            if (firstRun) {
+                await new Promise(function (r) {
+                    setTimeout(r, 60000);
+                });
+                firstRun = 0;
+                shownUp();
+            } else {
+                if (!hasShownUp) {
+                    window.location = "/";
+                }
+            }
+        }
+        shownUp();
+
+
+        /* States */
+        var auth = false;
+        var clerk_ready = false;
+        var clerk_verification = false;
+
+        function socket_messages_generator(status) {
+            return {
+                id: call_id,
+                from: my_mail,
+                to: target_mail,
+                type: status
+            };
+        }
+
+        /* Web socket implementations */
+        /* Login into the socket and says hey, I'm here folks */
+        const web_socket_host = "wss://voice." + window.location.host.replace("www.", "") + "/ws";
+        socket = new WebSocket(web_socket_host);
+        socket.onopen = function (event) {
+            /* Let use JSON strings everywhere */
+            socket.send(JSON.stringify(socket_messages_generator('im-in')));
+            socket.send(JSON.stringify(socket_messages_generator('are-you-there')))
+        };
+
+        var no_processed = 1;
+
+
+        /* To make this jonkeys-free */
+        $('#grantPermissions').on('animationend', async function (e) {
+            $(e.target).removeClass("animate__animated animate__tada");
+
+            await new Promise(function (r) {
+                setTimeout(r, 500)
+            });
+
+            $(e.target).addClass("animate__animated animate__tada")
+        });
+
+        socket.onmessage = async function (event) {
+            var content = JSON.parse(event.data);
+            switch (content.type) {
+                /* Live status switcher */
+                case "are-you-there":
+                    socket.send(JSON.stringify(socket_messages_generator('im-in')));
+                    break;
+                case "im-in":
+                    if (content.from == target_mail) {
+                        if (!clerk_verification) {
+                            hasShownUp = 1;
+                            /* Remove esperando o atendente */
+                            $("#waiting-client").collapse("hide");
+                            $("#feedbacks").removeClass("alert-danger").addClass("alert-info");
+                            clerk_verification = true;
+                            $("#detailed-status-list").append('<li class="animate__animated animate__fadeInRight"> O atendente entrou na sala...</li>');
+                        } /* stands for the view drawing status  */
+                    } /* else do nothing, not our call rolling on. */
+                    break;
+                case "im-ready":
+                    if (content.from == target_mail) {
+                        $("#detailed-status-list").append('<li class="animate__animated animate__fadeInRight"> O atendente está pronto para iniciar a chamada (autorizações garantidas)...</li>');
+                        if (auth) {
+                            await new Promise(r => setTimeout(r, 1000));
+                            invite();
+                            /* Draw view stmt that everything is ready */
+                            $("#detailed-status-list").append('<li class="animate__animated animate__fadeInRight"> Iniciando chamada... </li>');
+                            $("#feedbacks").removeClass("alert-info").addClass("alert-success");
+
+                            minutesOut();
+                        } else {
+                            $("#detailed-status-list").append('<li class="animate__animated animate__fadeInRight"> Chamada pronta para ser iniciada,  você precisa garantir suas autorizações primeiro clicando acima...</li>');
+                            clerk_ready = true;
+                        }
+                    }
+                    break;
+                case "audio-offer":  /* Invitation and offer to chat  */
+                    console.log("------------------- AUDIO ANSWER ----------------");
+                    console.log(content);
+                    console.log("------------------- AUDIO ANSWER ----------------");
+                    if (content.from == target_mail || content.target == my_mail || content.name == target_mail) {
+                        if (!offered) {
+                            offered = 1;
+                            handleAudioOfferMsg(content);
+                        }
+                    }
+                    break;
+
+                case "audio-answer":
+                    console.log("------------------- AUDIO ANSWER ----------------");
+                    console.log(content);
+                    console.log("------------------- AUDIO ANSWER ----------------");
+                    if (content.from == target_mail || content.target == my_mail || content.name == target_mail) {
+                        if (!answered) {
+                            answered = 1;
+                            handleAudioAnswerMsg(content);
+                        }
+                    }
+                    break;
+
+                case "new-ice-candidate": /* A new ICE candidate has been received */
+                    if (content.from == target_mail || content.target == my_mail || content.name == target_mail) {
+                        handleNewICECandidateMsg(content);
+                    }
+                    break;
+                case "hang-up":
+                    if (content.from == target_mail) {
+                        handleHangUpMsg(content);
+                    }
+                    break;
+
+            }
+        }
+
+        $(document).on("click", "#hangup-button", function () {
+            hangUpCall();
+        });
+
+        /* 1 step - Permissions 
+            Our media constrains will only stand for audio
+            video will be setted as false.
+        */
+
+        function handleGetUserMediaError(e) {
+            switch (e.name) {
+                case "NotFoundError":
+                    Swal.fire("Opss...", "Não encontramos o seu microfone", 'error');
+                    break;
+                case "SecurityError":
+                    Swal.fire("Opss...", "Seu dispositivo não permitiu o acesso, tente outro navegador.", 'error');
+                    break;
+                case "PermissionDeniedError":
+                    Swal.fire("Opss...", "Seu dispositivo não permitiu o acesso, tente outro navegador.", 'error');
+                    break;
+                default:
+                    Swal.fire("Opss...", "Seu dispositivo não permitiu o acesso, tente outro navegador.", 'error');
+                    break;
+            }
+        }
+
+        $(document).on('click', '#grantPermissions', async function () {
+            try {
+                microphoneStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+                document.getElementById("local_audio").srcObject = microphoneStream;
+                /* If reached this, we can change the permissions state and send over to the clerk that permissions have been granted. */
+                $("#auth-rolling").children().removeClass('alert-danger').addClass('alert-success').html('<h5 class="text-center my-2">Suas permissões de audio: <span id="permision-status">Autorizado com sucesso.</h5>');
+                socket.send(JSON.stringify(socket_messages_generator('im-ready')));
+                auth = true;
+                await new Promise(r => setTimeout(r, 3000));
+                $("#auth-rolling").collapse("hide");
+
+                /* If Clerk already gave auths, lets start */
+                if (clerk_ready) {
+                    invite();
+                    $("#detailed-status-list").append('<li> Iniciando chamada.</li>');
+                    minutesOut();
+                }
+
+            } catch (err) {
+                handleGetUserMediaError(err);
+            }
+        });
+
+        /* Another function that doesen't hold a struct like ours */
+        function sendToServer(msg) {
+            var msgJSON = JSON.stringify(msg);
+            socket.send(msgJSON);
+        }
+
+
+
+        /* This is for knowing how to reach another peer */
+        async function createPeerConnection() {
+            myPeerConnection = new RTCPeerConnection({
+                iceServers: [     /* Information about ICE servers */
+                    {
+                        urls: [
+                            "stun:stun.l.google.com:19302",
+                            "stun:stun1.l.google.com:19302",
+                            "stun:stun2.l.google.com:19302",
+                        ]
+                    },
+
+                    {
+                        url: 'turn:numb.viagenie.ca',
+                        credential: 'muazkh',
+                        username: 'webrtc@live.com'
+                    },
+                    {
+                        url: 'turn:192.158.29.39:3478?transport=udp',
+                        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                        username: '28224511:1379330808'
+                    },
+                    {
+                        url: 'turn:192.158.29.39:3478?transport=tcp',
+                        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                        username: '28224511:1379330808'
+                    },
+                    {
+                        url: 'turn:turn.bistri.com:80',
+                        credential: 'homeo',
+                        username: 'homeo'
+                    },
+                    {
+                        url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+                        credential: 'webrtc',
+                        username: 'webrtc'
+                    }
+                ]
+            });
+            // Set up event handlers for the ICE negotiation process.
+            myPeerConnection.onicecandidate = handleICECandidateEvent;
+            myPeerConnection.oniceconnectionstatechange = handleICEConnectionStateChangeEvent;
+            myPeerConnection.onicegatheringstatechange = handleICEGatheringStateChangeEvent;
+            myPeerConnection.onsignalingstatechange = handleSignalingStateChangeEvent;
+            myPeerConnection.onnegotiationneeded = handleNegotiationNeededEvent;
+            myPeerConnection.ontrack = handleTrackEvent;
+        }
+
+        // Called by the WebRTC layer to let us know when it's time to
+        // begin, resume, or restart ICE negotiation.
+        async function handleNegotiationNeededEvent() {
+            try {
+                const offer = await myPeerConnection.createOffer();
+
+                // If the connection hasn't yet achieved the "stable" state,
+                // return to the caller. Another negotiationneeded event
+                // will be fired when the state stabilizes.
+                if (myPeerConnection.signalingState != "stable") {
+                    return;
+                }
+                console.log("I offer");
+
+                // Establish the offer as the local peer's current
+                // description.
+                await myPeerConnection.setLocalDescription(offer);
+                // Send the offer to the remote peer.
+                sendToServer({
+                    name: my_mail,
+                    target: target_mail,
+                    type: "audio-offer",
+                    sdp: myPeerConnection.localDescription
+                });
+            } catch (err) {
+                console.error(err);
+            };
+        }
+        // Called by the WebRTC layer when events occur on the media tracks
+        // on our WebRTC call. This includes when streams are added to and
+        // removed from the call.
+        //
+        // track events include the following fields:
+        //
+        // RTCRtpReceiver       receiver
+        // MediaStreamTrack     track
+        // MediaStream[]        streams
+        // RTCRtpTransceiver    transceiver
+        //
+        // In our case, we're just taking the first stream found and attaching
+        // it to the <audio> element for incoming media.
+        function handleTrackEvent(event) {
+            document.getElementById("received_audio").srcObject = event.streams[0];
+            document.getElementById("hangup-button").disabled = false;
+
+            const track = mergeAudioStreams(microphoneStream, event.streams[0]);
+            stream = new MediaStream(track);
+            console.log()
+            blobs = [];
+            rec = new MediaRecorder(stream, { mimeType: "audio/webm" });
+            rec.start()
+            rec.ondataavailable = (e) => blobs.push(e.data);
+
+        }
+        // Handles |icecandidate| events by forwarding the specified
+        // ICE candidate (created by our local ICE agent) to the other
+        // peer through the signaling server.
+        function handleICECandidateEvent(event) {
+            if (event.candidate) {
+                sendToServer({
+                    type: "new-ice-candidate",
+                    target: target_mail,
+                    candidate: event.candidate
+                });
+            }
+        }
+        // Handle |iceconnectionstatechange| events. This will detect
+        // when the ICE connection is closed, failed, or disconnected.
+        //
+        // This is called when the state of the ICE agent changes.
+        function handleICEConnectionStateChangeEvent(event) {
+            switch (myPeerConnection.iceConnectionState) {
+                case "closed":
+                case "failed":
+                case "disconnected":
+                    closeAudioCall();
+                    break;
+            }
+        }
+        // Set up a |signalingstatechange| event handler. This will detect when
+        // the signaling connection is closed.
+        //
+        // NOTE: This will actually move to the new RTCPeerConnectionState enum
+        // returned in the property RTCPeerConnection.connectionState when
+        // browsers catch up with the latest version of the specification!
+        function handleSignalingStateChangeEvent(event) {
+            switch (myPeerConnection.signalingState) {
+                case "closed":
+                    closeAudioCall();
+                    break;
+            }
+        }
+        // Handle the |icegatheringstatechange| event. This lets us know what the
+        // ICE engine is currently working on: "new" means no networking has happened
+        // yet, "gathering" means the ICE engine is currently gathering candidates,
+        // and "complete" means gathering is complete. Note that the engine can
+        // alternate between "gathering" and "complete" repeatedly as needs and
+        // circumstances change.
+        //
+        // We don't need to do anything when this happens, but we log it to the
+        // console so you can see what's going on when playing with the sample.
+        function handleICEGatheringStateChangeEvent(event) {
+            console.log("*** ICE gathering state changed to: " + myPeerConnection.iceGatheringState);
+        }
+        // Close the RTCPeerConnection and reset variables so that the user can
+        // make or receive another call if they wish. This is called both
+        // when the user hangs up, the other user hangs up, or if a connection
+        // failure is detected.
+        const closeAudioCall = async () => {
+            var localAudio = document.getElementById("local_audio");
+            // Stops the record of voicecall
+            rec.stop()
+            // Close the RTCPeerConnection
+            if (myPeerConnection) {
+                // Stop all transceivers on the connection
+
+                myPeerConnection.getTransceivers().forEach(transceiver => {
+                    transceiver.stop();
+                });
+                // Disconnect all our event listeners; we don't want stray events
+                // to interfere with the hangup while it's ongoing.
+                myPeerConnection.ontrack = null;
+                myPeerConnection.onnicecandidate = null;
+                myPeerConnection.oniceconnectionstatechange = null;
+                myPeerConnection.onsignalingstatechange = null;
+                myPeerConnection.onicegatheringstatechange = null;
+                myPeerConnection.onnotificationneeded = null;
+                // Stop the webcam preview as well by pausing the <audio>
+                // element, then stopping each of the getUserMedia() tracks
+                // on it.
+                if (localAudio.srcObject) {
+                    localAudio.pause();
+                    localAudio.srcObject.getTracks().forEach(track => {
+                        track.stop();
+                    });
+                }
+                // Close the peer connection
+                myPeerConnection.close();
+                myPeerConnection = null;
+                microphoneStream = null;
+            }
+            // Disable the hangup button
+            document.getElementById("hangup-button").disabled = true;
+            target_mail = null;
+
+            window.location = "/depoimento/" + clerk_id;
+        }
+        // Handle the "hang-up" message, which is sent if the other peer
+        // has hung up the call or otherwise disconnected.
+
+        async function handleHangUpMsg(msg) {
+            Swal.fire("A conexão foi encerrada", 'Você será redirecionado para a Sua Conta em 3 segundos.', "info");
+            await new Promise(function (r) {
+                setTimeout(r, 3000)
+            });
+            window.location = "/depoimento/" + clerk_id;
+        }
+
+        // Hang up the call by closing our end of the connection, then
+        // sending a "hang-up" message to the other peer (keep in mind that
+        // the signaling is done on a different connection). This notifies
+        // the other peer that the connection should be terminated and the UI
+        // returned to the "no call in progress" state.
+        async function hangUpCall() {
+            sendToServer({
+                from: my_mail,
+                target: target_mail,
+                type: "hang-up"
+            });
+
+            Swal.fire("A conexão foi encerrada", 'Você será redirecionado para a Sua Conta em 3 segundos.', "info");
+            await new Promise(function (r) {
+                setTimeout(r, 3000)
+            });
+            window.location = "/depoimento/" + clerk_id;
+            closeAudioCall();
+        }
+
+
+        async function invite(evt) {
+            if (myPeerConnection) {
+                alert("You can't start a call because you already have one open!");
+            } else {
+                /* Creates our peer connection */
+                createPeerConnection();
+                /* Adds up to the local_audio src object (that player bar) */
+                document.getElementById("local_audio").srcObject = microphoneStream;
+                /* Adds track to the transceiver */
+                microphoneStream.getTracks().forEach(
+                    transceiver = track => myPeerConnection.addTransceiver(track, { streams: [microphoneStream] })
+                );
+            }
+        }
+
+
+        async function handleAudioOfferMsg(msg) {
+            targetUsername = msg.name;
+            log("Received audio chat offer from " + targetUsername);
+
+            if (!myPeerConnection) {
+                createPeerConnection();
+            }
+
+            var desc = new RTCSessionDescription(msg.sdp);
+
+            /* Se a conexão não for estável, rollback */
+            if (myPeerConnection.signalingState != "stable") {
+                await Promise.all([
+                    myPeerConnection.setLocalDescription({ type: "rollback" }),
+                    myPeerConnection.setRemoteDescription(desc)
+                ]);
+                return;
+            } else {
+                await myPeerConnection.setRemoteDescription(desc);
+            }
+
+            microphoneStream.getTracks().forEach(
+                transceiver = track => myPeerConnection.addTransceiver(track, { streams: [microphoneStream] })
+            );
+
+
+            await myPeerConnection.setLocalDescription(await myPeerConnection.createAnswer());
+
+            sendToServer({
+                name: my_mail,
+                target: target_mail,
+                type: "audio-answer",
+                sdp: myPeerConnection.localDescription
+            });
+        }
+
+        async function handleAudioAnswerMsg(msg) {
+            var desc = new RTCSessionDescription(msg.sdp);
+            await myPeerConnection.setRemoteDescription(desc).catch(reportError);
+        }
+
+
+        async function handleNewICECandidateMsg(msg) {
+            var candidate = new RTCIceCandidate(msg.candidate);
+
+            log("*** Adding received ICE candidate: " + JSON.stringify(candidate));
+            try {
+                await myPeerConnection.addIceCandidate(candidate)
+            } catch (err) {
+                reportError(err);
+            }
+        }
+
+    });
+</script>

@@ -1,0 +1,881 @@
+{{> home/header }}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css" integrity="sha512-6lLUdeQ5uheMFbWm3CP271l14RsX1xtx+J5x2yeIDkkiBpeVTNhTqijME7GgRKKi6hCqovwCoBTlRBEC20M8Mg==" crossorigin="anonymous" />
+
+<style>
+	.whatsapp-fixo {
+		position: fixed;
+		bottom: 10px;
+		right: 10px;
+		z-index: 999;
+		text-align: center;
+	}
+
+	.home-alter-cards {
+		position: relative !important;
+	}
+
+	.clerk-profile-link {
+		color: rgba(128, 42, 144, 1) !important;
+	}
+
+	.home-mim-height-from-home-posts-images {
+		height: 250px;
+		min-height: 250px;
+		max-height: 250px;
+	}
+
+</style>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div id="banners">
+			{{#each clerk_data.3}}
+			<picture alt="Imagem do banner de Templo Sagrado">
+				<source media="(max-width: 425px)" srcset="{{this.banner_desktop}}">
+				<img width="100%" src="{{this.banner_mobile}}" alt="Banner de Templo Sagrado">
+			</picture>
+			{{/each}}
+			{{#each self_data.3}}
+			<picture alt="Imagem do banner de Templo Sagrado">
+				<source media="(max-width: 425px)" srcset="{{this.banner_desktop}}">
+				<img width="100%" src="{{this.banner_mobile}}" alt="Banner de Templo Sagrado">
+			</picture>
+			{{/each}}
+		</div>
+	</div>
+</div>
+<div class="home-scroll-x mt-4">
+	<div class="row home-row-content">
+		<div class="col home-items">
+			<div class="home-column-content home-column-content-stories">
+				<img src="/assets/home/img/A1.png" class="rounded" alt="astrologia">
+				<h6 class="text-center"> ASTROLOGIA </h6>
+			</div>
+		</div>
+		<div class="col home-items">
+			<div class="home-column-content home-column-content-stories">
+				<img src="/assets/home/img/A2.png" class="rounded" alt="tarot">
+				<h6 class="text-center"> TAROT </h6>
+			</div>
+		</div>
+		<div class="col home-items">
+			<div class="home-column-content home-column-content-stories">
+				<img src="/assets/home/img/A3.png" class="rounded" alt="cigano">
+				<h6 class="text-center"> B.CIGANO </h6>
+			</div>
+		</div>
+		<div class="col home-items">
+			<div class="home-column-content home-column-content-stories">
+				<img src="/assets/home/img/A4.png" class="rounded" alt="videncia">
+				<h6 class="text-center"> VIDÊNCIA </h6>
+			</div>
+		</div>
+		<div class="col home-items">
+			<div class="home-column-content home-column-content-stories">
+				<img src="/assets/home/img/A5.png" class="rounded" alt="cartomancia">
+				<h6 class="text-center"> CARTOMANCIA </h6>
+			</div>
+		</div>
+		<div class="col home-items">
+			<div class="home-column-content home-column-content-stories">
+				<img src="/assets/home/img/A6.png" class="rounded" alt="numerologia">
+				<h6 class="text-center"> NUMEROLOGIA </h6>
+			</div>
+		</div>
+		<div class="col home-items">
+			<div class="home-column-content home-column-content-stories">
+				<img src="/assets/home/img/A8.png" class="rounded" alt="amor">
+				<h6 class="text-center"> AMOR </h6>
+			</div>
+		</div>
+		<div class="col home-items">
+			<div class="home-column-content home-column-content-stories">
+				<img src="/assets/home/img/A9.png" class="rounded" alt="ente-querido">
+				<h6 class="text-center"> ENTES QUERIDOS </h6>
+			</div>
+		</div>
+		<div class="col home-items">
+			<div class="home-column-content home-column-content-stories">
+				<img src="/assets/home/img/A7.png" class="rounded" alt="dinheiro">
+				<h6 class="text-center"> DINHEIRO </h6>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="bg-light home-content container position-relative home-border" style="min-height: 100%;">
+	<img src="/assets/home/img/arabesco.png" class="home-top-left-arabesque" alt="Arabesco" title="Arabesco">
+	<img src="/assets/home/img/arabesco.png" class="home-top-right-arabesque" alt="Arabesco" title="Arabesco">	
+	<h1 class="home-consultants mt-2 pt-5 text-uppercase"> Consultores </h1>
+	<img src="/assets/home/img/linha_menu2.png" class="home-menu-decoration img-fluid" alt="menu-decoration">
+	<div id="clerksOnline">
+		<div class="row">
+			{{#each clerk_data.1}}
+			<div class="col-lg-3 col-md-6 pt-5">
+				<div class="card text-center mt-5 home-card-atendent">
+					<div class="justify-content-center">
+						<img src="{{ this.2.clerk_image }}" class="rounded-circle mx-auto home-limit-height-from-atendet-picture" style="width: 60%; margin-top: -20%;" alt="consultor">
+					</div>
+					<button type="button" class="btn btn-block home-alter-leght-name" title="Ver perfil de {{ this.2.clerk_info_exhibition }}">
+						<a href="#" data-name="{{this.2.clerk_info_exhibition}}" class="clerk-profile-link text-decoration-none">
+							<i class="fa fa-user home-icon-atendent"></i>
+							{{ this.2.clerk_info_exhibition }}
+						</a>
+					</button>
+					<div class="card-footer mt-5 pt-5 border-0">
+						<p class="home-description card-text"> {{this.2.clerk_info_phrase}} </p>
+						<button data-clerk-id="{{this.0.user_id}}" disabled="true" type="button" class="logged-out-notify text-chat-btn btn btn-block home-atendiments-forms">
+							<img data-clerk-id="{{this.0.user_id}}" src="/assets/home/img/B1.png" alt="chat">
+							Atendimento via <br>Chat €<span data-clerk-id="{{this.0.user_id}}" class="valMinChat"></span>/min
+						</button>
+						<button data-clerk-id="{{this.0.user_id}}" disabled="true" type="button" class="logged-out-notify voice-chat-btn btn btn-block home-atendiments-forms">
+							<img data-clerk-id="{{this.0.user_id}}" src="/assets/home/img/B3.png" alt="phone">
+							Atendimento via <br>Tel. €<span data-clerk-id="{{this.0.user_id}}" class="valMinVoip"></span>/min
+						</button>
+						<button data-clerk-id="{{this.0.user_id}}" type="button" class="logged-out-notify btn btn-block home-atendiments-forms">
+							<i data-clerk-id="{{this.0.user_id}}" class="fa fa-envelope" aria-hidden="true" style="font-size: 1.5rem;"></i>
+							Atendimento por <br>E-mail. €<span data-clerk-id="{{this.0.user_id}}" class="valMail"></span>
+						</button>
+						<div class="whole-status-btn mt-2" data-clerk-id="{{ this.0.user_id }}">
+							<button data-clerk-id="{{ this.0.user_id }}" type="button" class="logged-out-notify btn btn-block btn-dark"> <i data-clerk-id="{{ this.0.user_id }}" class="far fa-paper-plane"></i>
+								Avise-me
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{/each}}
+			{{#each self_data.1}}
+			<div class="col-lg-3 col-md-6 pt-5">
+				<div class="card text-center mt-5 home-card-atendent">
+					<div class="justify-content-center">
+						<img src="{{ this.2.clerk_image }}" class="rounded-circle mx-auto home-limit-height-from-atendet-picture" style="width: 60%; margin-top: -20%;" alt="consultor">
+					</div>
+					<button type="button" class="btn btn-block home-alter-leght-name" title="Ver perfil de {{ this.2.clerk_info_exhibition }}">
+						<a href="#" data-name="{{this.2.clerk_info_exhibition}}" class="clerk-profile-link text-decoration-none">
+							<i class="fa fa-user home-icon-atendent"></i>
+							{{ this.2.clerk_info_exhibition }}
+						</a>
+					</button>
+					<div class="card-footer mt-5 pt-5 border-0">
+						<p class="home-description card-text"> {{this.2.clerk_info_phrase}} </p>
+						<button data-clerk-id="{{this.0.user_id}}" disabled="true" type="button" class="new-text-chat text-chat-btn btn btn-block home-atendiments-forms">
+							<img data-clerk-id="{{this.0.user_id}}" src="/assets/home/img/B1.png" alt="chat">
+							Atendimento via <br>Chat €<span data-clerk-id="{{this.0.user_id}}" class="valMinChat"></span>/min
+						</button>
+						<button data-clerk-id="{{this.0.user_id}}" disabled="true" type="button" class="new-voice-chat voice-chat-btn btn btn-block home-atendiments-forms">
+							<img data-clerk-id="{{this.0.user_id}}" src="/assets/home/img/B3.png" alt="phone">
+							Atendimento via <br>Tel. €<span data-clerk-id="{{this.0.user_id}}" class="valMinVoip"></span>/min
+						</button>
+
+						<button data-clerk-id="{{this.0.user_id}}" type="button" class="new-mail btn btn-block home-atendiments-forms">
+							<i data-clerk-id="{{this.0.user_id}}" class="fa fa-envelope" aria-hidden="true" style="font-size: 1.5rem;"></i>
+							Atendimento por<br>E-mail. €<span data-clerk-id="{{this.0.user_id}}" class="valMail"></span>
+						</button>
+						<div class="whole-status-btn mt-2" data-clerk-id="{{ this.0.user_id }}">
+							<button type="button" data-clerk-id="{{ this.0.user_id }}" class="notify-me btn btn-block btn-dark"> <i data-clerk-id="{{ this.0.user_id }}" class="far fa-paper-plane"></i>
+								Avise-me
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{/each}}
+		</div>
+	</div>
+
+	<div class="row justify-content-center my-5">
+		<a href="/tarologos">
+			<button type="button" class="btn btn-lg px-5 mb-3 text-uppercase home-bg-color text-white"> Ver todos </button>
+		</a>
+	</div>
+	<img src="/assets/home/img/arabesco.png" class="home-bottom-left-arabesque" alt="Arabesco" title="Arabesco">
+	<img src="/assets/home/img/arabesco.png" class="home-bottom-right-left-arabesque" alt="Arabesco" title="Arabesco">
+</div>
+
+<!-- Horóscopo -->
+<article class="bg-light home-content mt-3 container-fluid position-relative home-border">
+	<img src="/assets/home/img/arabesco.png" class="home-top-left-arabesque" alt="Arabesco" title="Arabesco">
+	<img src="/assets/home/img/arabesco.png" class="home-top-right-arabesque" alt="Arabesco" title="Arabesco">
+	<h2 class="text-center pb-5 pt-5 text-uppercase home-color"> Horóscopo </h2>
+	<div class="row mb-5">
+		<div class="col-lg-12">
+			<div class="row py-5">
+				<div class="container px-5">
+					<div class="row px-5 justify-content-center align-items-center" id="slider-horoscope">
+						<div class="col-lg-1">
+							<div class="row justify-content-center text-center">
+								<a href="#" title="Áries" type="aries" id="aries" class="home-horoscope">
+									<img src="/assets/home/img/sigs/zodiac_aries_icon_137003.svg" type="aries" class="img-fluid h-100" alt="Áries" title="Áries">
+								</a>
+							</div>
+							<div class="row text-center justify-content-center pt-3">
+								<p> Áries </p>
+							</div>
+						</div>
+						<div class="col-lg-1">
+							<div class="row justify-content-center text-center">
+								<a href="#" title="Escorpião" type="scorpio" class="home-horoscope">
+									<img src="/assets/home/img/sigs/zodiac_scorpio_icon_136002.svg" type="scorpio" class="img-fluid" alt="Escorpião" title="Escorpião">
+								</a>
+							</div>
+							<div class="row text-center justify-content-center pt-3">
+								<p> Escorpião </p>
+							</div>
+						</div>
+						<div class="col-lg-1">
+							<div class="row justify-content-center text-center">
+								<a href="#" title="Touro" type="taurus" class="home-horoscope">
+									<img src="/assets/home/img/sigs/zodiac_taurus_icon_136001.svg" type="taurus" class="img-fluid h-100" alt="Touro" title="Touro">
+								</a>
+							</div>
+							<div class="row text-center justify-content-center pt-3">
+								<p> Touro </p>
+							</div>
+						</div>
+						<div class="col-lg-1">
+							<div class="row justify-content-center text-center">
+								<a href="#" title="Sagitário" type="sagittarius" class="home-horoscope">
+									<img src="/assets/home/img/sigs/zodiac_sagittarius_icon_135002.svg" type="sagittarius" class="img-fluid" alt="Sagitário" title="Sagitário">
+								</a>
+							</div>
+							<div class="row text-center justify-content-center pt-3">
+								<p> Sagitário </p>
+							</div>
+						</div>
+						<div class="col-lg-1">
+							<div class="row justify-content-center text-center">
+								<a href="#" title="Gêmeos" type="gemini" class="home-horoscope">
+									<img src="/assets/home/img/sigs/zodiac_gemini_icon_138002.svg" type="gemini" class="img-fluid" alt="Gêmeos" title="Gêmeos">
+								</a>
+							</div>
+							<div class="row text-center justify-content-center pt-3">
+								<p> Gêmeos </p>
+							</div>
+						</div>
+						<div class="col-lg-1">
+							<div class="row justify-content-center text-center">
+								<a href="#" title="Câncer" type="cancer" class="home-horoscope">
+									<img src="/assets/home/img/sigs/zodiac_cancer_icon_136004.svg" type="cancer" class="img-fluid" alt="Câncer" title="Câncer">
+								</a>
+							</div>
+							<div class="row text-center justify-content-center pt-3">
+								<p> Câncer </p>
+							</div>
+						</div>
+						<div class="col-lg-1">
+							<div class="row justify-content-center text-center">
+								<a href="#" title="Leão" type="leo" class="home-horoscope">
+									<img src="/assets/home/img/sigs/zodiac_leo_icon_138001.svg" type="leo" class="img-fluid" alt="Leão" title="Leão">
+								</a>
+							</div>
+							<div class="row text-center justify-content-center pt-3">
+								<p> Leão </p>
+							</div>
+						</div>
+						<div class="col-lg-1">
+							<div class="row justify-content-center text-center">
+								<a href="#" title="Capricórnio" type="capricorn" class="home-horoscope">
+									<img src="/assets/home/img/sigs/zodiac_capricorn_icon_135003.svg" type="capricorn" class="img-fluid" alt="Capricórnio" title="Capricórnio">
+								</a>
+							</div>
+							<div class="row text-center justify-content-center pt-3">
+								<p> Capricórnio </p>
+							</div>
+						</div>
+						<div class="col-lg-1">
+							<div class="row justify-content-center text-center">
+								<a href="#" title="Virgem" type="virgo" class="home-horoscope">
+									<img src="/assets/home/img/sigs/zodiac_virgo_icon_137001.svg" type="virgo" class="img-fluid" alt="Virgem" title="Virgem">
+								</a>
+							</div>
+							<div class="row text-center justify-content-center pt-3">
+								<p> Virgem </p>
+							</div>
+						</div>
+						<div class="col-lg-1">
+							<div class="row justify-content-center text-center">
+								<a href="#" title="Libra" type="libra" class="home-horoscope">
+									<img src="/assets/home/img/sigs/zodiac_libra_icon_136003.svg" type="libra" class="img-fluid" alt="Libra" title="Libra">
+								</a>
+							</div>
+							<div class="row text-center justify-content-center pt-3">
+								<p> Libra </p>
+							</div>
+						</div>
+						<div class="col-lg-1">
+							<div class="row justify-content-center text-center">
+								<a href="#" title="Aquário" type="aquarius" class="home-horoscope">
+									<img src="/assets/home/img/sigs/zodiac_aquarius_icon_135004.svg" type="aquarius" class="img-fluid" alt="Aquário" title="Aquário">
+								</a>
+							</div>
+							<div class="row text-center justify-content-center pt-3">
+								<p> Aquário </p>
+							</div>
+						</div>
+						<div class="col-lg-1">
+							<div class="row justify-content-center text-center">
+								<a href="#" title="Peixes" type="pisces" class="home-horoscope">
+									<img src="/assets/home/img/sigs/zodiac_pisces_icon_137002.svg" type="pisces" class="img-fluid h-100" alt="Peixes" title="Peixes">
+								</a>
+							</div>
+							<div class="row text-center justify-content-center pt-3">
+								<p> Peixes </p>
+							</div>
+						</div>
+					</div>
+					<div class="row mx-5 pt-3">
+						<div class="col-lg-12 py-5 d-none" id="loading-effect">
+							<div class="d-flex justify-content-center">
+								<div class="spinner-border home-loading-from-horoscope" role="status">
+									<span class="sr-only">Loading...</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-12">
+							<div class="row pb-3 justify-content-center text-center">
+								<h3 class="text-uppercase home-title-color" id="horoscope-title">  </h3>
+							</div>	
+						</div>
+						<div class="col-lg-12 justify-content-center text-center">
+							<div class="row justify-content-center" id="horoscope-resume">
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<img src="/assets/home/img/arabesco.png" class="home-bottom-left-arabesque" alt="Arabesco" title="Arabesco">
+	<img src="/assets/home/img/arabesco.png" class="home-bottom-right-left-arabesque" alt="Arabesco" title="Arabesco">
+</article>
+<!-- END Horóscopo -->
+
+<article class="bg-light home-content mt-3 container-fluid position-relative home-border">
+	<img src="/assets/home/img/arabesco.png" class="home-top-left-arabesque" alt="Arabesco" title="Arabesco">
+	<img src="/assets/home/img/arabesco.png" class="home-top-right-arabesque" alt="Arabesco" title="Arabesco">
+	<h1 class="text-center pb-5 pt-5 text-uppercase home-color"> Últimos artigos </h1>
+	<div id="blog-post-container" class="row mb-5">
+
+	</div>
+	<div class="row justify-content-center mx-3 my-5">
+		<a href="/artigos">
+			<button type="button" class="btn btn-lg px-5 mb-4 home-bg-color text-white"> Ver todos os <span id="numPosts"></span> posts do Nosso Blog </button>
+		</a>
+	</div>
+	<img src="/assets/home/img/arabesco.png" class="home-bottom-left-arabesque" alt="Arabesco" title="Arabesco">
+	<img src="/assets/home/img/arabesco.png" class="home-bottom-right-left-arabesque" alt="Arabesco" title="Arabesco">
+</article>
+
+
+<section class="container bg-light mt-3 position-relative home-border">
+	<img src="/assets/home/img/arabesco.png" class="home-top-left-arabesque" alt="Arabesco" title="Arabesco">
+	<img src="/assets/home/img/arabesco.png" class="home-top-right-arabesque" alt="Arabesco" title="Arabesco">
+	<h2 class="text-center pt-5 pb-5 text-uppercase home-color"> Depoimentos de clientes </h2>
+	<div class="row justify-content-center mx-2" data-aos="fade-up">
+		<div class="card-deck w-100">
+			{{#each self_data.2}}
+			<div class="col-lg-4 mb-4 mt-1 home-id-filter" id="{{this.0.0.0.1.clerk_info_exhibition}}">
+				<div class="card home-alter-colors-from-comments-cards mx-0 h-100">
+					<div class="row justify-content-center">
+						<a href="#" class="text-decoration-none" title="Perfil de {{this.0.0.0.1.clerk_info_exhibition}}">
+							<div class="col-lg-6 mt-4 home-change-picture-div-from-atendent">
+								<img class="card-img-top rounded-circle home-change-picture-from-atendent" src="{{this.0.0.0.1.clerk_image}}" alt="Ver perfil de {{this.0.0.0.1.clerk_info_exhibition}}" title="Ver perfil de {{this.0.0.0.1.clerk_info_exhibition}}">
+							</div>
+						</a>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="row justify-content-center text-center mt-3">
+								<a href="#" class="text-decoration-none" title="Ver perfil de {{this.0.0.0.1.clerk_info_exhibition}}">
+									<div class="row justify-content-center home-color-from-atendent-profile-link">
+										<small> {{this.0.0.0.1.clerk_info_exhibition}} </small>
+									</div>
+								</a>
+							</div>    
+							<div class="row mb-3 justify-content-center text-center">
+								<div class="col-lg-6">
+									<span class="stars" data-value="{{this.1.testimonials_value}}"> </span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body h-100 card-footer border-0 pt-3 home-alter-comment-color-and-font p-0 m-0">
+						<div class="row m-0 p-0 pl-5">
+							<i class="fas fa-quote-left text-left home-quote-color" style="font-size: 2rem;"></i>
+						</div>
+						<div class="row my-0 mx-2 pt-0 px-0 h-100 text-center pb-4 d-flex text-lowercase align-items-center justify-content-center">
+							{{{this.1.testimonials_content}}}
+						</div>
+					</div>
+					{{!-- <div class="card-footer border-0">
+						<div class="row m-0 p-0 justify-content-end w-100 align-items-end">
+							<small class="home-alter-comment-color-and-font pr-1"> Por: {{this.0.0.0.1.clerk_info_exhibition}} </small>
+						</div>
+					</div> --}}
+				</div>
+			</div>
+			{{/each}}
+			{{#each clerk_data.2}}
+			<div class="col-lg-4 mb-4 mt-1 home-id-filter" id="{{this.0.0.0.1.clerk_info_exhibition}}">
+				<div class="card home-alter-colors-from-comments-cards mx-0 h-100">
+					<div class="row justify-content-center">
+						<a href="#" class="text-decoration-none" title="Perfil de {{this.0.0.0.1.clerk_info_exhibition}}">
+							<div class="col-lg-6 mt-4 home-change-picture-div-from-atendent">
+								<img class="card-img-top rounded-circle home-change-picture-from-atendent" src="{{this.0.0.0.1.clerk_image}}" alt="Ver perfil de {{this.0.0.0.1.clerk_info_exhibition}}" title="Ver perfil de {{this.0.0.0.1.clerk_info_exhibition}}">
+							</div>
+						</a>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="row justify-content-center text-center mt-3">
+								<a href="#" class="text-decoration-none" title="Ver perfil de {{this.0.0.0.1.clerk_info_exhibition}}">
+									<div class="row justify-content-center home-color-from-atendent-profile-link">
+										<small> {{this.0.0.0.1.clerk_info_exhibition}} </small>
+									</div>
+								</a>
+							</div>    
+							<div class="row mb-3 justify-content-center text-center">
+								<div class="col-lg-6">
+									<span class="stars" data-value="{{this.1.testimonials_value}}"> </span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body h-100 card-footer border-0 pt-3 home-alter-comment-color-and-font p-0 m-0">
+						<div class="row m-0 p-0 pl-5">
+							<i class="fas fa-quote-left text-left home-quote-color" style="font-size: 2rem;"></i>
+						</div>
+						<div class="row my-0 mx-2 pt-0 px-0 h-100 text-center pb-4 d-flex text-lowercase align-items-center justify-content-center">
+							{{{this.1.testimonials_content}}}
+						</div>
+					</div>
+					{{!-- <div class="card-footer border-0">
+						<div class="row m-0 p-0 justify-content-end w-100 align-items-end">
+							<small class="home-alter-comment-color-and-font pr-1"> Por: {{this.0.0.0.1.clerk_info_exhibition}} </small>
+						</div>
+					</div> --}}
+				</div>
+			</div>
+			{{/each}}
+		</div>
+	</div>
+	<div class="row justify-content-center my-5">
+		<a href="/depoimentos">
+			<button type="button" class="btn btn-lg px-3 mb-3 home-bg-color text-white"> Ver todos os Depoimentos </button>
+		</a>
+	</div>
+	{{!-- role="button" aria-pressed="true"> --}}
+	<img src="/assets/home/img/arabesco.png" class="home-bottom-left-arabesque" alt="Arabesco" title="Arabesco">
+	<img src="/assets/home/img/arabesco.png" class="home-bottom-right-left-arabesque" alt="Arabesco" title="Arabesco">
+</section>
+
+{{> home/footer }}
+
+<div class="whatsapp-fixo p-0">
+	<p class="text-white p-0 m-0"> Suporte Online </p>
+	<a href="https://api.whatsapp.com/send?phone=351914251638" target="_blank" onclick="gtag_report_conversion(&quot;https://api.whatsapp.com/send?phone=351914251638&quot;)">
+		<img src="https://logodownload.org/wp-content/uploads/2015/04/whatsapp-logo-1.png" alt="Fale Conosco pelo WhatsApp" style=" width: 54px;">
+	</a>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous"></script>
+
+<script>
+	$(document).ready(async function () {
+		$.get('/whats-my-id', async function (e) {
+			/* Horoscope */
+				$('#slider-horoscope').slick({
+            infinite: true,
+            slidesToShow: 12,
+            autoplay: true,
+            autoplaySpeed: 5000,
+            dots: false,
+            prevArrow: '<i class="fa fa-chevron-left home-alter-arrows text-white home-alter-arrow-left fa-2x" data-slide="prev"></i>',
+            nextArrow: '<i class="fa fa-chevron-right home-alter-arrows text-white home-alter-arrow-right fa-2x" data-slide="next"></i>',
+            slidesToScroll: 1,
+            responsive: [
+                {
+                    breakpoint: 1100,
+                    settings: {
+                        slidesToShow: 6,
+                        slidesToScroll: 2,
+                    },
+                },
+                {
+                    breakpoint: 1000,
+                    settings: {
+                        slidesToShow: 5,
+                        slidesToScroll: 2,
+                    },
+                },
+                {
+                    breakpoint: 800,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 1,
+                    },
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 1,
+                    },
+                },
+                {
+                    breakpoint: 400,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+            ]
+        	});
+
+			$(document).on('click', '.home-horoscope', async (e) => {
+				$('#loading-effect').removeClass('d-none');
+				e.preventDefault();
+				var type = $(e.target).attr('type');
+				var typePt = $(e.target).attr('title');
+ 				let text = await horoscope(type);
+				$('#loading-effect').addClass('d-none');
+				var title = document.getElementById('horoscope-title');
+    			title.innerHTML = typePt;
+				var resume = document.getElementById('horoscope-resume');
+    			resume.innerHTML = text;
+			});
+
+			async function horoscope(sign) {
+				const settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "https://sameer-kumar-aztro-v1.p.rapidapi.com/?sign="+ sign + "&day=today",
+					"method": "POST",
+					"headers": {
+						"x-rapidapi-key": "0238725886mshbd7559ab4b3a0f8p1a592djsnb6d3649445fa",
+						"x-rapidapi-host": "sameer-kumar-aztro-v1.p.rapidapi.com"
+					}
+				};
+
+				let tmp_data = await $.ajax(settings).done(function (response) {
+					return response;
+				});
+
+				return await translate(tmp_data.description);
+			}
+
+
+			async function translate(text) { 
+				const settings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "https://just-translated.p.rapidapi.com/?lang=pt&text="+text,
+					"method": "GET",
+					"headers": {
+						"x-rapidapi-key": "0238725886mshbd7559ab4b3a0f8p1a592djsnb6d3649445fa",
+						"x-rapidapi-host": "just-translated.p.rapidapi.com"
+					}
+				};
+
+				var data = await $.ajax(settings).done(function (response) {
+					return response 
+				});
+				return data["text"][0];
+			}
+			/* END horoscope */
+
+
+			$('#banners').slick({
+				infinite: true,
+				slidesToShow: 1,
+				autoplay: true,
+				autoplaySpeed: 4000,
+				dots: true,
+				slidesToScroll: 1
+			});
+
+			const myBalance = await $.get("/my-balance", function (e) { return e; });
+			const socket = new WebSocket("wss://attend." + window.location.host.replace("www.", "") + "/ws");
+			const client_id = parseInt(e);
+			/* We need to parse the user id in this view */
+
+			$(document).on('click', '.notify-me', function (e) {
+				$.get("/notify-me/" + $(e.target).data('clerk-id'), (e) => {
+					Swal.fire(
+						'Feito!',
+						'Assim que o atendente ficar online te avisaremos por e-mail!',
+						'success'
+					);
+				});
+			});
+
+			$(document).on('click', '.logged-out-notify', function (e) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Você precisa Entrar primeiro!',
+				})
+			});
+
+
+			function statusClerkButtons(user_id, status, text, voice, video) {
+				switch (status) {
+					case 1:
+						if (text) {
+							$('.text-chat-btn[data-clerk-id="' + user_id + '"]').removeAttr('disabled');
+						} else {
+							$('.text-chat-btn[data-clerk-id="' + user_id + '"]').attr('disabled', 'disabled');
+						}
+
+						if (voice) {
+							$('.voice-chat-btn[data-clerk-id="' + user_id + '"]').removeAttr('disabled');
+						} else {
+							$('.voice-chat-btn[data-clerk-id="' + user_id + '"]').attr('disabled', 'disabled');
+						}
+
+						if (!text && !voice) {
+							$('div[data-clerk-id="' + user_id + '"]').html('<button type="button" disabled class="btn home-change-all-card-buttons btn-block text-white btn-dark"> Já volto! 😁 </button>');
+						} else {
+							$('.whole-status-btn[data-clerk-id="' + user_id + '"]').html('<button type="button" class="btn btn-block mt-2 home-atendiments-forms-available"><i class="fas fa-rss"></i> Disponível</button>');
+						}
+
+						$('#clerksOnline').prepend($('div[data-clerk-id="' + user_id + '"]').parents('.home-alter-cards'));
+						break;
+					case 2:
+						// Is on a call, so do you wanna wait for it?
+						$('div[data-clerk-id="' + user_id + '"]').html('<button type="button" disabled class="btn home-change-all-card-buttons btn-block text-white btn-danger"> Em atendimento </button>');
+						break;
+					case 3:
+						$('div[data-clerk-id="' + user_id + '"]').html('<button type="button" class="btn btn-block mt-2 home-atendiments-forms-available"><i class="fas fa-rss"></i> Indisponível</button>');
+						break;
+				}
+			}
+
+			var configs;
+
+			$.get('/admin/config/get-configs', function (e) {
+				configs = e[0]
+				$('.valMinChat').text(parseFloat(configs['absolute_min_value_chat']).toFixed(2));
+				$('.valMinVoip').text(parseFloat(configs['absolute_min_value_voice']).toFixed(2));
+				$('.valMail').text(parseFloat(configs['site_mail_val']).toFixed(2));
+			});
+
+			/* When socket finally opens */
+			socket.onopen = function (event) {
+				socket.send(JSON.stringify({
+					action: 'new-client-entered-the-thread',
+					client_id: null,
+					clerk_id: null,
+					data: null,
+					from: 'Client',
+				}));
+			}
+
+			socket.onmessage = async function (event) {
+				var income_data = JSON.parse(event.data);
+
+				if (income_data.client_id === client_id) {
+					switch (income_data.action) {
+						/* Processes and redraw clerks */
+						case "clerks-available":
+							[].map.call(income_data.data, (clerk) => {
+								statusClerkButtons(clerk['clerk_id'], clerk['status'], clerk["text"], clerk["voice"], clerk["video"]);
+							});
+							$('.home-loading-effects').addClass('animate__animated animate__fadeOut').remove();
+							$('#home-hidden-content').removeClass('d-none').addClass('animate__animated animate__fadeInUp');
+							break;
+						/* Incoming advice to the client that clerk has accepted an text chat invitation */
+						case "text-chat-acc":
+							window.location = "/chat/" + income_data.data;
+							break;
+						/* Incoming advice to the client that clerk has accepted an voice chat invitation */
+						case "voice-chat-acc":
+							window.location = '/voip/' + income_data.data;
+						/* Incoming advice to the client that clerk has refused an text chat invitation */
+						case "text-chat-ref":
+							Swal.fire({
+								title: 'O atendente recusou sua solicitação.',
+								text: "Por favor, aguarde ou selecione outro atendente.",
+								showConfirmButton: false,
+								timer: 2000
+							});
+							break;
+						/* Incoming advice to the client that clerk has refused an voice chat invitation */
+						case "voice-chat-ref":
+							Swal.fire({
+								title: 'O atendente recusou sua solicitação.',
+								text: "Por favor, aguarde ou selecione outro atendente.",
+								showConfirmButton: false,
+								timer: 2000
+							});
+							break;
+					}
+				} else {
+					switch (income_data.action) {
+						/* Processes and redraw clerks */
+						case "clerks-available":
+							[].map.call(income_data.data, (clerk) => {
+								statusClerkButtons(clerk['clerk_id'], clerk['status'], clerk["is_available_chat"], clerk["is_available_voice"], clerk["is_available_video"]);
+							});
+							$('.home-loading-effects').addClass('animate__animated animate__fadeOut').remove();
+							$('#home-hidden-content').removeClass('d-none').addClass('animate__animated animate__fadeInUp');
+							break;
+					}
+				}
+			}
+
+
+			//* Voice Chat implementation */
+			$(document).on('click', '.new-voice-chat', async function (e) {
+				if (parseFloat(myBalance) >= (configs['absolute_min_value_voice'] * 3)) {
+					socket.send(JSON.stringify({
+						action: "voice-chat-intend",
+						client_id: client_id,
+						clerk_id: $(e.target).data('clerk-id'),
+						data: null,
+						from: 'Client'
+					}));
+
+
+					Swal.fire({
+						title: 'Esperando o atendente responder sua requisição de atendimento!',
+						showCloseButton: true,
+						showCancelButton: true,
+						cancelButtonText:
+							'Cancelar',
+						onBeforeOpen: function () {
+							Swal.showLoading()
+						},
+					});
+
+				} else {
+					Swal.fire({
+						title: 'Você não possui créditos Suficientes..',
+						text: "Você será redirecionado a página de compra de minutos.",
+						showConfirmButton: false,
+						timer: 2500
+					});
+
+					await new Promise(r => setTimeout(r, 2000));
+					window.location = '/comprar-creditos';
+
+				}
+			});
+
+			/* Text chat inviter implementation */
+			$(document).on('click', '.new-text-chat', async function (e) {
+				if (parseFloat(myBalance) >= parseFloat(configs['absolute_min_value_chat'] * 3)) {
+					socket.send(JSON.stringify({
+						action: "text-chat-intend",
+						client_id: client_id,
+						clerk_id: $(e.target).data('clerk-id'),
+						data: null,
+						from: 'Client'
+					}));
+
+					Swal.fire({
+						title: 'Esperando o atendente responder sua requisição de atendimento!',
+						showCloseButton: true,
+						showCancelButton: true,
+						cancelButtonText:
+							'Cancelar',
+						onBeforeOpen: function () {
+							Swal.showLoading()
+						},
+					});
+				} else {
+					Swal.fire({
+						title: 'Você não possui créditos!',
+						text: "Você será redirecionado a página de compra de minutos.",
+						showConfirmButton: false,
+						timer: 2500
+					});
+
+					await new Promise(r => setTimeout(r, 2000));
+					window.location = '/comprar-creditos';
+				}
+			});
+
+			/* Mail attendance implementation */
+			$(document).on('click', '.new-mail', async function (e) {
+				if (parseFloat(myBalance) >= (configs['site_mail_val'])) {
+					window.location = '/atendimento-email/' + $(e.target).data('clerk-id');
+				} else {
+					Swal.fire({
+						title: 'Você não possui créditos!',
+						text: "Você será redirecionado a página de compra de créditos.",
+						showConfirmButton: false,
+						timer: 2500
+					});
+
+					await new Promise(r => setTimeout(r, 2000));
+					window.location = '/comprar-creditos';
+				}
+			});
+
+			$(document).on('click', '.notify-me', function (e) {
+				$.get("/notify-me/" + $(e.target).data('clerk-id'), function (e) {
+					Swal.fire(
+						'Feito!',
+						'Assim que o atendente ficar online te avisaremos por e-mail!',
+						'success'
+					)
+				});
+			});
+
+			$(document).on('click', '.logged-out-notify', function (e) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Você precisa Entrar primeiro!',
+				})
+			})
+
+			const generatePostSlug = (postTitle) => {
+				if (postTitle) {
+					return postTitle.replace('.', '').split(' ').join('-').toLowerCase();
+				}
+			}
+
+			$.get("/posts/all/", function (e) {
+				var data = JSON.parse(e);
+				var kokoroto = 0;
+				[].map.call(data, (post) => {
+					if (kokoroto < 3) {
+						$('#blog-post-container').append('<div class="col-lg-4 pt-3 pb-3"> <div class="card text-center h-100" style="border: 1px solid rgba(128, 42, 144, 1);"> <img class="card-img-top p-2 home-mim-height-from-home-posts-images" src="' + post['post_image'] + '" alt="Post sobre ' + post['post_title'] + '" title="Post sobre ' + post['post_title'] + '"> <div class="card-body"> <h5 class="card-title text-uppercase" style="color: rgba(128, 42, 144, 1);"> ' + post['post_title'] + ' </h5> </div> <div class="card-footer text-center border-0 bg-transparent"> <a href="/blog-post/' + generatePostSlug(post['post_title']) + '" style="text-decoration: none;"><button type="button" style="background-color: rgba(46, 49, 146, 1); border: none !important;" class="btn btn-primary btn-lg btn-block text-uppercase">Ver post</button> </div> </div> </div>');
+					}
+					kokoroto++;
+				});
+				$("#numPosts").html(kokoroto);
+			});
+
+			[].map.call($('.stars'), (item) => {
+				var amount_given = $(item).data('value');
+				$(item).html('<span class="given-star"> ★ </span>'.repeat(amount_given));
+				$(item).append('<span class="not-given-star"> ★ </span>'.repeat(5 - amount_given));
+			});
+
+			[].map.call($('.clerk-profile-link'), function (item) {
+				$(item).attr("href", "/tarologo/" + generatePostSlug($(item).data('name')));
+			});
+
+			// ID FILTER
+			$(document).find('.home-id-filter').each(function(){
+				var id = $(this).attr("id");
+				var idsCounter = 0;
+				if (id != "") {
+					if (idsCounter < 5) {
+						var hideIds = document.getElementById(id);
+						$(hideIds).hide();
+						idsCounter = idsCounter + 1;
+					}
+				} else {
+					console.log('Opssss, existem comentários sem o nome do atendente....');
+				}
+			});
+		});
+	});
+</script>

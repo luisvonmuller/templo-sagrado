@@ -1,0 +1,607 @@
+{{> pages/header}}
+<style type="text/css">
+    @media (min-width: 768px) {
+        .modal-xl {
+            width: 90%;
+            max-width: 1200px;
+        }
+    }
+
+    #whole-chat-container {
+        overflow-y: scroll !important;
+        height: 60vh !important;
+        background-image: url('/assets/admin/img/fundo_site_02.jpg') !important;
+        background-size: fixed;
+    }
+
+    .msg-in {
+        border-radius: 1em !important;
+        background-color: white;
+        -webkit-box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        -moz-box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+    }
+
+    .msg-out {
+        background-color: #dcf8c6;
+        border-radius: 1em !important;
+        -webkit-box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        -moz-box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+        box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Tooltip container */
+</style>
+<!-- Header -->
+<div class="header pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-6">
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="/">Administrativo</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Atendimentos por chat na plataforma
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-6 clear-fix">
+                    <form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+                        <div class="form-group mb-0">
+                            <div class="input-group input-group-alternative input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="Procurar ... " type="text">
+                            </div>
+                        </div>
+                        <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+                            aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Page content -->
+<main class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-xl-3 col-md-12">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Total pago por clientes
+                                cliente
+                            </h5>
+                            <span class="h1 font-weight-bold mb-0">
+                                € <span style="color: green" id="all-time-paid-from-cash" data-toggle="tooltip"
+                                    data-placement="top" title="Pago através de saldos de clientes">(...)</span>
+                                +
+                                <span style="color: red;" id="all-time-paid-from-bonus" data-toggle="tooltip"
+                                    data-placement="top" title="Pago através de bônus de clientes">(...)</span>
+
+                                = <span id="all-time-paid-value" data-toggle="tooltip" data-placement="top"
+                                    title="Total pago (indifere de bônus ou saldos)">(...)</span>
+                            </span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-dark text-white rounded-circle shadow">
+                                <i class="fas fa-user-tag"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Valores recebidos pelo atendente -->
+        <div class="col-xl-3 col-md-12">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Total recebido por atendentes
+                            </h5>
+                            <span class="h1 font-weight-bold mb-0">
+                                € <span id="all-time-given-value">(...)</span>
+                            </span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-purple text-white rounded-circle shadow">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Valores em HOLD pelo sistema -->
+        <div class="col-xl-3 col-md-12">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Lucro sobre atendimentos *
+                            </h5>
+                            <span class="h1 font-weight-bold mb-0">
+                                € <span id="profit-estimated-value">(...)</span>
+                            </span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                                <i class="fas fa-euro-sign"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Valores em HOLD pelo sistema -->
+        <div class="col-xl-3 col-md-12">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Total Processado pelo
+                                sistema
+                            </h5>
+                            <span class="h1 font-weight-bold mb-0">
+                                € <span id="all-time-processed-value">(...)</span>
+                            </span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-light text-white rounded-circle shadow">
+                                <i class="fas fa-euro-sign"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Listando atendimentos por texto da plataforma 💬 🔮</h2>
+                    <p class="text-sm mb-0">
+                        Aqui estão listados todos os atendimentos por texto que aconteceram na plataforma, ordenados pelo mais
+                        novo. Também consta aqui as relações de pagamentos inter e intra-chat. 🚀
+                    </p>
+                </div>
+                <div class="table-responsive py-4">
+                    <table id="chatsTable" class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Data</th>
+                                <th scope="col">Atendente</th>
+                                <th scope="col">Cliente</th>
+                                <th scope="col">Créditos Gastos</th>
+                                <th scope="col">Opções</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</main>
+
+{{> pages/footer }}
+
+<script>
+    $(document).ready(() => {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        const timestamp = (unix_timestamp) => {
+            var date = new Date(unix_timestamp);
+            var hours = date.getHours();
+            var minutes = "0" + date.getMinutes();
+            var seconds = "0" + date.getSeconds();
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+
+            var formattedTime = day + '/' + month + '/' + year + ' - ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+            return formattedTime;
+        }
+
+        const parseData = (unix_timestamp) => {
+            var date = new Date(unix_timestamp);
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+            return day + '/' + month + '/' + year
+        }
+
+        $('#chatsTable').on('processing.dt', (e, settings, processing) => {
+            [].map.call($('.amountTrasacted'), (item) => {
+                var chatId = $(item).data('chat-id');
+                $.get('/admin/total-minutes-transacted/' + chatId, (data) => {
+                    $(item).html('<span class="badge badge-secondary"> ' + data[0]['count'] + ' minutos(s) </span>');
+                });
+            });
+        });
+
+        $(document).on('click', '.see-transactions', async (e) => {
+            $('#transactions-modal').modal('show');
+
+            /* Client paid val */
+            var paid_value = await $.get("/admin/text_chat_paid/" + $(e.target).data('chat-id'), (e) => {
+                return e;
+            })
+
+            /* Amount paid on bonus */
+            var bonus = await $.get("/admin/text_chat_bonus/" + $(e.target).data('chat-id'), (e) => {
+                return e;
+            });
+
+            /* Amount paid on balance (from real cash) */
+            var real_paid = await $.get("/admin/text_chat_balance/" + $(e.target).data('chat-id'), (e) => {
+                return e;
+            });
+
+            $("#paid-value-bonus").html(parseFloat(bonus.sum ?? 0).toFixed(2).replace(",", "."));
+            $("#paid-value-balance").html(parseFloat(real_paid.sum ?? 0).toFixed(2).replace(",", "."));
+            $('#paid-value').html(parseFloat(paid_value.sum ?? 0).toFixed(2).replace(",", "."));
+
+            /* (Earned by clerk) Given Value */
+            var given_value = await $.get("/admin/text_chat_given/" + $(e.target).data('chat-id'), (e) => {
+                return e;
+            })
+
+            $('#given-value').html(parseFloat(given_value.sum ?? 0).toFixed(2));
+
+            /* Value that is on hold */
+            var hold_value = await $.get("/admin/text_chat_hold/" + $(e.target).data('chat-id'), (e) => {
+                return e;
+            });
+
+            $('#hold-value').html(parseFloat(hold_value.sum ?? 0).toFixed(2));
+
+            /* Value system has processed */
+            var processed_value = await $.get("/admin/text_processed_value/" + $(e.target).data('chat-id'), (e) => {
+                return e;
+            });
+            $("#processed-value").html(parseFloat(processed_value.sum ?? 0).toFixed(2));
+
+            /* We also need to define the buttons data-chat-ids */
+            $('#pay-clerk').data('chat-id', $(e.target).data('chat-id'));
+            $('#give-back').data('chat-id', $(e.target).data('chat-id'));
+        });
+
+        $(document).on('click', '#pay-clerk', async (e) => {
+            $.get("/admin/text-chat-pay-clerk/" + $(e.target).data('chat-id'), (event) => {
+                Swal.fire(
+                    'Pronto!',
+                    'O valor total do chat foi pago.',
+                    'success'
+                );
+            });
+        });
+
+        $(document).on('click', '#give-back', async (e) => {
+            $.get("/admin/text-chat-payback/" + $(e.target).data('chat-id'), (event) => {
+                Swal.fire(
+                    'Pronto!',
+                    'O valor total do chat foi devolvido ao cliente.',
+                    'success'
+                );
+            });
+        });
+
+        /* Listners for transactions overrides */
+        var chatsTable = $('#chatsTable').DataTable({
+            "serverSide": true,
+            "order": [[0, "desc"]],
+            "ajax": {
+                url: '/admin/attendance-chat/list/',
+                type: 'POST',
+            },
+            "columns": [
+                {
+                    "data": "0.init_time", "render": (data, type, row) => {
+                        return parseData(Date.parse(data));
+                    },
+                },
+                { "data": "1.clerk_info_exhibition" },
+                { "data": "2.user_name" },
+                {
+                    "data": "0.chat_id", "render": (data, type, row) => {
+                        return '<span class="amountTrasacted" data-chat-id="' + data + '"></span>'
+                    }
+                },
+                {
+                    "data": "0.chat_id", "render": (data, type, row) => {
+                        return '<button class="btn btn-dark btn-sm ml-1 see-transactions" data-chat-id="' + data + '"><i class="fas fa-info-circle" data-chat-id="' + data + '"></i> Ver transações </button> <button class="see-conversation btn btn-success btn-sm" data-client-id="' + row[0]['client_id'] + '" data-clerk-id="' + row[0]['clerk_id'] + '" data-chat-id="' + data + '"> <i class="fas fa-eye see-conversation" data-client-id="' + row[0]['client_id'] + '" data-clerk-id="' + row[0]['clerk_id'] + '" data-chat-id="' + data + '"></i> Ver conversa</button>'
+                    }
+                }
+            ],
+            "ordering": true,
+            "info": true,
+            "processing": true,
+            "language":
+            {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": ">",
+                    "sPrevious": "<",
+                    "sFirst": "<<",
+                    "sLast": ">>"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                },
+                "select": {
+                    "rows": {
+                        "_": "Selecionado %d linhas",
+                        "0": "Nenhuma linha selecionada",
+                        "1": "Selecionado 1 linha"
+                    }
+                },
+                "buttons": {
+                    "copy": "Copiar para a área de transferência",
+                    "copyTitle": "Cópia bem sucedida",
+                    "copySuccess": {
+                        "1": "Uma linha copiada com sucesso",
+                        "_": "%d linhas copiadas com sucesso"
+                    }
+                }
+            }
+
+        });
+
+
+        $(document).on('click', '.see-conversation ', (e) => {
+            $('#whole-chat-modal').modal('show');
+            var selfId = $(e.target).data('client-id');
+            var chatId = $(e.target).data('chat-id');
+
+            $('#whole-chat-container').html('');
+            $.get('/admin/attendance-chat/retrive_whole_chat/' + chatId, (data) => {
+                var chatData = JSON.parse(data);
+                [].map.call(chatData, (chatMsg) => {
+                    if (chatMsg['chat_msg_user_id'] === selfId) {
+                        let tmpHtml = '<div class="row clear-fix mx-2">';
+                        tmpHtml += '<div class="msg-out col-lg-6 ml-auto alert"><p>' + chatMsg['chat_msg_body'] + '</p>';
+                        tmpHtml += '<small class="float-right"> Enviado em:' + timestamp(Date.parse(chatMsg['chat_msg_time'])) + '</small> </div> </div>';
+                        $('#whole-chat-container').append(tmpHtml);
+                    } else {
+                        let tmpHtml = '<div class="row clear-fix mx-2">';
+                        tmpHtml += '<div class="msg-in col-lg-6 mr-auto alert"><p>' + chatMsg['chat_msg_body'] + ' </p>';
+                        tmpHtml += '<small class="float-right"> Enviado em: ' + timestamp(Date.parse(chatMsg['chat_msg_time'])) + ' </small> </div> </div>';
+                        $('#whole-chat-container').append(tmpHtml);
+                    }
+                })
+            });
+        });
+
+
+        var [payOffs, givenVals, allTimePaidFromCash, allTimePaidFromBonus] = [0.0, 0.0, 0.0, 0.0];
+        /* This is the card processing stmts */
+        $.get("/admin/text-all-time-processed", (e) => {
+            $('#all-time-processed-value').html(parseFloat(e.sum).toFixed(2).replace('.', ',') ?? 0.0);
+
+            /* This is the card processing stmts */
+            $.get("/admin/text-all-time-given", (e) => {
+                givenVals = parseFloat(e.sum).toFixed(2) ?? 0;
+                $('#all-time-given-value').html(isNaN(givenVals) ? 0 : givenVals.replace('.', ','));
+            });
+
+            /* Money really paid */
+            $.get("/admin/all-time-paid-from-cash", (e) => {
+                allTimePaidFromCash = parseFloat(e.sum).toFixed(2);
+                $("#all-time-paid-from-cash").html(isNaN(allTimePaidFromCash) ? 0.0 : allTimePaidFromCash.replace('.', ','));
+            });
+
+            /* Money paid from bonus */
+            $.get("/admin/all-time-paid-from-bonus", (e) => {
+                allTimePaidFromBonus = parseFloat(e.sum).toFixed(2);
+                $("#all-time-paid-from-bonus").html(isNaN(allTimePaidFromBonus) ? 0.0 : allTimePaidFromBonus.replace('.', ','));
+
+                /* This is the card processing stmts */
+                $.get("/admin/text-all-time-paid", (e) => {
+                    payOffs = parseFloat(e.sum).toFixed(2);
+                    console.log(payOffs);
+                    console.log(givenVals + allTimePaidFromBonus);
+                    $('#all-time-paid-value').html(isNaN(payOffs) ? 0 : payOffs.replace('.', ','));
+                    $("#profit-estimated-value").html(parseFloat((parseFloat(payOffs ?? 0) - (parseFloat(givenVals ?? 0) + parseFloat(allTimePaidFromBonus ?? 0))) ?? 0).toFixed(2).replace('.', ','))
+                });
+            });
+        });
+    });
+</script>
+
+<!-- Whole CHAT Modal -->
+<div class="modal fade" id="whole-chat-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLongTitle">Visualizando Chat</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="whole-chat-container" class="container-fluid py-3">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="alert text-white bg-gradient-purple mr-auto">
+                    As mensagens do cliente estão em verde, as do atendente em branco.
+                </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-window-close"></i>
+                    Fechar Chat</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [END] Whole CHAT Modal -->
+
+
+<!-- Transactions Modal -->
+<div class="modal fade" id="transactions-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLongTitle">Visualizando Transações de Chat</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <!-- 
+                    1 - Valor pago pelo clientes
+                    2 - Valores Recebidos 
+                    3 - Valores em Hold 
+                -->
+                    <div class="row">
+                        <!-- Valores pagos pelos cliente -->
+                        <div class="col-xl-3 col-md-12">
+                            <div class="card card-stats">
+                                <!-- Card body -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title text-uppercase text-muted mb-0">Total pago pelo
+                                                cliente
+                                            </h5>
+                                            <span class="h2 font-weight-bold mb-0">
+                                                € <span style="color: green" id="paid-value-balance"
+                                                    data-toggle="tooltip" data-placement="top"
+                                                    title="Pago através de saldos de clientes">Loading</span>
+                                                +
+                                                <span style="color: red;" id="paid-value-bonus" data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Pago através de bônus de clientes">Loading</span>
+
+                                                = <span id="paid-value" data-toggle="tooltip" data-placement="top"
+                                                    title="Total pago (indifere de bônus ou saldos)">Loading</span>
+                                            </span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div
+                                                class="icon icon-shape bg-gradient-dark text-white rounded-circle shadow">
+                                                <i class="fas fa-user-tag"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Valores recebidos pelo atendente -->
+                        <div class="col-xl-3 col-md-12">
+                            <div class="card card-stats">
+                                <!-- Card body -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title text-uppercase text-muted mb-0">Total recebido
+                                                atendente
+                                            </h5>
+                                            <span class="h2 font-weight-bold mb-0">
+                                                € <span id="given-value"><small>Carregando...</small></span>
+                                            </span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div
+                                                class="icon icon-shape bg-gradient-purple text-white rounded-circle shadow">
+                                                <i class="fas fa-user-tie"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Valores em HOLD pelo sistema -->
+                        <div class="col-xl-3 col-md-12">
+                            <div class="card card-stats">
+                                <!-- Card body -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title text-uppercase text-muted mb-0">Total em Hold pelo
+                                                sistema
+                                            </h5>
+                                            <span class="h2 font-weight-bold mb-0">
+                                                € <span id="hold-value"><small>Carregando...</small></span>
+                                            </span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div
+                                                class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                                                <i class="fas fa-euro-sign"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Valores em HOLD pelo sistema -->
+                        <div class="col-xl-3 col-md-12">
+                            <div class="card card-stats">
+                                <!-- Card body -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title text-uppercase text-muted mb-0">Total Processado pelo
+                                                sistema
+                                            </h5>
+                                            <span class="h2 font-weight-bold mb-0">
+                                                € <span id="processed-value"><small>Carregando...</small></span>
+                                            </span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div
+                                                class="icon icon-shape bg-gradient-light text-white rounded-circle shadow">
+                                                <i class="fas fa-euro-sign"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <button id="give-back" data-chat-id="" class="btn btn-block btn-dark">Devolver total ao
+                                cliente</button>
+                        </div>
+                        <div class="col-lg-6">
+                            <button id="pay-clerk" data-chat-id="" class="btn btn-block btn-success">Pagar total ao
+                                atendente</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [END] Transactions Modal -->

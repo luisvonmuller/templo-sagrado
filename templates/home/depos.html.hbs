@@ -1,0 +1,130 @@
+{{> home/header }}
+
+<main id="new-user" class="container position-relative home-border mt-4">
+    <img src="/assets/home/img/arabesco.png" class="home-top-left-arabesque" alt="Arabesco" title="Arabesco">
+    <img src="/assets/home/img/arabesco.png" class="home-top-right-arabesque" alt="Arabesco" title="Arabesco">
+    <div class="row">
+        <div class="col-lg-12 py-4 px-3">
+            <h1 class="text-center">
+                Depoimentos de clientes
+            </h1>
+        </div>
+    </div>
+    <div class="row mb-5 mx-5" id="depos-container">
+        {{!-- Break row estão aqui somente por TESTE sksksk /ban @Laerson... --. --}}
+        {{#each clerk_data.1}}
+            {{#if this.1.testimonials_content}}
+            <div class="col-lg-6 mb-4 mt-1">
+                <div class="card home-alter-colors-from-comments-cards mx-0 h-100">
+                    <div class="row justify-content-center">
+                        <a href="#" class="text-decoration-none" title="Perfil de {{this.0.0.0.1.clerk_info_exhibition}}">
+                            <div class="col-lg-6 mt-4 home-change-picture-div-from-atendent">
+                                <img class="card-img-top rounded-circle home-change-picture-from-atendent" src="{{this.0.0.0.1.clerk_image}}" alt="Ver perfil de {{this.0.0.0.1.clerk_info_exhibition}}" title="Ver perfil de {{this.0.0.0.1.clerk_info_exhibition}}">
+                            </div>
+                        </a>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row justify-content-center text-center mt-3">
+                                <a href="#" class="text-decoration-none" title="Ver perfil de {{this.0.0.0.1.clerk_info_exhibition}}">
+                                    <div class="row justify-content-center text-lowercase home-color-from-atendent-profile-link">
+                                        <small> {{this.0.0.0.1.clerk_info_exhibition}} </small>
+                                    </div>
+                                </a>
+                            </div>    
+                            <div class="row mb-3 justify-content-center text-center">
+                                <div class="col-lg-6">
+                                    <span class="stars" data-value="{{this.1.testimonials_value}}"> </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body h-100 card-footer border-0 pt-3 home-alter-comment-color-and-font p-0 m-0">
+                        <div class="row m-0 p-0 pl-5">
+                            <i class="fas fa-quote-left text-left home-quote-color" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="row m-0 pt-0 px-0 h-100 text-center pb-4 d-flex text-lowercase align-items-center justify-content-center">
+                            {{{this.1.testimonials_content}}}
+                        </div>
+                    </div>
+                    {{!-- <div class="card-footer border-0">
+                        <div class="row m-0 p-0 justify-content-end w-100 align-items-end">
+                            <small class="home-alter-comment-color-and-font pr-1"> Por: {{this.0.0.0.1.clerk_info_exhibition}} </small>
+                        </div>
+                    </div> --}}
+                </div>
+            </div>
+            {{/if}}
+        {{/each}}
+        {{#each self_data.1}}
+            {{#if this.1.testimonials_content}}
+            <div class="col-lg-6 mb-4 mt-1">
+                <div class="card home-alter-colors-from-comments-cards mx-0 h-100">
+                    <div class="row justify-content-center">
+                        <a href="#" class="text-decoration-none" title="Perfil de {{this.0.0.0.1.clerk_info_exhibition}}">
+                            <div class="col-lg-6 mt-4 home-change-picture-div-from-atendent">
+                                <img class="card-img-top rounded-circle home-change-picture-from-atendent" src="{{this.0.0.0.1.clerk_image}}" alt="Ver perfil de {{this.0.0.0.1.clerk_info_exhibition}}" title="Ver perfil de {{this.0.0.0.1.clerk_info_exhibition}}">
+                            </div>
+                        </a>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row justify-content-center text-center mt-3">
+                                <a href="#" class="text-decoration-none" title="Ver perfil de {{this.0.0.0.1.clerk_info_exhibition}}">
+                                    <div class="row justify-content-center text-lowercase home-color-from-atendent-profile-link">
+                                        <small> {{this.0.0.0.1.clerk_info_exhibition}} </small>
+                                    </div>
+                                </a>
+                            </div>    
+                            <div class="row mb-3 justify-content-center text-center">
+                                <div class="col-lg-6">
+                                    <span class="stars" data-value="{{this.1.testimonials_value}}"> </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body h-100 card-footer border-0 pt-3 home-alter-comment-color-and-font p-0 m-0">
+                        <div class="row m-0 p-0 pl-5">
+                            <i class="fas fa-quote-left text-left home-quote-color" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="row m-0 pt-0 px-0 h-100 text-center pb-4 d-flex text-lowercase align-items-center justify-content-center">
+                            {{{this.1.testimonials_content}}}
+                        </div>
+                    </div>
+                    {{!-- <div class="card-footer border-0">
+                        <div class="row m-0 p-0 justify-content-end w-100 align-items-end">
+                            <small class="home-alter-comment-color-and-font pr-1"> Por: {{this.0.0.0.1.clerk_info_exhibition}} </small>
+                        </div>
+                    </div> --}}
+                </div>
+            </div>
+            {{/if}}
+        {{/each}}
+    </div>
+    <img src="/assets/home/img/arabesco.png" class="home-bottom-left-arabesque" alt="Arabesco" title="Arabesco">
+    <img src="/assets/home/img/arabesco.png" class="home-bottom-right-left-arabesque" alt="Arabesco" title="Arabesco">
+</main>
+
+{{> home/footer }}
+
+<script type="text/javascript">
+    $(document).ready(() => {
+        const getWhoClerk = async (clerk_info_id) => {
+            return await $.get('/whoClerk/' + clerk_info_id, (data) => {
+                return data;
+            });
+        };
+
+        const getWhoClient = async (user_id) => {
+            return await $.get('/whoClient/' + user_id, (data) => {
+                return data;
+            });
+        };
+
+        [].map.call($('.stars'), (item) => {
+            var amount_given = $(item).data('value');
+            $(item).html('<span class="given-star"> ★ </span>'.repeat(amount_given));
+            $(item).append('<span class="not-given-star"> ★ </span>'.repeat(5 - amount_given));
+        });
+    });
+</script>

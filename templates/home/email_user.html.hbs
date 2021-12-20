@@ -1,0 +1,206 @@
+{{> home/header}}
+<!-- Header -->
+<div class="header pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-6">
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="/">Administrativo</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Blog da plataforma</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-6 clear-fix">
+                    <form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+                        <div class="form-group mb-0">
+                            <div class="input-group input-group-alternative input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="Procurar ... " type="text">
+                            </div>
+                        </div>
+                        <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+                            aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Page content -->
+<main class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <h2 class="card-header"><strong>Listando atendimentos pelo E-mail realizados na
+                        plataforma:</strong><button data-target="#newEmailModal" data-toggle="modal"
+                        class="float-right btn btn-sm btn-primary"><i class="fas fa-plus-circle"></i> Responder email</button></h2>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="postsTable" class="table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Imagem</th>
+                                    <th scope="col">Titulo</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Opções</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.tiny.cloud/1/z7v8t8d49cnfq4y1eodidfna4kflxqxlwyjou6051bxwkyas/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin" />
+</script>
+
+{{> home/footer }}
+
+<script type="text/javascript">
+
+    tinymce.init({
+        selector: '#emailBody'
+    });
+
+    $(document).ready(() => {
+        var postsTable = $('#postsTable').DataTable({
+            "ordering": false,
+            "info": false,
+            "language":
+            {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": ">",
+                    "sPrevious": "<",
+                    "sFirst": "<<",
+                    "sLast": ">>"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                },
+                "select": {
+                    "rows": {
+                        "_": "Selecionado %d linhas",
+                        "0": "Nenhuma linha selecionada",
+                        "1": "Selecionado 1 linha"
+                    }
+                },
+                "buttons": {
+                    "copy": "Copiar para a área de transferência",
+                    "copyTitle": "Cópia bem sucedida",
+                    "copySuccess": {
+                        "1": "Uma linha copiada com sucesso",
+                        "_": "%d linhas copiadas com sucesso"
+                    }
+                }
+            }
+        });
+
+        const postButtons = (postId) => {
+            var tmpHtml = '<button class="see-post btn btn-light" data-post-id="' + postId + '"> Ver post </button>';
+            tmpHtml+= ' <button class="edit-post btn btn-dark"> Editar Post </button>';
+            tmpHtml+= ' <button class="edit-post btn btn-danger"> Excluir Post </button>';
+            return tmpHtml;
+        };
+
+        $.get('/admin/blog/list', (incomingData) => {
+            var posts = JSON.parse(incomingData);
+            [].map.call(posts, (post) => {
+                postsTable.row.add([
+                '<img src="' + post['post_image'] + '" class="img-fluid" />', 
+                post['post_title'],
+                new Date(),
+                postButtons(post['post_id'])
+                ]).draw(true);
+            });
+        });
+
+        $(document).on('submit', '#newEmail', (e) => {
+            e.preventDefault();
+            var postData = new FormData();
+                    
+            postData.append('email_subject', $('input[name="email_subject"]').text());
+            postData.append('email_body', $('input[name="email_body"]').text());
+            postData.append('email_to_id', $('#userID').val());
+
+            $.ajax({
+                url: '/new-email',
+                type: 'POST',
+                data: postData,
+                contentType: false,
+                processData: false,
+                success: (event) => {
+                    Swal.fire(
+                        'Email Enviado'
+                    );
+                    $("#newEmailModal").modal('hide');
+                }
+            });
+        });
+    });
+</script>
+
+</main>
+<form id="newEmail">
+    <!-- Modal -->
+    <div class="modal fade" id="newEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Escreva aqui sua Resposta:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label>Assunto do Email:</label>
+                                <input class="form-control form-control-alternative"
+                                    placeholder="Amor" name="email_subject" id="emailSubject">
+                            </div>
+                        </div>
+                        <!-- Post content (With a rich text editor) -->
+                        <div class="row mt-4">
+                            <div class="col-lg-12">
+                                <label>Texto:</label>
+                                <textarea class="form-control form-control-alternative" name="email_body" id="emailBody"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="float-left btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Enviar email</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,192 @@
+<!-- Modal -->
+<div class="modal fade" id="clerkProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Exibindo perfil de atendente:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <img id="_clerk_image_" class="img-fluid img-thumbnail">
+                            <br>
+                            <button class="btn btn-primary btn-block btn-sm">Ver perfil no site</button>
+                            <button class="btn btn-dark btn-block btn-sm">Alterar Senha</button>
+                            <button class="btn btn-light btn-block btn-sm">Editar</button>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    Informações do atendente:
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-lg-12">
+                                        <strong>Nome: </strong> <span id="_user_name_"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Gênero: </strong> <span id="_user_genre"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Nome de usuário: </strong> <span id="_user_alias"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Data de inserção: </strong><span id="_user_creation_date"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>E-mail: </strong><span id="_user_email"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Data de nascimento: </strong> <span id="_user_birthdate"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>CPF: </strong> <span id="_clerk_info_cpf"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    Informações de Endereço:
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-lg-12">
+                                        <strong>Estado: </strong> <span id="_address_state"></span> - <strong>CEP:
+                                        </strong> <span id="_adress_zip_code"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Cidade: </strong><span id="_address_city"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Logradouro: </strong><span id="_address_street"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Número: </strong><span id="_address_number"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="col-lg-12">
+                                        <form id="pay-debts">
+                                            <strong>Débitos:</strong>
+                                            <div class="form-group mb-2">
+                                                <input hidden name="edit_user_min_user_id"
+                                                    id="_user-amount-owned-user-id" />
+                                                <input readonly class="form-control form-control-alternative"
+                                                    id="_user_amount_owned" name="edit_user_balance" />
+
+                                                <button type="submit" class=" btn-sm btn-danger btn-block">
+                                                    Zerar
+                                                    (pagar)</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Modalidades de atendimento:</strong>
+                                        <div class="custom-control custom-checkbox">
+                                            <input readonly checked type="checkbox" class="custom-control-input"
+                                                id="editClerkInfoChat" name="edit_clerk_info_chat" value="true">
+                                            <label class="custom-control-label" for="editClerkInfoChat">Atendimento via
+                                                chat</label>
+                                        </div>
+                                        <div readonly class="custom-control custom-checkbox">
+                                            <input readonly checked type="checkbox" class="custom-control-input"
+                                                name="edit_clerk_info_mail" id="editClerkInfoMail" value="true">
+                                            <label class="custom-control-label" for="editClerkInfoMail">Atendimento via
+                                                e-mail</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Prioridade de exibição:</strong>
+                                        <div class="progress">
+                                            <div class="progress-bar" id="progressClerkInfoPrior" role="progressbar"
+                                                aria-valuemin="0" aria-valuemax="10"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    Informações Bancárias:
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-lg-12">
+                                        <strong>Banco: </strong> <span id="_bank_name"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Agência: </strong><span id="_bank_agency"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Conta: </strong> <span id="_bank_account"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Tipo de conta: </strong> <span id="_bank_account_type"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>CPF (titular): </strong> <span id="_bank_cpf"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="card">
+                                <div class="card-header">
+                                    Informações do perfil:
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-lg-12">
+                                        <strong>Experiência: </strong> <span id="_clerk_info_experience"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Frase: </strong> <span id="_clerk_info_phrase"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Descrição Inicial (Curta): </strong><span id="_clerk_info_description"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Descrição Extensiva do perfil (Longa): </strong><span id="_clerk_info_long_description"></span>
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <strong>Horários:</strong> <span id="_clerk_info_schdeule"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

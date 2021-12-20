@@ -1,0 +1,1744 @@
+{{> pages/header}}
+<style type="text/css">
+	#whole-chat-container {
+		overflow-y: scroll !important;
+		height: 60vh !important;
+		background-image: url('/assets/admin/img/fundo_site_02.jpg') !important;
+		background-size: fixed;
+		padding-top: 2em;
+		padding-bottom: 2em;
+	}
+
+	.msg-in {
+		border-radius: 1em !important;
+		background-color: white;
+		-webkit-box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+		-moz-box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+		box-shadow: -4px 10px 26px -9px rgba(0, 0, 0, 0.35);
+	}
+
+	.msg-out {
+		background-color: #dcf8c6;
+		border-radius: 1em !important;
+		-webkit-box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+		-moz-box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+		box-shadow: 6px 10px 26px -9px rgba(0, 0, 0, 0.35);
+	}
+
+	.bording-for-bee-ing-cool {
+		border-bottom: 1px solid #ddd;
+	}
+</style>
+
+<!-- Header -->
+<div class="header pb-6">
+	<div class="container-fluid">
+		<div class="header-body">
+			<div class="row align-items-center py-4">
+				<div class="col-lg-6 col-6">
+					<nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+						<ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+							<li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+							<li class="breadcrumb-item"><a href="/">Administrativo</a></li>
+							<li class="breadcrumb-item active" aria-current="page">Atendentes</li>
+						</ol>
+					</nav>
+				</div>
+				<div class="col-lg-6 col-6 clear-fix">
+					<form class="navbar-search navbar-search-light form-inline float-right" id="navbar-search-main">
+						<div class="form-group mb-0">
+							<div class="input-group input-group-alternative input-group-merge">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-search"></i></span>
+								</div>
+								<input class="form-control" placeholder="Procurar ... " type="text">
+							</div>
+						</div>
+						<button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
+							aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<main class="container-fluid mt--6">
+	<div class="row">
+		<div class="col-lg-12 py-1 px-2">
+			<div class="card">
+				<div class="card-header mb-0">
+					<div class="row">
+						<div class="col-lg-7">
+							<h2 class="mb-0">🔮 Listando seus Atendentes cadastrados </h2>
+							<p class="text-sm mb-0">
+								Aqui você encontra os atendentes cadastrados na sua plataforma, também pode verificar
+								status ou alterar informações pertinentes 👀
+							</p>
+						</div>
+						<div class="col-lg-5 my-auto">
+							<button id="newProductBtn" data-toggle="modal" data-target="#newClerkModal"
+								class="btn btn-primary float-right "> <i class="fas fa-plus-circle mr-2"></i>
+								Adicionar
+								novo Atendente</button>
+							<a href="/admin/generate-payment-report" target="_blank"
+								class="btn btn-light mr-1 float-right "><i class="fas fa-table mr-2"></i> Gerar
+								relatório de pagamento</a>
+						</div>
+					</div>
+				</div>
+				<div class="table-responsive py-4">
+					<table id="clerkTable" class="table">
+						<thead class="thead-light">
+							<tr>
+								<th scope="col" style="max-width: 8%">Imagem</th>
+								<th scope="col">Nome</th>
+								<th scope="col">NIF</th>
+								<th scope="col">Valor devido</th>
+								<th scope="col">Online</th>
+								<th scope="col">Status</th>
+								<th scope="col">Opções</th>
+							</tr>
+						</thead>
+						<tbody id="clerkContainer">
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</main>
+<form id="newClerk" method="POST">
+	<!-- Modal New clerk -->
+	<div class="modal fade" id="newClerkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2 class="modal-title" id="exampleModalLongTitle"> Cadastrando um novo atendente:</h2>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="container">
+						<h3>Informações básicas</h3>
+						<hr>
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label>Nome Completo do atendente:</label>
+									<input required class="form-control form-control-alternative" name="user_name"
+										placeholder="Ex: Luís Carlos Von Müller Júnior">
+								</div>
+							</div>
+
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label>Foto:</label>
+									<div class="custom-file">
+										<input type="file" name="clerk_image" class="custom-file-input" id="productImg">
+										<label class="custom-file-label" for="customFile">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label>WhatsApp para contato:</label>
+									<input required class="form-control form-control-alternative cellphone"
+										name="user_phone_number" placeholder="Ex: 49 9 99920 9227">
+								</div>
+							</div>
+
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label for="user_genre">Gênero: </label>
+									<select name="user_genre" class="form-control form-control-alternative">
+										<option value="Masculino">Masculino</option>
+										<option value="Feminino">Feminino</option>
+										<option value="Prefere não informar">Prefiro não informar</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label>Aniversário:</label>
+									<input required class="date form-control form-control-alternative"
+										name="user_birthdate" placeholder="23/11/1997">
+									<small class="ml-2 mt-1">dd/mm/yyyy</small>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label>NIF:</label>
+									<input required class="cpf form-control form-control-alternative" name="clerk_cpf"
+										placeholder="075.547.329-94">
+									<small class="ml-2 mt-1"> Apenas números </small>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label>Comissão:</label>
+									<input required name="clerk_info_comission_rate"
+										class="form-control form-control-alternative" placeholder="10,5">
+									<small class="ml-2 mt-1">Omita o símbolo de "%"".</small>
+								</div>
+							</div>
+						</div>
+						<h3 class="mt-3">Informações de Endereço:</h3>
+						<hr>
+						<div class="row">
+							<div class="col-lg-4">
+								<label for="user_zip_code">Código Postal: </label>
+
+								<input type="text" name="user_zip_code"
+									class="form-control form-control-alternative cep" id="user_zip_code"
+									placeholder="O Código Postal do atendente">
+							</div>
+							<div class="col-lg-4">
+								<label for="user_city">Cidade: </label>
+								<input type="text" name="user_city" class="form-control form-control-alternative"
+									id="user_city" placeholder="Cidade do atendente">
+							</div>
+							<div class="col-lg-4">
+								<label for="user_city">País: </label>
+
+								<input type="text" name="user_state" class="form-control form-control-alternative"
+									id="user_state" placeholder="Sigla da unidade federativa">
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-lg-8">
+								<label for="user_street">Endereço: </label>
+								<input type="text" name="user_street" class="form-control form-control-alternative"
+									id="user_street" placeholder="Rua, Avenida, Alameda, etc.">
+							</div>
+							<div class="col-lg-4">
+								<label for="user_addr_num">Número: </label>
+								<input type="text" name="user_addr_num" class="form-control form-control-alternative"
+									id="user_addr_num" placeholder="Número">
+							</div>
+						</div>
+
+						<!-- Login info -->
+						<h3 class="mt-3"> Informações de Acesso:
+						</h3>
+						<hr>
+						<div class="row">
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label>E-mail:</label>
+									<input required type="email" class="form-control form-control-alternative"
+										placeholder="tech@easywebusa.com" name="user_email">
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label>Senha:</label>
+									<input required type="password" id="pass1"
+										class="form-control form-control-alternative" placeholder="**********"
+										name="user_password">
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label>Confirme a senha:</label>
+									<input required type="password" id="pass2"
+										class="form-control form-control-alternative" placeholder="**********">
+								</div>
+							</div>
+							<div class="col-lg-12" id="password-tip">
+
+							</div>
+						</div>
+						<h3 class="mt-3"> Informações do Perfil:</h3>
+						<hr>
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label>Nome para exibição: </label>
+									<input required name="clerk_info_exhibition"
+										class="form-control form-control-alternative" placeholder="Cigano Luís">
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label>Experiência em atendimento: </label>
+									<input required class="form-control form-control-alternative"
+										name="clerk_info_experience" placeholder="10 anos">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="form-group">
+									<label>Frase Filosófica ou de impacto escolhida pelo atendente:</label>
+									<input required
+										placeholder="Tudo é energia, devemos aprender a utilizar elas em nosso favor!"
+										class="form-control form-control-alternative" name="clerk_info_phrase">
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-lg-8">
+								<label>Descrição inicial do Perfil (Curta):</label>
+								<textarea class="form-control form-control-alternative" id="clerk_description"
+									name="clerk_description" rows="4"
+									placeholder="Descrição completa que engage os clientes."></textarea>
+							</div>
+							<div class="col-lg-4 my-auto">
+								<h5>Modalidades:</h5>
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="clerkInfoChat"
+										name="clerk_info_chat" value="true">
+									<label class="custom-control-label" for="clerkInfoChat">Atendimento via
+										chat</label>
+								</div>
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" name="clerk_info_mail"
+										id="clerkInfoMail" value="true">
+									<label class="custom-control-label" for="clerkInfoMail">Atendimento via
+										e-mail</label>
+								</div>
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" name="clerk_info_voice"
+										id="clerkInfoVoice">
+									<label class="custom-control-label" for="clerkInfoVoice">Atendimento via
+										voz</label>
+								</div>
+								<div class="custom-control custom-checkbox">
+									<input disabled type="checkbox" class="custom-control-input"
+										name="clerk_info_webcam" id="editClerkInfoWebcam">
+									<label class="custom-control-label" for="customCheck1">Atendimento via
+										webcam</label>
+								</div>
+							</div>
+						</div>
+						<div class="row mt-2">
+							<div class="col-lg-12">
+								<div class="form-group">
+									<label for="clerk_log_description">Descrição extensiva e completa (Longa) do
+										perfil:</label>
+									<textarea class="form-control tiny-text form-control-alternative" id="clerk_long_description"
+										name="clerk_long_description" rows="4"
+										placeholder="Descrição completa que engage os clientes."></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12 mt-3">
+								<label for="customRange">Prioridade de exibição do atendente na home e na lista de
+									atendentes:</label>
+								<input type="range" class="custom-range" id="editClerkPriorityRange" min="0" max="10"
+									step="1" name="clerk_info_priority">
+							</div>
+						</div>
+						<h3 class="mt-3"> Informações
+							bancárias:</h3>
+						<hr>
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label>Nome do banco: </label>
+									<input required class="form-control form-control-alternative" name="clerk_bank_name"
+										placeholder="Banco do Brasil">
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label>Tipo de conta: </label>
+									<select name="clerk_bank_account_type"
+										class="form-control form-control-alternative">
+										<option class="cc">Conta Corrente</option>
+										<option class="cp">Conta Poupança</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label>Agência: </label>
+									<input required name="clerk_bank_agency_number"
+										class="form-control form-control-alternative" placeholder="Ex: 0798-6">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label>Número da conta: </label>
+									<input required class="form-control form-control-alternative"
+										name="clerk_bank_acc_number" placeholder="Ex: 30914-1">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label>NIF: </label>
+									<input required class="form-control form-control-alternative" name="clerk_bank_cpf"
+										placeholder="075.547.329-94">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer clearfix">
+						<button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Fechar</button>
+						<button type="submit" id="save-clerk" class="btn btn-primary" disabled>Salvar novo
+							atendente</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<form id="editClerk" method="POST">
+	<!-- 	
+	8888888888 8888888b. 8888888 88888888888       .d8888b.  888      8888888888 8888888b.  888    d8P  
+	888        888  "Y88b  888       888          d88P  Y88b 888      888        888   Y88b 888   d8P   
+	888        888    888  888       888          888    888 888      888        888    888 888  d8P    
+	8888888    888    888  888       888          888        888      8888888    888   d88P 888d88K     
+	888        888    888  888       888          888        888      888        8888888P"  8888888b    
+	888        888    888  888       888          888    888 888      888        888 T88b   888  Y88b   
+	888        888  .d88P  888       888          Y88b  d88P 888      888        888  T88b  888   Y88b  
+	8888888888 8888888P" 8888888     888           "Y8888P"  88888888 8888888888 888   T88b 888    Y88b 
+																									
+	 -->
+	<div class="modal fade" id="editClerkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2 class="modal-title" id="exampleModalLongTitle"> Editando informações de um atendente:</h2>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="container">
+						<h3>Informações básicas</h5>
+							<hr>
+							<div class="row">
+								<input hidden name="edit_user_id">
+								<input hidden name="edit_clerk_info_id">
+								<input hidden name="edit_clerk_bank_id">
+								<input hidden name="edit_phone_id">
+								<input hidden name="edit_address_id">
+
+
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label>Nome Completo do atendente:</label>
+										<input required class="form-control form-control-alternative"
+											name="edit_user_name" placeholder="Ex: Luís Carlos Von Müller Júnior">
+									</div>
+								</div>
+
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label>Foto:</label>
+										<div class="custom-file">
+											<input type="file" name="edit_clerk_image" class="custom-file-input"
+												id="productImg">
+											<label class="custom-file-label" for="customFile"></label>
+											<small> Se não selecionar uma nova foto a antiga será mantida </small>
+
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label>WhatsApp para contato:</label>
+										<input required class="form-control form-control-alternative cellphone"
+											name="edit_user_phone_number" placeholder="Ex: 49 9 99920 9227">
+									</div>
+								</div>
+
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label for="user_genre">Gênero: </label>
+										<select name="edit_user_genre" class="form-control form-control-alternative">
+											<option value="Masculino">Masculino</option>
+											<option value="Feminino">Feminino</option>
+											<option value="Prefere não informar">Prefiro não informar</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label>Data de nascimento:</label>
+										<input required class="date form-control form-control-alternative"
+											name="edit_user_birthdate" placeholder="23/11/1997">
+										<small class="ml-2 mt-1">dd/mm/yyyy</small>
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label>NIF:</label>
+										<input required class="cpf form-control form-control-alternative"
+											name="edit_clerk_cpf" placeholder="075.547.329-94">
+										<small class="ml-2 mt-1"> Apenas números </small>
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label>Comissão:</label>
+										<input required name="edit_clerk_info_comission_rate"
+											class="form-control form-control-alternative" placeholder="10,5">
+										<small class="ml-2 mt-1">Omita o símbolo de "%"".</small>
+									</div>
+								</div>
+							</div>
+							<h3 class="mt-3"> Informações de Endereço:</h3>
+							<hr>
+							<div class="row">
+								<div class="col-lg-4">
+									<label for="user_zip_code">Código Postal: </label>
+									<input type="text" name="edit_user_zip_code"
+										class="form-control form-control-alternative cep" id="edit_user_zip_code"
+										placeholder="O Código Postal do atendente">
+								</div>
+								<div class="col-lg-4">
+									<label for="user_city">Cidade: </label>
+									<input type="text" name="edit_user_city"
+										class="form-control form-control-alternative" id="edit_user_city"
+										placeholder="Cidade do atendente">
+								</div>
+								<div class="col-lg-4">
+									<label for="user_city">País: </label>
+
+									<input type="text" name="edit_user_state"
+										class="form-control form-control-alternative" id="edit_user_state"
+										placeholder="Sigla da unidade federativa">
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-lg-8">
+									<label for="user_street">Endereço: </label>
+									<input type="text" name="edit_user_street"
+										class="form-control form-control-alternative" id="edit_user_street"
+										placeholder="Rua, Avenida, Alameda, etc.">
+								</div>
+								<div class="col-lg-4">
+									<label for="user_addr_num">Número: </label>
+									<input type="text" name="edit_user_addr_num"
+										class="form-control form-control-alternative" id="user_addr_num"
+										placeholder="Número">
+								</div>
+							</div>
+
+							<!-- Login info -->
+							<h3 class="mt-3">Informações de Acesso:
+							</h3>
+							<hr>
+							<div class="row">
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label>E-mail:</label>
+										<input required type="email" class="form-control form-control-alternative"
+											placeholder="tech@easywebusa.com" name="edit_user_email">
+									</div>
+								</div>
+
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label>Senha:</label>
+										<input required type="password" id="pass1"
+											class="form-control form-control-alternative" placeholder="**********"
+											name="edit_user_password">
+									</div>
+								</div>
+
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label>Confirme a senha:</label>
+										<input required type="password" id="edit_pass2"
+											class="form-control form-control-alternative" placeholder="**********">
+									</div>
+								</div>
+								<div class="col-lg-12" id="password-tip">
+
+								</div>
+							</div>
+							<h3 class="mt-3"><i class="material-icons my-auto">face</i> Informações do Perfil:</h3>
+							<hr>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label>Nome para exibição: </label>
+										<input required name="edit_clerk_info_exhibition"
+											class="form-control form-control-alternative" placeholder="Cigano Luís">
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+
+										<label>Experiência em atendimento: </label>
+										<input required class="form-control form-control-alternative"
+											name="edit_clerk_info_experience" placeholder="10 anos">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label>Frase Filosófica ou de impacto escolhida pelo atendente:</label>
+										<input required
+											placeholder="Tudo é energia, devemos aprender a utilizar elas em nosso favor!"
+											class="form-control form-control-alternative" name="edit_clerk_info_phrase">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-8">
+									<label>Descrição inicial do Perfil (Curta):</label>
+									<textarea class="form-control form-control-alternative" id="edit_clerk_description"
+										name="edit_clerk_description" rows="4"
+										placeholder="Descrição completa que engage os clientes."></textarea>
+								</div>
+								<div class="col-lg-4 my-auto">
+									<h5>Modalidades:</h5>
+									<div class="custom-control custom-checkbox">
+										<input type="checkbox" class="custom-control-input" id="editClerkInfoChat"
+											name="edit_clerk_info_chat" value="true">
+										<label class="custom-control-label" for="editClerkInfoChat">Atendimento via
+											chat</label>
+									</div>
+									<div class="custom-control custom-checkbox">
+										<input type="checkbox" class="custom-control-input" id="editClerkInfoMail"
+											name="edit_clerk_info_mail" value="true">
+										<label class="custom-control-label" for="editClerkInfoMail">Atendimento via
+											E-mail</label>
+									</div>
+									<div class="custom-control custom-checkbox">
+										<input type="checkbox" class="custom-control-input" name="edit_clerk_info_voice"
+											id="editClerkInfoVoice">
+										<label class="custom-control-label" for="editClerkInfoVoice">Atendimento via
+											voz</label>
+									</div>
+									<div class="custom-control custom-checkbox">
+										<input disabled type="checkbox" class="custom-control-input"
+											name="edit_clerk_info_webcam" id="editClerkInfoWebcam">
+										<label class="custom-control-label" for="customCheck1">Atendimento via
+											webcam</label>
+									</div>
+								</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label for="edit_clerk_log_description">Descrição extensiva e completa (Longa)
+											do
+											perfil:</label>
+										<textarea class="form-control tiny-text form-control-alternative"
+											id="edit_clerk_info_long_description"
+											name="edit_clerk_info_long_description" rows="4"
+											placeholder="Descrição completa que engage os clientes."></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12 mt-3">
+									<label for="customRange">Prioridade de exibição do atendente na home e na lista de
+										atendentes:</label>
+									<input type="range" class="custom-range" id="editClerkPriorityRange" min="0"
+										max="10" step="1" name="edit_clerk_info_priority">
+								</div>
+							</div>
+							<h3 class="mt-3"> Informações
+								bancárias:</h3>
+							<hr>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label>Nome do banco: </label>
+										<input required class="form-control form-control-alternative"
+											name="edit_clerk_bank_name" placeholder="Banco do Brasil">
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label>Tipo de conta: </label>
+										<select id="#edit_clerk_bank_account_type" name="edit_clerk_bank_account_type"
+											class="form-control form-control-alternative">
+											<option class="cc">Conta Corrente</option>
+											<option class="cp">Conta Poupança</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label>Agência: </label>
+										<input required name="edit_clerk_bank_agency_number"
+											class="form-control form-control-alternative" placeholder="Ex: 0798-6">
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label>Número da conta: </label>
+										<input required class="form-control form-control-alternative"
+											name="edit_clerk_bank_acc_number" placeholder="Ex: 30914-1">
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label>NIF: </label>
+										<input required class="form-control form-control-alternative"
+											name="edit_clerk_bank_cpf" placeholder="075.547.329-94">
+									</div>
+								</div>
+							</div>
+					</div>
+					<div class="modal-footer clearfix">
+						<button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Fechar</button>
+						<button type="submit" id="update-clerk" class="btn btn-primary">Salvar Alterações</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<div id="modal-container-profile"></div>
+<!-- Modal de atendimentos -->
+<div class="modal fade" id="clerkChats" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	aria-hidden="true">
+	<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Exibindo todos Atendimentos realizados</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table id="chatsTable" class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Cliente</th>
+							<th scope="col">Créditos Gastos</th>
+							<th scope="col">Opções</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+{{> pages/footer}}
+<script src="https://cdn.tiny.cloud/1/z7v8t8d49cnfq4y1eodidfna4kflxqxlwyjou6051bxwkyas/tinymce/5/tinymce.min.js"
+	referrerpolicy="origin" />
+</script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+	function matchCustom(params, data) {
+
+		// If there are no search terms, return all of the data
+		if ($.trim(params.term) === '') {
+			return data;
+		}
+
+		// Do not display the item if there is no 'text' property
+		if (typeof data.text === 'undefined') {
+			return null;
+		}
+
+		// `params.term` should be the term that is used for searching
+		// `data.text` is the text that is displayed for the data object
+		if (data.text.indexOf(params.term) > -1) {
+			var modifiedData = $.extend({}, data, true);
+			modifiedData.text += ' (matched)';
+
+			// You can return modified objects from here
+			// This includes matching the `children` how you want in nested data sets
+			return modifiedData;
+		}
+
+		// Return `null` if the term should not be displayed
+		return null;
+	}
+
+	$(document).ready(async function () {
+		tinymce.init({
+			selector: '.tiny-text',
+			height: "240"
+		});
+
+		String.prototype.capitalize = function () {
+			return this.charAt(0).toUpperCase() + this.slice(1)
+		}
+		const timestamp = (unix_timestamp) => {
+			var date = new Date(unix_timestamp);
+			var hours = date.getHours();
+			var minutes = "0" + date.getMinutes();
+			var seconds = "0" + date.getSeconds();
+			let year = date.getFullYear();
+			let month = (1 + date.getMonth()).toString().padStart(2, '0');
+			let day = date.getDate().toString().padStart(2, '0');
+
+			var formattedTime = day + '/' + month + '/' + year + ' - ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+			return formattedTime;
+		}
+
+		const clerk_buttons = (user_id) => {
+			let tmp_html = '<button class="btn btn-sm btn-light clerk-show-profile" data-user-id="' + user_id + '"><i data-user-id="' + user_id + '" class="fas fa-id-card"></i> Ver perfil completo</button> ';
+			tmp_html += '<button data-user-id=' + user_id + ' class="clerk-attend-history btn btn-sm btn-primary"><i data-user-id=' + user_id + ' class="fas fa-history"></i> Histórico</button> ';
+			tmp_html += '<button data-user-id=' + user_id + ' class="clerk-schedule btn btn-sm btn-dark"><i data-user-id=' + user_id + ' class="fas fa-calendar-week"></i> Agenda</button> ';
+			tmp_html += '<button data-user-id=' + user_id + ' class="clerk-edit-tags btn btn-sm btn-dark"><i data-user-id=' + user_id + ' class="fas fa-tags"></i> Qualificações</button>';
+			tmp_html += '<button data-user-id=' + user_id + ' class="clerk-edit-info btn btn-sm btn-dark"><i data-user-id=' + user_id + ' class="fas fa-edit"></i> Editar</button>';
+			tmp_html += '<button data-user-id=' + user_id + ' class="clerk-edit-minutes btn btn-sm btn-dark"><i class="fas fa-money-check-alt client-edit-minutes" data-user-id=' + user_id + '></i> Saldo</button> ';
+			return tmp_html;
+		}
+
+		const status_button = (user_status, user_id) => {
+			if (user_status) {
+				return '<button data-user-status="' + user_status + '" data-user-id="' + user_id + '" class="change-user-status btn-sm btn btn-light">Atendente Ativo</button>';
+			} else {
+				return '<button data-user-status="' + user_status + '" data-user-id="' + user_id + '" class="change-user-status btn-sm btn btn-dark">Atendente Desativado</button>';
+			}
+		};
+
+		const statusBadge = (value, clerk_id) => {
+			if (value) {
+				return '<span data-clerk-id="' + clerk_id + '" class="badge badge-primary py-2 px-3"><strong>🔮 Está Online agora 🔮</strong></span>';
+			} else {
+				return '<span data-clerk-id="' + clerk_id + '" class="badge badge-danger py-2 px-3"><strong>😴 Está Offline 💤</strong></span>';
+			}
+		}
+
+		const socket = new WebSocket("wss://attend." + window.location.host + "/ws");
+
+		const statusClerkButtons = (user_id, status) => {
+			switch (status) {
+				case 0:
+					$('span[data-clerk-id="' + user_id + '"]').parent().html(statusBadge(status, user_id));
+					break;
+
+				case 1:
+					$('span[data-clerk-id="' + user_id + '"]').parent().html(statusBadge(status, user_id));
+					break;
+
+				case 2:
+					$('span[data-clerk-id="' + user_id + '"]').parent().html(statusBadge(status, user_id));
+					break;
+			}
+		};
+
+		var clerkTable = $('#clerkTable').DataTable({
+			"serverSide": true,
+			"ordering": true,
+			"info": true,
+			"ajax":
+			{
+				url: "/admin/clerk/list",
+				type: "POST"
+			},
+			"columns": [
+				{
+					"data": "2.clerk_image", render: (data, type, row) => {
+						return `<img class="img-thumbnail img-fluid" src="${data}" alt="Imagem de atendente">`
+					}
+				},
+				{
+					"data": "0.user_name", render: (data, type, row) => {
+						return `<strong>${data}</strong>`
+					}
+				},
+				{
+					"data": "0.user_uni", render: (data, type, row) => {
+						return data
+					}
+				},
+				{
+					"data": "0.user_balance", render: (data, type, row) => {
+						return `<strong>💰 € ${(data.toFixed(2).replace('.', ','))}<strong>`
+					}
+				},
+				{
+					"data": "0.user_id", render: (data, type, row) => {
+						//return statusBadge(row[1].is_available, data)
+						return statusBadge(row[1].status, data)
+					}
+				},
+				{
+					"data": "0.user_status", render: (data, type, row) => {
+						return status_button(row[0].user_status, row[0].user_id)
+					}
+				},
+				{
+					"data": "0.user_id", render: (data, type, row) => {
+						return clerk_buttons(row[0].user_id)
+					}
+				}, /* Stands for user_id */
+			],
+			"language":
+			{
+				"sEmptyTable": "Nenhum registro encontrado",
+				"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+				"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+				"sInfoFiltered": "(Filtrados de _MAX_ registros)",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sLengthMenu": "_MENU_ resultados por página",
+				"sLoadingRecords": "Carregando...",
+				"sProcessing": "Processando...",
+				"sZeroRecords": "Nenhum registro encontrado",
+				"sSearch": "Pesquisar",
+				"oPaginate": {
+					"sNext": ">",
+					"sPrevious": "<",
+					"sFirst": "<<",
+					"sLast": ">>"
+				},
+				"oAria": {
+					"sSortAscending": ": Ordenar colunas de forma ascendente",
+					"sSortDescending": ": Ordenar colunas de forma descendente"
+				},
+				"select": {
+					"rows": {
+						"_": "Selecionado %d linhas",
+						"0": "Nenhuma linha selecionada",
+						"1": "Selecionado 1 linha"
+					}
+				},
+				"buttons": {
+					"copy": "Copiar para a área de transferência",
+					"copyTitle": "Cópia bem sucedida",
+					"copySuccess": {
+						"1": "Uma linha copiada com sucesso",
+						"_": "%d linhas copiadas com sucesso"
+					}
+				}
+			}
+
+		});
+
+		/* Add to parent li the active class */
+		$.get('/admin/page/clerk/show-profile', (elm) => {
+			$("#modal-container-profile").html(elm);
+		});
+
+		/* Changes user state */
+		$(document).on('click', '.change-user-status', (e) => {
+			$.get('/admin/clerk/change-status/' + $(e.target).data('user-id') + '/' + $(e.target).data('user-status') + '/', (data) => {
+				clerkTable.ajax.reload();
+			});
+		});
+
+		await $.get('/admin/config/get-configs', (e) => {
+			configStuff = e[0];
+		});
+
+		$(document).on('click', '.clerk-show-profile', (e) => {
+			let clerk_id = $(e.target).data('user-id');
+
+			$('#_user-amount-owned-user-id').val($(e.target).data('user-id'));
+
+			$.get('/admin/clerk/single/' + clerk_id, (e) => {
+				var data = JSON.parse(e)[0];
+				$("#_clerk_edit").data('user-id', clerk_id);
+				$("#_clerk_show_profile").data('user-id', clerk_id);
+				$("#_clerk_update_pass").data('user-id', clerk_id);
+				$("#_user_amount_owned").val(parseFloat(data[0]['user_balance']).toFixed(2));
+				$('#_user_name_').text(data[0]['user_name']);
+				$('#_user_genre').text(data[0]['user_genre']);
+				$('#_user_alias').text(data[0]['user_alias']);
+				$('#_user_creation_date').text(new Date(data[0]['user_creation']));
+				$('#_user_email').text(data[0]['user_email']);
+				$('#_user_birthdate').text(data[0]['user_birthdate']);
+				$('#_clerk_info_cpf').text(data[1]['clerk_info_cpf']);
+				$('#progressClerkInfoPrior').css('width', data[1]['clerk_info_priority'] * 10 + "%");
+				$('#_address_state').text(data[3]['address_state']);
+				$('#_adress_zip_code').text(data[3]['address_postalcode']);
+				$('#_address_city').text(data[3]['address_city']);
+				$('#_address_street').text(data[3]['address_street']);
+				$('#_address_number').text(data[3]['address_number']);
+				$('#user_balance').text(data[0]['user_balance']);
+				$('#_bank_name').text(data[2]['clerk_bank_name']);
+				$('#_bank_agency').text(data[2]['user_name']);
+				$('#_bank_agency').text(data[2]['clerk_bank_agency_number']);
+				$('#_bank_account').text(data[2]['clerk_bank_acc_number']);
+				$('#_bank_account_type').text(data[2]['clerk_bank_account_type']);
+				$('#_bank_cpf').text(data[2]['clerk_bank_cpf'].replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"));
+				$('#_clerk_info_experience').text(data[1]['clerk_info_experience']);
+				$('#_clerk_image_').attr('src', data[1]['clerk_image']);
+				$('#_clerk_info_phrase').text(data[1]['clerk_info_phrase']);
+				$('#_clerk_info_description').text(data[1]['clerk_description']);
+				$('#_clerk_info_long_description').text(data[1]['clerk_info_long_description']);
+			});
+			$('#clerkProfileModal').modal('show');
+		});
+
+		$(document).on('click', '.clerk-edit-minutes', async (e) => {
+			var user_id = $(e.target).data('user-id');
+			await $.get('/admin/clients/balance/' + user_id + '/', (stuff) => {
+				$('input[name="edit_user_min_user_id"]').val(user_id);
+				var balance = parseFloat(stuff).toFixed(2).replace(".", ",");
+				$('#editUserBalance').val(balance);
+			});
+			$('#editMinutesModal').modal('show');
+		});
+
+		$(document).on('submit', '#updateUserMinutes', (e) => {
+			e.preventDefault();
+			$("#editUserBalance").val($("#editUserBalance").val().replace(",", "."));
+			$.post('/admin/clients/update-client-balance/', $(e.target).serialize()).done((stuff) => {
+				Swal.fire({
+					icon: 'success',
+					title: 'O Saldo Pago do Cliente foi atualizado com sucesso!',
+					showConfirmButton: false,
+					timer: 1500
+				});
+				$('#editMinutesModal').modal('hide');
+				clerkTable.ajax.reload();
+			});
+		});
+
+
+		$(document).on('click', '.hiddeable', (e) => {
+			if ($(e.target).parents('.card').find('.card-body').css('display') !== 'none') {
+				$(e.target).parents('.card').find('.card-body').hide();
+			} else {
+				$(e.target).parents('.card').find('.card-body').show();
+			}
+		});
+
+		/* POST of the (new-clerk) */
+		$(document).on('submit', '#newClerk', (e) => {
+			e.preventDefault();
+			var clerk_data = new FormData();
+			clerk_data.append('user_name', $('input[name="user_name"]').val());
+			clerk_data.append('user_phone_number', $('input[name="user_phone_number"]').val());
+			clerk_data.append('user_genre', $('select[name="user_genre"]').val());
+			clerk_data.append('user_birthdate', $('input[name="user_birthdate"]').val());
+			clerk_data.append('clerk_info_cpf', $('input[name="clerk_cpf"]').val().replace(/\D+/g, ''));
+			clerk_data.append('clerk_info_comission_rate', $('input[name="clerk_info_comission_rate"]').val().replace(",", "."));
+			clerk_data.append('user_zip_code', $('input[name="user_zip_code"]').val());
+			clerk_data.append('user_city', $('input[name="user_city"]').val());
+			clerk_data.append('user_state', $('input[name="user_state"]').val());
+			clerk_data.append('user_street', $('input[name="user_street"]').val());
+			clerk_data.append('user_addr_num', $('input[name="user_addr_num"]').val());
+			clerk_data.append('user_email', $('input[name="user_email"]').val());
+			clerk_data.append('user_password', $('input[name="user_password"]').val());
+			clerk_data.append('clerk_info_experience', $('input[name="clerk_info_experience"]').val());
+			clerk_data.append('clerk_info_phrase', $('input[name="clerk_info_phrase"]').val());
+			clerk_data.append('clerk_info_description', $('#clerk_description').val());
+			clerk_data.append('clerk_info_long_description', $('#clerk_info_long_description').val());
+			clerk_data.append('clerk_bank_name', $('input[name="clerk_bank_name"]').val());
+			clerk_data.append('clerk_bank_account_type', $('select[name="clerk_bank_account_type"]').val());
+			clerk_data.append('clerk_bank_agency_number', $('input[name="clerk_bank_agency_number"]').val());
+			clerk_data.append('clerk_bank_acc_number', $('input[name="clerk_bank_acc_number"]').val());
+			clerk_data.append('clerk_bank_cpf', $('input[name="clerk_bank_cpf"]').val());
+			clerk_data.append('clerk_info_chat', $('input[name="clerk_info_chat"]').is(':checked') ? true : false);
+			clerk_data.append('clerk_info_mail', $('input[name="clerk_info_mail"]').is(':checked') ? true : false);
+			clerk_data.append('clerk_info_voice', $('input[name="clerk_info_voice"]').is(':checked') ? true : false);
+			clerk_data.append('clerk_info_webcam', $('input[name="clerk_info_webcam"]').is(':checked') ? true : false);
+			clerk_data.append('clerk_info_exhibition', $('input[name="clerk_info_exhibition"]').val());
+			clerk_data.append('clerk_info_priority', $('input[name="clerk_info_priority"]').val());
+			clerk_data.append('clerk_image', $('input[name="clerk_image"]')[0].files[0]);
+
+			$.ajax({
+				url: '/admin/clerk/new-clerk',
+				type: 'POST',
+				data: clerk_data,
+				contentType: false,
+				processData: false,
+				success: (event) => {
+					Swal.fire(
+						'Novo atendente Cadastrado!',
+						'O novo atendente foi inserido com sucesso no banco de dados e está disponível.',
+						'success'
+					);
+					$("#newClerkModal").modal('hide');
+					clerkTable.ajax.reload();
+				}
+			});
+		});
+
+		$('#pass2, #pass1').keyup((e) => {
+			if ($("#pass2").val() == $("#pass1").val()) {
+				/* When equals */
+				$("#save-clerk").removeAttr('disabled');
+				$("#password-tip").html('<div class="alert alert-success"> As senhas são iguais. </div>');
+			} else {
+				/* When not equals */
+				$("#save-clerk").attr('disabled', 'true');
+				$("#password-tip").html('<div class="alert alert-danger"> As senhas não são iguais. </div>');
+			}
+		});
+
+		$('.date').mask('00/00/0000');
+		$('.cep').mask('0000-000');
+		$('.cellphone').mask('+000 000 000 000');
+
+
+		$(document).on('click', '.clerk-edit-info', (e) => {
+			$('#btn-clear-debts').data('user-id', $(e.target).data('user-id'));
+			$.get('/admin/clerk/single/' + $(e.target).data('user-id'), (alpha) => {
+				var data = JSON.parse(alpha)[0];
+				/* Refils the form */
+				$('#editClerkModal').modal('show');
+				$('input[name="edit_user_name"]').val(data[0]['user_name']);
+				$('select[name="edit_user_genre"]').val(data[0]['user_genre']);
+				$('input[name="edit_user_phone_number"]').val(data[4]['phone_number']);
+				$('input[name="edit_user_birthdate"]').val(data[0]['user_birthdate'].split('-').reverse().join('/'));
+				$('input[name="edit_clerk_cpf"]').val(data[1]['clerk_info_cpf']);
+				$('input[name="edit_clerk_info_comission_rate"]').val(data[1]['clerk_info_comission_rate'].replace(".", ","));
+				$('input[name="edit_user_zip_code"]').val(data[3]['address_postalcode']);
+				$('input[name="edit_user_city"]').val(data[3]['address_city']);
+				$('input[name="edit_user_state"]').val(data[3]['address_state']);
+				$('input[name="edit_user_city"]').val(data[3]['address_city']);
+				$('input[name="edit_user_street"]').val(data[3]['address_street']);
+				$('input[name="edit_user_addr_num"]').val(data[3]['address_number']);
+				$('input[name="edit_user_email"]').val(data[0]['user_email']);
+				$('input[name="edit_user_password"]').val(data[0]['user_password']);
+				$('input[name="edit_clerk_info_experience"]').val(data[1]['clerk_info_experience']);
+				$('input[name="edit_clerk_info_phrase"]').val(data[1]['clerk_info_phrase']);
+				$('input[name="edit_clerk_info_priority"]').val(data[1]['clerk_info_priority']);
+				$('input[name="edit_clerk_info_chat"]').prop("checked", data[1]['clerk_info_chat']);
+				$('input[name="edit_clerk_info_voice"]').prop("checked", data[1]['clerk_info_voice']);
+				$('input[name="edit_clerk_info_mail"]').prop("checked", data[1]['clerk_info_mail']);
+				$('textarea[name="edit_clerk_description"]').text(data[1]['clerk_description']);
+				$('textarea[name="edit_clerk_info_long_description"]').text(data[1]['clerk_info_long_description']);
+				$('input[name="edit_clerk_bank_name"]').val(data[2]['clerk_bank_name']);
+				$('input[name="edit_clerk_info_exhibition"]').val(data[1]['clerk_info_exhibition']);
+				$('select[name="edit_clerk_bank_account_type"]').val(data[2]['clerk_bank_account_type']);
+				$('input[name="edit_clerk_bank_agency_number"]').val(data[2]['clerk_bank_agency_number']);
+				$('input[name="edit_clerk_bank_acc_number"]').val(data[2]['clerk_bank_acc_number']);
+				$('input[name="edit_clerk_bank_cpf"]').val(data[2]['clerk_bank_cpf']);
+				$('input[name="edit_user_id"]').val(data[0]['user_id']);
+				$('input[name="edit_clerk_info_id"]').val(data[1]['clerk_info_id']);
+				$('input[name="edit_clerk_bank_id"]').val(data[2]['clerk_bank_id']);
+				$('input[name="edit_phone_id"]').val(data[4]['phone_id']);
+				$('input[name="edit_address_id"]').val(data[3]['address_id']);
+				$('#edit_pass2').val(data[0]['user_password']);
+			});
+		});
+
+		$(document).on('submit', '#editClerk', (e) => {
+			e.preventDefault();
+
+			var clerk_data = new FormData();
+			clerk_data.append('user_id', $('input[name="edit_user_id"]').val());
+			clerk_data.append('clerk_info_id', $('input[name="edit_clerk_info_id"]').val());
+			clerk_data.append('clerk_bank_id', $('input[name="edit_clerk_bank_id"]').val());
+			clerk_data.append('phone_id', $('input[name="edit_phone_id"]').val());
+			clerk_data.append('address_id', $('input[name="edit_address_id"]').val());
+			clerk_data.append('user_name', $('input[name="edit_user_name"]').val());
+			clerk_data.append('user_phone_number', $('input[name="edit_user_phone_number"]').val());
+			clerk_data.append('user_genre', $('select[name="edit_user_genre"]').val());
+			clerk_data.append('user_birthdate', $('input[name="edit_user_birthdate"]').val());
+			clerk_data.append('clerk_info_cpf', $('input[name="edit_clerk_cpf"]').val().replace(/\D+/g, ''));
+			clerk_data.append('clerk_info_comission_rate', $('input[name="edit_clerk_info_comission_rate"]').val().replace(",", "."));
+			clerk_data.append('user_zip_code', $('input[name="edit_user_zip_code"]').val());
+			clerk_data.append('user_city', $('input[name="edit_user_city"]').val());
+			clerk_data.append('user_state', $('input[name="edit_user_state"]').val());
+			clerk_data.append('user_street', $('input[name="edit_user_street"]').val());
+			clerk_data.append('user_addr_num', $('input[name="edit_user_addr_num"]').val());
+			clerk_data.append('user_email', $('input[name="edit_user_email"]').val());
+			clerk_data.append('user_password', $('input[name="edit_user_password"]').val());
+			clerk_data.append('clerk_info_experience', $('input[name="edit_clerk_info_experience"]').val());
+			clerk_data.append('clerk_info_phrase', $('input[name="edit_clerk_info_phrase"]').val());
+			clerk_data.append('clerk_info_description', $('#edit_clerk_description').val());
+			clerk_data.append('clerk_info_long_description', $('#edit_clerk_info_long_description').val());
+			clerk_data.append('clerk_bank_name', $('input[name="edit_clerk_bank_name"]').val());
+			clerk_data.append('clerk_bank_account_type', $('select[name="edit_clerk_bank_account_type"]').val());
+			clerk_data.append('clerk_bank_agency_number', $('input[name="edit_clerk_bank_agency_number"]').val());
+			clerk_data.append('clerk_bank_acc_number', $('input[name="edit_clerk_bank_acc_number"]').val());
+			clerk_data.append('clerk_bank_cpf', $('input[name="edit_clerk_bank_cpf"]').val());
+			clerk_data.append('clerk_info_chat', $('input[name="edit_clerk_info_chat"]').is(':checked') ? true : false);
+			clerk_data.append('clerk_info_mail', $("#editClerkInfoMail").is(':checked') ? true : false);
+			clerk_data.append('clerk_info_voice', $('input[name="edit_clerk_info_voice"]').is(':checked') ? true : false);
+			clerk_data.append('clerk_info_webcam', $('input[name="edit_clerk_info_webcam"]').is(':checked') ? true : false);
+			clerk_data.append('clerk_info_exhibition', $('input[name="edit_clerk_info_exhibition"]').val());
+			clerk_data.append('clerk_info_priority', $('input[name="edit_clerk_info_priority"]').val());
+			clerk_data.append('clerk_image', $('input[name="edit_clerk_image"]')[0].files[0] ?? "none");
+
+			$.ajax({
+				url: '/admin/clerk/update-clerk',
+				type: 'POST',
+				data: clerk_data,
+				contentType: false,
+				processData: false,
+				success: async (event) => {
+					Swal.fire(
+						'Atendente Alterado!',
+						'O atendente foi alterado com sucesso no banco de dados e está disponível.',
+						'success'
+					);
+					$
+					$('#editClerkModal').modal('hide');
+					clerkTable.ajax.reload();
+				}
+			});
+		});
+
+		var chatsTable = $('#chatsTable').DataTable({
+			"language":
+			{
+				"sEmptyTable": "Nenhum registro encontrado",
+				"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+				"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+				"sInfoFiltered": "(Filtrados de _MAX_ registros)",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sLengthMenu": "_MENU_ resultados por página",
+				"sLoadingRecords": "Carregando...",
+				"sProcessing": "Processando...",
+				"sZeroRecords": "Nenhum registro encontrado",
+				"sSearch": "Pesquisar",
+				"oPaginate": {
+					"sNext": ">",
+					"sPrevious": "<",
+					"sFirst": "<<",
+					"sLast": ">>"
+				},
+				"oAria": {
+					"sSortAscending": ": Ordenar colunas de forma ascendente",
+					"sSortDescending": ": Ordenar colunas de forma descendente"
+				},
+				"select": {
+					"rows": {
+						"_": "Selecionado %d linhas",
+						"0": "Nenhuma linha selecionada",
+						"1": "Selecionado 1 linha"
+					}
+				},
+				"buttons": {
+					"copy": "Copiar para a área de transferência",
+					"copyTitle": "Cópia bem sucedida",
+					"copySuccess": {
+						"1": "Uma linha copiada com sucesso",
+						"_": "%d linhas copiadas com sucesso"
+					}
+				}
+			}
+		});
+
+		$(document).on('click', '.clerk-attend-history', (e) => {
+			chatsTable.clear().draw(true);
+			$("#clerkChats").modal('show');
+			$.get('/admin/attendance-chat/clerk-chats/' + $(e.target).data('user-id'), (data) => {
+				data = JSON.parse(data);
+
+				[].map.call((data), async (chat) => {
+					/* Will query for amount of registered transactions upon this chat */
+					total_minutes = await $.get('/admin/total-minutes-transacted/' + chat[0]['chat_id'], (data) => {
+						return data
+					});
+					/* Drawing chat row */
+					chatsTable.row.add([
+						chat[1]['user_name'],
+						'<span class="badge badge-primary">' + total_minutes[0]['count'] + ' Minutos gastos </span>',
+						'<button class="see-conversation btn btn-success btn-sm btn-block" data-client-id="' + chat[0]['client_id'] + '" data-clerk-id="' + chat[0]['clerk_id'] + '" data-chat-id="' + chat[0]['chat_id'] + '"> <i class="fas fa-eye see-conversation" data-client-id="' + chat[0]['client_id'] + '" data-clerk-id="' + chat[0]['clerk_id'] + '" data-chat-id="' + chat[0]['chat_id'] + '"></i> Ver conversa</button>'
+					]).draw(true);
+				});
+			});
+		});
+
+		$(document).on('click', '.see-conversation ', (e) => {
+			$('#whole-chat-modal').modal('show');
+			var selfId = $(e.target).data('client-id');
+			var chatId = $(e.target).data('chat-id');
+			$.get('/admin/attendance-chat/retrive_whole_chat/' + chatId, (chatData) => {
+				chatData = JSON.parse(chatData);
+				console.log(chatData);
+				$("#whole-chat-container").html("");
+				[].map.call(chatData, (chatMsg) => {
+					if (chatMsg['chat_msg_user_id'] !== selfId) {
+						let tmpHtml = '<div class="row clear-fix mx-2">';
+						tmpHtml += '<div class="msg-out col-lg-6 ml-auto alert"><p>' + chatMsg['chat_msg_body'] + '</p>';
+						tmpHtml += '<small class="float-right"> Enviado em:' + timestamp(Date.parse(chatMsg['chat_msg_time'])) + '</small> </div> </div>';
+						$('#whole-chat-container').append(tmpHtml);
+					} else {
+						let tmpHtml = '<div class="row clear-fix mx-2">';
+						tmpHtml += '<div class="msg-in col-lg-6 mr-auto alert"><p>' + chatMsg['chat_msg_body'] + ' </p>';
+						tmpHtml += '<small class="float-right"> Enviado em: ' + timestamp(Date.parse(chatMsg['chat_msg_time'])) + ' </small> </div> </div>';
+						$('#whole-chat-container').append(tmpHtml);
+					}
+				})
+			});
+		});
+
+		$(document).on('submit', '#pay-debts', (e) => {
+			$("#_user_amount_owned").val(0.0);
+			console.log($(e.target).serialize());
+			e.preventDefault();
+			$.post('/admin/clients/update-client-balance/', $(e.target).serialize()).done((stuff) => {
+				Swal.fire({
+					icon: 'success',
+					title: 'O Saldo foi Zerado com sucesso!',
+					showConfirmButton: false,
+					timer: 1500
+				});
+				$('#clerkProfileModal').modal('hide');
+				clerkTable.ajax.reload();
+			});
+
+		});
+
+		$(document).on('click', '.clerk-schedule', (e) => {
+			var clerk_id = $(e.target).data('user-id');
+			$.get("/admin/clerk/schedule/" + clerk_id, ([schedule_data, ...rest]) => {
+				/* Meta inputs */
+				$('input[name="clerk_schedule_id"]').val(schedule_data.clerk_schedule_id);
+				$('input[name="clerk_schedule_user_id"]').val(schedule_data.clerk_schedule_user_id);
+
+				/* Monday */
+				schedule_data.clerk_schedule_mon ? $('input[name="clerk_schedule_mon"]').prop("checked", true) : $('input[name="clerk_schedule_mon"]').prop("checked", false);
+				$('input[name="clerk_schedule_mon_init"]').val(schedule_data.clerk_schedule_mon_init);
+				$('input[name="clerk_schedule_mon_end"]').val(schedule_data.clerk_schedule_mon_end);
+				/* Tuesday */
+				schedule_data.clerk_schedule_tue ? $('input[name="clerk_schedule_tue"]').prop("checked", true) : $('input[name="clerk_schedule_tue"]').prop("checked", false);
+				$('input[name="clerk_schedule_tue_init"]').val(schedule_data.clerk_schedule_tue_init);
+				$('input[name="clerk_schedule_tue_end"]').val(schedule_data.clerk_schedule_tue_end);
+				/* Wednesday */
+				schedule_data.clerk_schedule_wed ? $('input[name="clerk_schedule_wed"]').prop("checked", true) : $('input[name="clerk_schedule_wed"]').prop("checked", false);
+				$('input[name="clerk_schedule_wed_init"]').val(schedule_data.clerk_schedule_wed_init);
+				$('input[name="clerk_schedule_wed_end"]').val(schedule_data.clerk_schedule_wed_end);
+				/* Thursday */
+				schedule_data.clerk_schedule_thu ? $('input[name="clerk_schedule_thu"]').prop("checked", true) : $('input[name="clerk_schedule_thu"]').prop("checked", false);
+				$('input[name="clerk_schedule_thu_init"]').val(schedule_data.clerk_schedule_thu_init);
+				$('input[name="clerk_schedule_thu_end"]').val(schedule_data.clerk_schedule_thu_end);
+				/* Friday */
+				schedule_data.clerk_schedule_fri ? $('input[name="clerk_schedule_fri"]').prop("checked", true) : $('input[name="clerk_schedule_fri"]').prop("checked", false);
+				$('input[name="clerk_schedule_fri_init"]').val(schedule_data.clerk_schedule_fri_init);
+				$('input[name="clerk_schedule_fri_end"]').val(schedule_data.clerk_schedule_fri_end);
+				/* Saturday */
+				schedule_data.clerk_schedule_sat ? $('input[name="clerk_schedule_sat"]').prop("checked", true) : $('input[name="clerk_schedule_sat"]').prop("checked", false);
+				$('input[name="clerk_schedule_sat_init"]').val(schedule_data.clerk_schedule_sat_init);
+				$('input[name="clerk_schedule_sat_end"]').val(schedule_data.clerk_schedule_sat_end);
+				/* Sunday */
+				schedule_data.clerk_schedule_sun ? $('input[name="clerk_schedule_sun"]').prop("checked", true) : $('input[name="clerk_schedule_sun"]').prop("checked", false);
+				$('input[name="clerk_schedule_sun_init"]').val(schedule_data.clerk_schedule_sun_init);
+				$('input[name="clerk_schedule_sun_end"]').val(schedule_data.clerk_schedule_sun_end);
+
+				$("#clerk-schedule-modal").modal("show");
+			});
+		});
+
+		$(document).on('submit', '#setClerkSchedule', (e) => {
+			e.preventDefault();
+			$.post("/admin/clerk/schedule/set", $(e.target).serialize(), (callback) => {
+				if (callback) {
+					Swal.fire("Atualizada com sucesso!", "A Agenda do atendente foi salva com sucesso.", "success");
+					$("#clerk-schedule-modal").modal("hide");
+				}
+			});
+		})
+
+		$(document).on('click', '.clerk-edit-tags', async (e) => {
+			var user_id = $(e.target).data('user-id');
+			$('#associative-tags-user-id').val(user_id);
+
+			/* Fill up possible tags */
+			await $.get("/admin/attendance-tags/list/", (incoming) => {
+				if (incoming) {
+					$("#associative-tags-select").html("");
+					incoming.forEach((tag) => {
+						$("#associative-tags-select").append(`<option value="${tag.attendance_tag_id}"> ${tag.attendance_tag_name} </Option>`);
+					});
+					$("#associative-tags-select").select2({
+						placeholder: 'Associe aqui as tags ao atendente',
+						matcher: matchCustom
+					});
+				}
+
+			});
+
+			/* Lets query for the information about this user on attendance-tags */
+			$.get('/admin/attendance-tags/get-clerk-tags/' + user_id, (incoming) => {
+				$("#attendance-tags-modal").modal("show");
+				$("#clerk-tags-container").html("");
+				console.log(incoming.length);
+				if (incoming.length > 0) {
+					incoming.forEach((tag) => {
+						let htmlContent = `<span class="badge badge-secondary mx-2 my-2">
+                        <button data-clerk-tag-id="${tag[0].clerk_tag_id}" type="button" class="close unrelate-tag" aria-label="Close">
+					        <span data-clerk-tag-id="${tag[0].clerk_tag_id}" aria-hidden="true">&times;</span>
+                        </button>${tag[1].attendance_tag_name}</span>`;
+						$("#clerk-tags-container").append(htmlContent);
+
+					});
+				} else {
+					$("#clerk-tags-container").append(`<div class="alert alert-primary"> <i class="fas fa-tags"></i> Esse atendente aindaa não possui qualificações associadas a ele.</div>`);
+
+				}
+			});
+		});
+
+
+		$(document).on('click', '.unrelate-tag', (e) => {
+			$.get('/admin/attendance-tags/unrelate/' + $(e.target).data('clerk-tag-id'), (data) => {
+				$(e.target).parents("span").hide();
+			});
+		});
+
+		$(document).on('click', '#relate-clerk-to-tags', (e) => {
+			var tags_to_relate = $("#associative-tags-select").val();
+			var user_id = parseInt($("#associative-tags-user-id").val());
+			var form_data = new FormData();
+			form_data.append("tags", tags_to_relate);
+			form_data.append("user_id", user_id);
+
+			/* Since We have our data built, lets POST it to the server :) */
+			$.ajax({
+				url: '/admin/attendance-tags/relate',
+				type: 'POST',
+				data: form_data,
+				contentType: false,
+				processData: false,
+				success: (event) => {
+					$("#associative-tags-select").val(null).trigger('change')
+					$.get('/admin/attendance-tags/get-clerk-tags/' + user_id, (incoming) => {
+						$("#clerk-tags-container").html("");
+						if (incoming) {
+							incoming.forEach((tag) => {
+								let htmlContent = `<span class="badge badge-secondary mx-2 my-2">
+											<button data-clerk-tag-id="${tag[0].clerk_tag_id}" type="button" class="close unrelate-tag" aria-label="Close">
+												<span data-clerk-tag-id="${tag[0].clerk_tag_id}" aria-hidden="true">&times;</span>
+											</button>${tag[1].attendance_tag_name}</span>`;
+								$("#clerk-tags-container").append(htmlContent);
+
+							});
+						}
+					});
+				}
+			});
+
+		});
+	});
+</script>
+
+
+
+<!-- Edit minutes Modal -->
+<form id="updateUserMinutes">
+	<div class="modal fade" id="editMinutesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2 class="modal-title" id="exampleModalLongTitle">Alterando saldo de minutos/emails do cliente</h2>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" name="edit_user_min_user_id" value="">
+					<div class="form-group">
+						<label for="editUserBalance">Débito para com o atendente:</label>
+						<input id="editUserBalance" type="text" class="form-control" name="edit_user_balance">
+						<small>Saldo em Euros (Moeda da união europeia).</small>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="mr-auto btn btn-secondary" data-dismiss="modal"><i
+							class="fas fa-times-circle"></i> Cancelar</button>
+					<button type="submit" class="btn btn-primary"> <i class="fas fa-save"></i> Salvar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<!-- Whole CHAT Modal -->
+<div class="modal fade" id="whole-chat-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	aria-hidden="true">
+	<div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="exampleModalLongTitle">Visualizando Chat</h3>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="whole-chat-container" class="container-fluid">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="alert text-white bg-gradient-purple mr-auto">
+					As mensagens do cliente estão em verde, as do atendente em branco.
+				</div>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-window-close"></i>
+					Fechar Chat</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+<!-- [END] Whole CHAT Modal -->
+
+<!-- TAGS Modal -->
+<div class="modal fade" id="attendance-tags-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	aria-hidden="true">
+	<div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2 id="exampleModalLongTitle"><i class="fas fa-tags"></i> Visualizando Tags associadas</h2>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="attendance-tags-container" class="container-fluid">
+					<div class="row">
+						<div class="col-lg-8">
+							<input id="associative-tags-user-id" type="hidden" value="" />
+							<label>Selecione as tags para adiconar...</label>
+							<select id="associative-tags-select" class="form-control-alternative" name="clerk-tag[]"
+								multiple="multiple">
+
+							</select>
+						</div>
+						<div class="col-lg-4 my-auto">
+							<button class="btn btn-block btn-dark" role="button" type="button"
+								id="relate-clerk-to-tags"><i class="fas fa-plus-circle"></i>
+								Adicionar Qualificações
+							</button>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12 text-center px-4 mt-3">
+							<h2>Qualificações já cadastradas do atendente...</h2>
+
+							<div id="clerk-tags-container" class="my-1">
+
+							</div>
+							<button class="btn btn-dark btn-block" type="button" data-dismiss="modal"
+								aria-label="Close">
+								<i class="fas fa-times-circle mr-2"></i> Fechar Visualização...
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- [END] TAGS  Modal -->
+
+
+<form id="setClerkSchedule">
+	<!-- Hidden Meta inputs -->
+	<input type="hidden" name="clerk_schedule_user_id">
+	<input type="hidden" name="clerk_schedule_id">
+	<!-- Schedule Modal -->
+	<div class="modal fade" id="clerk-schedule-modal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1>🗓 - Visualizando Horários de atendimento sugeridos pelo Atendente. </h1>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col">
+							<div class="mx-2 card py-2 px-3">
+								<h2 class="text-center mt-2 pb-2 bording-for-bee-ing-cool">Segunda 😒
+								</h2>
+								<div class="form-group d-flex  justify-content-between">
+									<label>Trabalha no dia?</label>
+									<label class="custom-toggle my-auto mt-2">
+										<input type="checkbox" name="clerk_schedule_mon" value="true">
+										<span class="custom-toggle-slider rounded-circle" data-label-off="Não"
+											data-label-on="Sim"></span>
+									</label>
+								</div>
+								<div class="form-group">
+									<label>Entra às:</label><br>
+									<input name="clerk_schedule_mon_init" type="text"
+										class="form-control form-control-alternative">
+								</div>
+								<div class="form-group">
+									<label>Sai às:</label><br>
+									<input name="clerk_schedule_mon_end" type="text"
+										class="form-control form-control-alternative">
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="mx-2 card py-2 px-3">
+								<h2 class="text-center mt-2 pb-2 bording-for-bee-ing-cool">Terça 😕
+								</h2>
+								<div class="form-group d-flex  justify-content-between">
+									<label>Trabalha no dia?</label>
+									<label class="custom-toggle my-auto mt-2">
+										<input name="clerk_schedule_tue" type="checkbox" value="true">
+										<span class="custom-toggle-slider rounded-circle" data-label-off="Não"
+											data-label-on="Sim"></span>
+									</label>
+								</div>
+								<div class="form-group">
+									<label>Entra às:</label><br>
+									<input name="clerk_schedule_tue_init" type="text"
+										class="form-control form-control-alternative">
+								</div>
+								<div class="form-group">
+									<label>Sai às:</label>
+									<input name="clerk_schedule_tue_end" type="text"
+										class="form-control form-control-alternative">
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="mx-2 card py-2 px-3">
+								<h2 class="text-center mt-2 pb-2 bording-for-bee-ing-cool">Quarta 😐
+								</h2>
+								<div class="form-group d-flex  justify-content-between">
+									<label>Trabalha no dia?</label>
+									<label class="custom-toggle my-auto mt-2">
+										<input name="clerk_schedule_wed" type="checkbox" value="true">
+										<span class="custom-toggle-slider rounded-circle" data-label-off="Não"
+											data-label-on="Sim"></span>
+									</label>
+								</div>
+								<div class="form-group">
+									<label>Entra às:</label>
+									<input name="clerk_schedule_wed_init" type="text"
+										class="form-control form-control-alternative">
+								</div>
+								<div class="form-group">
+									<label>Sai às:</label>
+									<input name="clerk_schedule_wed_end" type="text"
+										class="form-control form-control-alternative">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<div class="mx-2 card py-2 px-3">
+								<h2 class="text-center mt-2 pb-2 bording-for-bee-ing-cool">Quinta 🙂
+								</h2>
+								<div class="form-group d-flex  justify-content-between">
+									<label>Trabalha no dia?</label>
+									<label class="custom-toggle my-auto mt-2">
+										<input name="clerk_schedule_thu" type="checkbox" value="true">
+										<span class="custom-toggle-slider rounded-circle" data-label-off="Não"
+											data-label-on="Sim"></span>
+									</label>
+								</div>
+								<div class="form-group">
+									<label>Entra às:</label>
+									<input name="clerk_schedule_thu_init" type="text"
+										class="form-control  form-control-alternative">
+								</div>
+								<div class="form-group">
+									<label>Sai às:</label>
+									<input name="clerk_schedule_thu_end" type="text"
+										class="form-control  form-control-alternative">
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="mx-2 card py-2 px-3">
+								<h2 class="text-center mt-2 pb-2 bording-for-bee-ing-cool">Sexta 😃
+								</h2>
+								<div class="form-group d-flex  justify-content-between">
+									<label>Trabalha no dia?</label>
+									<label class="custom-toggle my-auto mt-2">
+										<input name="clerk_schedule_fri" type="checkbox" value="true">
+										<span class="custom-toggle-slider rounded-circle" data-label-off="Não"
+											data-label-on="Sim"></span>
+									</label>
+								</div>
+								<div class="form-group">
+									<label>Entra às:</label>
+									<input name="clerk_schedule_fri_init" type="text"
+										class="form-control form-control-alternative">
+								</div>
+								<div class="form-group">
+									<label>Sai às:</label>
+									<input name="clerk_schedule_fri_end" type="text"
+										class="form-control form-control-alternative">
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="mx-2 card py-2 px-3">
+								<h2 class="text-center mt-2 pb-2 bording-for-bee-ing-cool">Sábado 😆
+								</h2>
+								<div class="form-group d-flex  justify-content-between">
+									<label>Trabalha no dia?</label>
+									<label class="custom-toggle my-auto mt-2">
+										<input name="clerk_schedule_sat" type="checkbox" value="true">
+										<span class="custom-toggle-slider rounded-circle" data-label-off="Não"
+											data-label-on="Sim"></span>
+									</label>
+								</div>
+								<div class="form-group">
+									<label>Entra às:</label>
+									<input name="clerk_schedule_sat_init" type="text"
+										class="form-control form-control-alternative">
+								</div>
+								<div class="form-group">
+									<label>Sai às:</label>
+									<input name="clerk_schedule_sat_end" type="text"
+										class="form-control  form-control-alternative">
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="mx-2 card py-2 px-3">
+								<h2 class="text-center mt-2 pb-2 bording-for-bee-ing-cool">Domingo 😴
+								</h2>
+								<div class="form-group d-flex  justify-content-between">
+									<label>Trabalha no dia?</label>
+									<label class="custom-toggle my-auto mt-2">
+										<input name="clerk_schedule_sun" type="checkbox" value="true">
+										<span class="custom-toggle-slider rounded-circle" data-label-off="Não"
+											data-label-on="Sim"></span>
+									</label>
+								</div>
+								<div class="form-group">
+									<label>Entra às:</label>
+									<input name="clerk_schedule_sun_init" type="text"
+										class="form-control form-control-alternative">
+								</div>
+								<div class="form-group">
+									<label>Sai às:</label>
+									<input name="clerk_schedule_sun_end" type="text"
+										class="form-control  form-control-alternative">
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="float-left btn btn-secondary" data-dismiss="modal"><i
+							class="fas fa-window-close"></i>
+						Fechar Agenda</button>
+					<button type="submit" class="btn btn-primary">
+						<i class="fas fa-save"></i> Salvar </button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<!-- [END] Whole CHAT Modal -->

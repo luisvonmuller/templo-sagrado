@@ -1,0 +1,251 @@
+{{> home/header }}
+<style>
+	button.buy-product {
+		background-color: #ac58aa !important;
+	}
+
+	.home-alter-bg-color {
+		color: #000;
+		background-color: rgba(255, 105, 180, .3) !important;
+	}
+</style>
+
+<!-- Page content -->
+<main class="container-fluid mt-3 position-relative home-border">
+	<img src="/assets/home/img/arabesco.png" class="home-top-left-arabesque" alt="Arabesco" title="Arabesco">
+	<img src="/assets/home/img/arabesco.png" class="home-top-right-arabesque" alt="Arabesco" title="Arabesco">
+	<div id="products-container" class="py-5 my-4 px-3 row home-alter-border-from-cards">
+
+	</div>
+	<img src="/assets/home/img/arabesco.png" class="home-bottom-left-arabesque" alt="Arabesco" title="Arabesco">
+	<img src="/assets/home/img/arabesco.png" class="home-bottom-right-left-arabesque" alt="Arabesco" title="Arabesco">
+</main>
+
+{{> home/footer }}
+
+<!-- New product modal -->
+<div class="modal fade" id="newSaleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalProcutTitle"><strong>Comprar Pacote de Minutos</strong></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="buy_product_id" value="">
+				<input type="hidden" id="buy_product_category_id" value="">
+				<div class="form-group">
+					<label for="buy_product_name">
+						Nome do produto:
+					</label>
+					<p id="buy_product_name"></p>
+				</div>
+				<div class="form-group">
+					<label for="buy_product_description">
+						Descrição do produto:
+					</label>
+					<p id="buy_product_description"></p>
+				</div>
+				<div>
+					<div class="row">
+						<div class="col-lg-6">
+							<label for="buy_product_real_value">
+								Valor a ser Pago:
+							</label>
+							<p id="buy_product_real_value"></p>
+						</div>
+						<div class="col-lg-6">
+							<label for="buy_product_bonus">
+								Valor extra gratuíto (Bônus):
+							</label>
+							<p id="buy_product_bonus"></p>
+						</div>
+						<small class="px-3">*Valores em euros</small>
+					</div>
+				</div>
+			</div>
+			<div class="py-2">
+				<button class="btn btn-block btn-primary" onclick="stripePayment()">PAGAMENTO COM MULTIBANCO</button>
+			</div>
+			<div id="paypal-button-container"></div>
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+		</div>
+	</div>
+</div>
+
+<!-- New product modal -->
+<script type="text/javascript">
+	$(document).ready(async () => {
+		const user_id = await $.get('/whats-my-id', async function (e) {
+			return e;
+		});
+
+		const product_buttons = (product_id) => {
+			let tmp_btn = '<button class="buy-product ml-2 btn btn-light" data-product-id="' + product_id + '"><i  data-product-id="' + product_id + '" class="fas fa-eye"></i> Comprar';
+			return tmp_btn;
+		}
+
+		$.get("/product-list", (data) => {
+			var product_data = JSON.parse(data);
+			product_data.map((product) => {
+				if (product['product_is_active']) {
+					$('#products-container').append('<div class="col-lg-3 mt-3 mb-3"> <div class="card" style="min-height: 100%;"> <img class="img-fluid" src="' + product['product_image'] + '" style="max-height: 20%;"/> <div class="card-body"> </div> <div class="card-footer"> <h3 class="text-center">' + product['product_title'] + '</h3><button data-product-id="' + product['product_id'] + '" class="btn buy-product btn-block btn-info">Comprar </button> </div> </div> </div>');
+				}
+			});
+		});
+
+
+		$(document).on('click', '.buy-product', async (e) => {
+			var status = await $.get('/whats-my-id', async (a) => {
+				return a;
+			});
+			$("#paypal-button-container").html("");
+			if (!status.includes("login")) {
+				$.get('/admin/product/single/' + $(e.target).data('product-id') + '/', (e) => {
+					let product_data = JSON.parse(e);
+					$('#buy_product_id').val(product_data[0]['product_id']);
+					$('#buy_product_name').text(product_data[0]['product_title']);
+					$('#buy_product_real_value').text(parseFloat(product_data[0]['product_value']).toFixed(2).replace(".", ","));
+					$('#buy_product_bonus').text(parseFloat(product_data[0]['product_bonus']).toFixed(2).replace(".", ","));
+					$('#buy_product_category_id').val(product_data[0]['product_category_id']);
+					$('#newSaleModal').modal('show');
+					paypal.Buttons({
+						createOrder: function () {
+							return fetch('https://payments.templo-sagrado.com/paypal/create-order', {
+								method: 'POST',
+								headers: {
+									'content-type': 'application/json'
+								},
+								body: JSON.stringify({
+									intent: 'CAPTURE',
+									aplication_context: {
+										brand_name: 'Templo Sagrado',
+										landing_page: 'BILLING',
+										shipping_preference: 'NO_SHIPPING',
+										user_action: 'PAY_NOW'
+									},
+									purchase_units: [{
+										reference_user_id: user_id,
+										reference_id: product_data[0]['product_id'],
+										description: 'Minutos no Site Templo Sagrado',
+										amount: {
+											currency_code: 'EUR',
+											value: product_data[0]['product_value']
+										}
+									}]
+								})
+							}).then(function (res) {
+								return res.json();
+							}).then(function (data) {
+								return data.id;
+							});
+						},
+
+						onApprove: function (data) {
+							return fetch('https://payments.templo-sagrado.com/paypal/capture-order', {
+								method: 'POST',
+								headers: {
+									'content-type': 'application/json'
+								},
+								body: JSON.stringify({
+									orderID: data.orderID,
+								})
+							}).then(function (res) {
+								return res.json();
+							}).then(async function (details) {
+								Swal.fire(
+									'Sua compra foi realizada com sucesso!',
+									'Você será redirecionado para a sua conta em alguns instantes.',
+									'success'
+								);
+								await new Promise(r => setTimeout(r, 1000));
+								window.location.href = "/my-acc";
+							});
+						}
+
+					}).render('#paypal-button-container');
+				});
+				/* Getting right elemns for adding a new product */
+				$(document).on('click', '#newSaleBtn', (e) => {
+					$('textarea[name="product_description"]').text("");
+
+					$.get('/admin/product/retrieve_categories', (e) => {
+						var categories = JSON.parse(e);
+						$("#productCategoriesHolder").html('');
+						[].map.call(categories, (category) => {
+							$('#productCategoriesHolder').append('<option value="' + category['product_category_id'] + '">' + category['product_category_title'] + '</option>');
+						});
+					});
+				});
+			} else {
+				Swal.fire("Por favor, faça log-in primeiro!");
+			}
+		});
+
+
+	});
+</script>
+
+<!-- NEW -->
+<script
+	src="https://www.paypal.com/sdk/js?client-id=AS6k1ODDK_Q3C_s7W4xs0OLDcErkDir4SzeXk7PZWJdQqhvKO1UdOMchAiACxwt0KNCdHaSrXHwwL4N_&currency=EUR"></script>
+
+<!-- OLD <script src="https://www.paypal.com/sdk/js?client-id=AWAp4wJ8LJ8w6syRSDuHpUxtR4ykdM61zeLkII9J7eEOp3-NwxuKcxekZr_xIcvdhmB6jymhw1eSYaE9&currency=EUR"></script>-->
+
+<script rel="preconnect" src="https://js.stripe.com/v3/"></script>
+<script>
+	function stripePayment() {
+		var stripe = Stripe('pk_live_txVYNcNL0jnxPAOdDKLx4clM00EAmPTZwK');
+		stripe.createSource({
+			type: 'multibanco',
+			amount: parseInt(parseFloat($('#buy_product_real_value').text()) * 100, 10),
+			currency: 'eur',
+			metadata: {
+				product_id: $('#buy_product_id').val(), //teste de produto = email
+			},
+			owner: {
+				name: '{{self_data.0.0.user_name }}', // Client name get from self_data
+				email: '{{self_data.0.0.user_email }}', // Client email self_data
+			},
+			redirect: {
+				return_url: 'https://templo-sagrado.com/my-acc',
+			},
+		}).then(function (result) {
+
+			var dados = JSON.parse(JSON.stringify(result));
+
+			//console.log(dados.source.id);
+
+			var sale_data = new FormData();
+			//sale_data.append('user_id', $().val());
+			sale_data.append('product_id', $('#buy_product_id').val());
+			sale_data.append('sale_real_value', $('#buy_product_real_value').text().replace(',', '.'));
+			sale_data.append('sale_points_value', $('#buy_product_points_value').text());
+			sale_data.append('sale_payment_source', 'Stripe');
+			sale_data.append('stripe_source', dados.source.id);
+			$.ajax({
+				url: '/admin/sales/new-stripe-sale',
+				type: 'POST',
+				data: sale_data,
+				contentType: false,
+				processData: false,
+				success: (event) => {
+					Swal.fire({
+						html:
+							'Você sera redirecionado para uma página de pagamento do Multibanco.' +
+							'Após o pagamento, aguarde a liberação dos créditos!' +
+							'Caso não tenha sido direcionado <a href="' + dados.source.redirect.url + '" target="_blank">clique aqui</a>',
+					});
+					//$("#newSaleModal").modal('hide');
+					//document.location.reload(true);
+					window.open(dados.source.redirect.url);
+				}
+			});
+
+
+		});
+	}
+</script>

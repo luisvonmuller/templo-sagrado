@@ -1,0 +1,1246 @@
+{{> clerk/header}}
+<style type="text-css">
+    .bg-out {
+        background-color: #e9ecef !important;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1) !important;
+    }
+
+    .text-info {
+        color: #5e72e4 !important;
+    }
+
+    .progress {
+       height: 20px !important;
+    }
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+<div class="header pb-8">
+    <div class="container-fluid">
+        <div class="header-body px-5">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-12 col-12">
+                    <h6 class="ml-2 h2 text-white d-inline-block mb-0">👋 Seja muito bem vindo à sua Área
+                        de atendimento!</h6>
+
+                    <nav aria-label="breadcrumb" class="d-none float-right d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb  breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Área de Atendimento</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-stats">
+                        <!-- Card body -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Saldo Ganho no dia</h5>
+                                    <span class="h2 font-weight-bold mb-0"><span id="earned-day"></span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-sm">
+                                <span class="mr-2"> <span id="earned-day-diff"></span></span>
+                                <span class="text-nowrap"></span> <strong class="float-right"
+                                    id="earned-yesterday"></strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-stats">
+                        <!-- Card body -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Saldo ganho na semana</h5>
+                                    <span class="h2 font-weight-bold mb-0"><span id="earned-week"></span></span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                                        <i class="fas fa-coins"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-sm">
+                                <span class=" mr-2"><span id="earned-week-diff"></span></span>
+                                <span class="text-nowrap"></span>
+                                <strong class="float-right" id="earned-last-week"></strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-none d-lg-block col-xl-3 col-md-6">
+                    <div class="card card-stats">
+                        <!-- Card body -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Saldo ganho Mês</h5>
+                                    <span class="h2 font-weight-bold mb-0"><span id="earned-month"></span></span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                                        <i class="ni ni-money-coins"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-sm">
+                                <span class="mr-2"> <span id="earned-month-diff"></span></span>
+                                <span class="text-nowrap"></span>
+                                <strong class="float-right" id="earned-last-month"></strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-none d-lg-block col-xl-3 col-md-6">
+                    <div class="card card-stats">
+                        <!-- Card body -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Total já ganho no site</h5>
+                                    <span class="h2 font-weight-bold mb-0"> <span
+                                            id="earned-sibnce-begun"></span></span>
+
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                                        <i class="ni ni-chart-bar-32"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-sm">
+                                <span class="text-nowrap">🙏 Agradecemos seus serviços </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Graphs and mail alert -->
+<div class="container-fluid mt--8">
+    <div class="row px-5">
+        {{#each self_data.0}}
+        <div class="col-lg-6 px-3">
+            <!-- Email DIV  -->
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h3 class="alert-text text-white my-auto"><span class="alert-icon"><i
+                                    class="fas fa-mail-bulk"></i></span>
+                            <strong>Novo atendimento via e-mail de: {{this.1}}!</strong> <br> Pedimos que responda assim
+                            que
+                            possível!
+                        </h3>
+                    </div>
+                    <div class="col-lg-4 my-auto mt-2">
+                        <button type="button" data-mail-id="{{this.0}}"
+                            class="answer-mail btn btn-secondary btn-lg float-right" data-dismiss="alert"
+                            aria-label="Close">
+                            <span data-mail-id="{{this.0}}" aria-hidden="true"><i data-mail-id="{{this.0}}"
+                                    class="fas fa-reply-all"></i> Responder</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+
+        <div class="d-none d-lg-block col-xl-12 px-3">
+            <div class="card">
+                <div class="card-header ">
+                    <h2>📊 Gráficos e outras estatísticas legais para Você se entreter enquanto espera! 😁
+                        <button data-toggle="collapse" data-target="#graphs-body"
+                            class="float-right btn btn-dark">Expandir</button>
+                    </h2>
+                </div>
+                <div id="graphs-body" class="collapse card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card ">
+                                <div class="card-header">
+                                    <div class="col">
+                                        <h6 class="text-uppercase ls-1 mb-1">Sua performance nos últimos 7 dias</h6>
+                                        <h4 class="h3 mb-0"><strong>Nos atendimentos via chat de texto! 💬</strong></h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart">
+                                        <canvas id="chart-text" class="chart-canvas"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card ">
+                                <div class="card-header">
+                                    <div class="col">
+                                        <h6 class="text-uppercase ls-1 mb-1">Sua performance nos últimos 7 dias</h6>
+                                        <h4 class="h3 mb-0"><strong>Nos atendimentos via chat de Voz! ☎️</strong></h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart">
+                                        <canvas id="chart-voice" class="chart-canvas"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{> clerk/footer}}
+<div class="container-fluid">
+    <div class="row px-5">
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-header">
+                    <h2>💰 O Seu Saldo atual é de <b>€ <span id="my-credits"></span></b> </h2>
+                </div>
+                <div class="card-footer">
+                    <small>Esse saldo representa o saldo devedor que temos contigo. 🤗</small>
+                </div>
+            </div>
+            <div class="card mt-2">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="d-md-block col-lg-8">
+                            <h2 class="text-center"> Atendimento ✨</h2>
+                        </div>
+                        <div class="col-lg-4 d-flex justify-content-center">
+                            <div id="online-status" class="badge my-auto badge-danger float-right">
+                                Offline 😴
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div clasas="card-body">
+                    <div class="container">
+                        <div class="row px-1 py-2">
+                            <div class="col-8">
+                                <h2>💬 Atender Texto </h2>
+                            </div>
+                            <div class="col-4">
+                                <label class="float-right custom-toggle my-auto">
+                                    <input name="online-for-text" type="checkbox">
+                                    <span class="custom-toggle-slider rounded-circle"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row px-1 py-2">
+                            <div class="col-8">
+                                <h2>☎️ Atender Voz </h2>
+                            </div>
+                            <div class="col-4">
+                                <label class="float-right  custom-toggle my-auto">
+                                    <input name="online-for-voice" type="checkbox">
+                                    <span class="custom-toggle-slider rounded-circle"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row px-1 py-2" data-toggle="tooltip" data-placement="top"
+                            title="Esse sistema não possui este módulo 😢">
+                            <div class="col-8">
+                                <h2>📹 Atender Vídeo </h2>
+                            </div>
+                            <div class="col-4">
+                                <label class="float-right  custom-toggle my-auto">
+                                    <input disabled type="checkbox">
+                                    <span class="custom-toggle-slider rounded-circle"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button disabled class="login-into-socket btn btn-lg btn-success btn-block"><strong>Salvar e
+                            Entrar
+                            Online
+                            😊</strong></button>
+                    <button id="btn-logout" class="collapse hide btn btn-lg btn-dark btn-block">Sair 😴</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-header">
+                    <h2> 📈 Sua atividade no Templo Sagrado nos últimos 7 Dias ...</h2>
+                </div>
+                <div class="card-body">
+                    <div class="d-none d-lg-block">
+                        <div class="row text-center">
+                            <div class="col">00:00</div>
+                            <div class="col">02:00</div>
+                            <div class="col">04:00</div>
+                            <div class="col">06:00</div>
+                            <div class="col">08:00</div>
+                            <div class="col">10:00</div>
+                            <div class="col">12:00</div>
+                            <div class="col">14:00</div>
+                            <div class="col">16:00</div>
+                            <div class="col">18:00</div>
+                            <div class="col">20:00</div>
+                            <div class="col">22:00</div>
+                            <div class="col">23:59</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+                                    <h4>Hoje</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div id="0-days-less" class="progress">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+                                    <h4 id="label-1-day-less"></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div id="1-days-less" class="progress">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+                                    <h4 id="label-2-day-less"></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-12 mt-2">
+                                    <div id="2-days-less" class="progress">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+                                    <h4 id="label-3-day-less"></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-12 mt-2">
+                                    <div id="3-days-less" class="progress">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+                                    <h4 id="label-4-day-less"></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-12 mt-2">
+                                    <div id="4-days-less" class="progress">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+                                    <h4 id="label-5-day-less"></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-12 mt-2">
+                                    <div id="5-days-less" class="progress">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+                                    <h4 id="label-6-day-less"></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-12 mt-2">
+                                    <div id="6-days-less" class="progress">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-none d-lg-block">
+                        <div class="row text-center">
+                            <div class="col">00:00</div>
+                            <div class="col">02:00</div>
+                            <div class="col">04:00</div>
+                            <div class="col">06:00</div>
+                            <div class="col">08:00</div>
+                            <div class="col">10:00</div>
+                            <div class="col">12:00</div>
+                            <div class="col">14:00</div>
+                            <div class="col">16:00</div>
+                            <div class="col">18:00</div>
+                            <div class="col">20:00</div>
+                            <div class="col">22:00</div>
+                            <div class="col">23:59</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mx-5px-5">
+    <div class="row mx-5">
+        <footer class="footer col-lg-12 pt-2">
+            <div class="row align-items-center justify-content-lg-between">
+                <div class="col-lg-6">
+                    <div class="copyright text-center  text-lg-left  text-muted">
+                        © 2020 <a href="https://www.easywebusa.com/" class="font-weight-bold ml-1" target="_blank">Feito
+                            com
+                            ❤️ pela Von Müller Software</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                        <li class="nav-item">
+                            <a href="https://www.vonmuller.com.br" class="nav-link" target="_blank">Clique aqui e saiba
+                                mais
+                                sobre a gente</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link badge badge-danger px-3"
+                                target="_blank">
+                                🚨 Suporte Emergencial 🚨 </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="https://cdn.tiny.cloud/1/z7v8t8d49cnfq4y1eodidfna4kflxqxlwyjou6051bxwkyas/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin" />
+</script>
+<script type="text/javascript">
+
+    $(document).ready(async function () {
+        /* Audio imports for notifications */
+        const call_audio = new Audio('/assets/audio/call.mp3');
+        const text_audio = new Audio('/assets/audio/sirene.mp3');
+
+        /* Common date functions */
+        function getDateTime() {
+            const today = new Date();
+            const date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+            const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            const payload = date + ' ' + time;
+            return payload;
+        }
+
+        function parseData(unix_timestamp) {
+            var date = new Date(unix_timestamp);
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+            return day + '/' + month + '/' + year
+        }
+
+
+
+        /* Make work tooltips */
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+
+        /* Toast declaration */
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'bottom-end',
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        /* Get My Id [AWAIT IT!] */
+        const my_id = parseInt(await $.get('/whats-my-id', async function (e) {
+            return e;
+        }));
+
+        /* Status messages functions definitions */
+        function im_in(text, voice, video = false) {
+            var data = JSON.stringify({
+                action: "im-in",
+                clerk_id: my_id,
+                client_id: null,
+                voice: voice,
+                text: text,
+                video: video,
+                data: null,
+                from: "Clerk",
+            });
+
+            return data;
+        }
+
+        function im_out() {
+            var data = JSON.stringify({
+                action: "im-out",
+                clerk_id: my_id,
+                client_id: null,
+                voice: null,
+                text: null,
+                video: null,
+                data: null,
+                from: "Clerk",
+            });
+
+            return data;
+        }
+
+        function im_busy() {
+            var data = JSON.stringify({
+                action: "im-busy",
+                clerk_id: my_id,
+                client_id: null,
+                voice: null,
+                text: null,
+                video: null,
+                data: null,
+                from: "Clerk",
+            });
+
+            return data;
+        }
+
+
+        /**
+        **THIS IS NOT AN ASYNCRHONOUS FUNCTION **
+        @definition attendance_actions() 
+        ---- Stand for all our actions over the attendance websocket, this will send and process stuff for us. 
+        ----------**THIS IS NOT AN ASYNCRHONOUS FUNCTION **----------------------------------------------------------------------------------------------------------------------------------
+            * @param {string (String)} action          Our Enum of answer posibilities (acc-voice-chat, acc-text-chat, refuse-voice-chat, refuse-text-chat).
+            * @param {Optional: int (i32)}       client_id       The target client that will answer and behave for the desired enum action (fallbacks to zero if no value provided )
+        ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            @returns JSON (that will be send to the attendance web socket.)
+        **/
+
+        function attendance_actions(action, client_id, id = null) {
+            var data = JSON.stringify({
+                action: action,
+                clerk_id: clerk_id,
+                client_id: parseInt(client_id),
+                voice: null,
+                text: null,
+                video: null,
+                data: parseInt(id),
+                from: "Clerk",
+            });
+
+            return data;
+        }
+
+        /**
+        @func 
+        * @name days_bar
+        * @desc Will return all the bars to be drawn (already sized) 
+        * @bindsto  #0day, #1dayless, #2dayless, #3dayless #4dayless
+        * @bindsto 
+        -------------------------
+        -------------------------
+        * @returns {void}
+        **
+        */
+
+
+        const DAY_TOTAL_SECONDS = 60 * 60 * 24 * 10; /* Total seconds on a day  + miliseconds of the unix epoch  - 100% */
+
+        function day_bars(role, events, first_draw = 1, last_size = 0) {
+            const THIS_DAY_EPOCH = new Date(events[0].clerk_time_date.slice(0, 10)).getTime();
+            /* First Drawn as an outsider */
+            let next_event_diff = (THIS_DAY_EPOCH - (new Date(events[0].clerk_time_date).getTime()));
+            let event_size = (next_event_diff / DAY_TOTAL_SECONDS);
+            /* Draws */
+            bar(role, 0, event_size * -1);
+
+            events.map((event, index) => {
+                /* Declaring here for beeing able to shadow scopes */
+                if (events[index + 1]) {
+                    var event_size;
+                    var next_event_diff;
+                    var this_event_diff
+                    next_event_diff = (THIS_DAY_EPOCH - (new Date(events[index + 1].clerk_time_date).getTime()));
+                    this_event_diff = (THIS_DAY_EPOCH - (new Date(events[index].clerk_time_date).getTime()));
+                    event_size = (next_event_diff - this_event_diff) / DAY_TOTAL_SECONDS;
+                    /* Draws */
+                    bar(role, event.clerk_time_event_type, event_size * -1);
+                }
+            });
+
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            });
+        }
+
+
+        /**a2
+        * @param {int} role  || #role-days-less
+        * @param {string} type  || Will give us decide for the bar color
+        * @param {float64} size || The amount that corresponds to this bar, will run a calculation over this.
+       
+        */
+
+        function bar(role, type, size) {
+            switch (type) {
+                case 0:
+                    $("#" + role + "-days-less").append('<div class="bg-out" data-toggle="tooltip" data-placement="top" title="Você esteve offline durante este período" role="progressbar" style="width: ' + (size * 0.7692307692307692) + '%"></div>');
+                    break;
+                case 1:
+                    $("#" + role + "-days-less").append('<div class="bg-primary" data-toggle="tooltip" data-placement="top" title="Você esteve ativo no site durante este período." role="progressbar" style="width: ' + (size * 0.7692307692307692) + '%"></div>');
+                    break;
+                case 2:
+                    $("#" + role + "-days-less").append('<div class="bg-warning" data-toggle="tooltip" data-placement="top" title="Você ficou ocupado durante esse tempo" role="progressbar" style="width: ' + (size * 0.7692307692307692) + '%"></div>');
+                    break;
+                case 3:
+                    $("#" + role + "-days-less").append('<div class="bg-success" data-toggle="tooltip" data-placement="top" title="Você estava atendendo um chat de texto" role="progressbar" style="width: ' + (size * 0.7692307692307692) + '%"></div>');
+                    break;
+                case 4:
+                    $("#" + role + "-days-less").append('<div class="bg-primary" data-toggle="tooltip" data-placement="top" title="Você esteve ativo no site durante este período." role="progressbar" style="width: ' + (size * 0.7692307692307692) + '%"></div>');
+                    break;
+                case 5:
+                    $("#" + role + "-days-less").append('<div class="bg-danger" data-toggle="tooltip" data-placement="top" title="Você estava atendendo um chat de Voz" role="progressbar" style="width: ' + (size * 0.7692307692307692) + '%"></div>');
+                case 6:
+                    $("#" + role + "-days-less").append('<div class="bg-primary" data-toggle="tooltip" data-placement="top" title="Você esteve ativo no site durante este período." role="progressbar" style="width: ' + (size * 0.7692307692307692) + '%"></div>');
+                    break;
+                default:
+                    //do-nothing
+                    break;
+
+            }
+        }
+
+
+        /**
+            @definition getUserName() 
+            Will return the desired user name that we are querying for.
+            ---------------------------------------------- ---------------------------------------------- ----------------------------------------------
+            * @param {int (i32)}       client_id       The target client that will seek for 
+            ---------------------------------------------- ---------------------------------------------- ----------------------------------------------
+            @returns {string (String)} - String with client's name, UTF-8 encoded.
+        */
+
+        async function getUserName(user_id) {
+            return await $.get('/whoClient/' + user_id, function (e) {
+                return e[0] /* Contains and Vec<String> that when calld on position zero will contain the user_name wanted */
+            });
+        };
+
+        /* If the id is parsed, proceed */
+        if (my_id) {
+
+            /* Actual balance */
+            (async function () {
+                const total_balance = await $.get("/my-credits", function (e) {
+                    var total = parseFloat(e[0] + e[1]).toFixed(2).replace(".", ",");
+                    return total;
+                });
+
+                $("#my-credits").html(parseFloat(total_balance).toFixed(2).replace(".", ","));
+            })();
+
+            /* 
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            ANSWER MAIL ANSWER MAIL  ANSWER MAIL ANSWER MAIL  ANSWER MAIL ANSWER MAIL  ANSWER MAIL ANSWER MAIL  ANSWER MAIL ANSWER MAIL  ANSWER MAIL ANSWER MAIL  ANSWER MAIL ANSWER MAIL  
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            */
+
+            $(document).on('click', '.answer-mail', async function (e) {
+                var mail_id = $(e.target).data("mail-id");
+                console.log(mail_id);
+                /* Asynchronously get mails data */
+                await $.get('/get-mail-data/' + mail_id, function (mailData) {
+                    var data = JSON.parse(mailData)[0];
+                    $('#mailUserName').html(data[0]);
+                    $('#mailSubject').html(data[1]['call_email_request_title']);
+                    $('#mailReqContent').html(data[1]['call_email_request_body']);
+                    $('#mailReqDate').html(parseData(data[1]['call_email_request_date']));
+                    $('#mailReqDest').val(data[1]['call_email_request_to_email']);
+                    $('#mailId').val(mail_id);
+                });
+                /* Removes the e-mail from the unanswered list */
+                $(e.target).parents('.col-lg-12').addClass('animate__animated animate__fadeOut').remove();
+                /* Shows mail modal */
+                $('#answerMailModal').modal('show');
+            });
+
+            $(document).on('submit', '#answerMail', function (e) {
+                e.preventDefault();
+                /* Shows a user friendly msg */
+                Swal.fire({
+                    title: 'Estamos enviando o e-mail... Aguarde!',
+                    showCloseButton: false,
+                    showCancelButton: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    },
+                });
+
+                /* Posts the answer data */
+                $.post('/answer-mail', $(e.target).serialize(), function (cb) {
+                    Swal.fire('Enviado', 'O e-mail foi enviado com sucesso e o valor foi creditado para você', 'success');
+                });
+
+                /* Clean the form */
+                $('#mailUserName').html('');
+                $('#mailSubject').html('');
+                $('#mailReqContent').html('');
+                $('#mailReqDate').html('');
+                $('#mailReqDest').val('');
+                $('#mailId').val(0);
+
+                /* Hide the answer modal */
+                $('#answerMailModal').modal('hide');
+            });
+
+
+            /* Day time bars */
+            let days = [
+                new Date().getUTCDate(),
+                (new Date().getUTCDate() - 1) <= 0 ? new Date(new Date().getFullYear(), new Date().getMonth() - 1, 0 + (new Date().getUTCDate() - 1)).getUTCDate() : (new Date().getUTCDate() - 1),
+                (new Date().getUTCDate() - 2) <= 0 ? new Date(new Date().getFullYear(), new Date().getMonth() - 1, 0 + (new Date().getUTCDate() - 2)).getUTCDate() : (new Date().getUTCDate() - 2),
+                (new Date().getUTCDate() - 3) <= 0 ? new Date(new Date().getFullYear(), new Date().getMonth() - 1, 0 + (new Date().getUTCDate() - 3)).getUTCDate() : (new Date().getUTCDate() - 3),
+                (new Date().getUTCDate() - 4) <= 0 ? new Date(new Date().getFullYear(), new Date().getMonth() - 1, 0 + (new Date().getUTCDate() - 4)).getUTCDate() : (new Date().getUTCDate() - 4),
+                (new Date().getUTCDate() - 5) <= 0 ? new Date(new Date().getFullYear(), new Date().getMonth() - 1, 0 + (new Date().getUTCDate() - 5)).getUTCDate() : (new Date().getUTCDate() - 5),
+                (new Date().getUTCDate() - 6) <= 0 ? new Date(new Date().getFullYear(), new Date().getMonth() - 1, 0 + (new Date().getUTCDate() - 6)).getUTCDate() : (new Date().getUTCDate() - 6),
+            ];
+
+            days.map((day, daypos) => {
+                $("#label-" + daypos + "-day-less").text("Dia " + day);
+                $.get("/my-behaviour-on-a-day/" + daypos, function (day_data) {
+                    if (day_data.length > 1) {
+                        day_bars(daypos, day_data);
+                    }
+                });
+            });
+
+            /* 
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+             DOM MANIPULATIONS  DOM MANIPULATIONS  DOM MANIPULATIONS DOM MANIPULATIONS  DOM MANIPULATIONS DOM MANIPULATIONS  DOM MANIPULATIONS  DOM MANIPULATIONS  DOM MANIPULATIONS  
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            */
+
+            /* First enter into the socket */
+            $(document).on("click", ".login-into-socket", async function (e) {
+                e.preventDefault();
+                /* DOM updates */
+                $(e.target).removeClass("login-into-socket btn-success").addClass("update-status-preference btn-primary").text("Atualizar Status 💾");
+                $("#btn-logout").collapse("show");
+                $("#online-status").removeClass("badge-danger").addClass("badge-success").text("Online 😎");
+
+                /* Another visual information update */
+                Toast.fire({
+                    icon: 'success',
+                    title: '<h2>Você está online 😊!</h2>'
+                });
+
+
+                /* Retrieve status */
+                let text = $('input[name="online-for-text"]').is(":checked");
+                let voice = $('input[name="online-for-voice"]').is(":checked");
+
+                socket.send(im_in(text, voice));
+                /* Send data to socket */
+
+                await $.get("/register-event-by-clerk/1", function (e) { });
+
+            });
+
+            /* RE ENTERS, or update its status */
+            $(document).on("click", ".update-status-preference", async function (e) {
+                e.preventDefault();
+                /* Another visual information update */
+                Toast.fire({
+                    icon: 'success',
+                    title: '<h2>Suas opções foram atualizadas com sucesso! 👌</h2>'
+                });
+
+                /* Retrieve status */
+                let text = $('input[name="online-for-text"]').is(":checked");
+                let voice = $('input[name="online-for-voice"]').is(":checked");
+
+                if (!text && !voice) {
+                    await $.get("/register-event-by-clerk/2", function (e) { });
+
+                    $("#online-status").removeClass("badge-success").addClass("badge-secondary").text("Ocupado 😳");
+                } else {
+                    await $.get("/register-event-by-clerk/1", function (e) { });
+
+                    $("#online-status").removeClass("badge-secondary badge-danger").addClass("badge-success").text("Online 😎");
+                }
+
+                socket.send(im_in(text, voice));
+            });
+
+            /* 
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            DOM MANIPULATIONS  DOM MANIPULATIONS  DOM MANIPULATIONS DOM MANIPULATIONS  DOM MANIPULATIONS DOM MANIPULATIONS  DOM MANIPULATIONS  DOM MANIPULATIONS  DOM MANIPULATIONS  
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+             */
+
+            /* 
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            ATTENDANCE SOCKET  ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE 
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            */
+
+            /* Web Socket for attendance */
+            const socket = new WebSocket("wss://attend." + window.location.host.replace("www.", "") + "/ws");
+
+            /* On opens authorize to enter */
+            socket.onopen = function () {
+                $(".login-into-socket").removeAttr("disabled");
+                $.get("/my-last-status", async function (e) {
+                    /* Reassing since Vec<StatusClerk> */
+                    let status = e[0];
+
+                    /* Retrieve for each button */
+                    if (status.is_available_chat) {
+                        $('input[name="online-for-text"]').prop('checked', true);
+                    }
+                    if (status.is_available_voice) {
+                        $('input[name="online-for-voice"]').prop('checked', true);
+                    }
+
+                    /* Retrieve meta whole state */
+
+
+                    if (status.status) {
+                        /* DOM updates */
+                        $(".login-into-socket").removeClass("login-into-socket btn-success").addClass("update-status-preference btn-primary").text("Atualizar Status 💾");
+                        $("#btn-logout").collapse("show");
+
+                        /* Another visual information update */
+                        Toast.fire({
+                            icon: 'success',
+                            title: '<h2>Você está online 😊!</h2>'
+                        });
+
+                        /* Retrieve status */
+                        let text = $('input[name="online-for-text"]').is(":checked");
+                        let voice = $('input[name="online-for-voice"]').is(":checked");
+
+                        socket.send(im_in(text, voice));
+                        /* Send data to socket */
+                        if (!text && !voice) {
+                            await $.get("/register-event-by-clerk/2", function (e) { });
+                            $("#online-status").removeClass("badge-success").addClass("badge-secondary").text("Ocupado 😳");
+                        } else {
+                            await $.get("/register-event-by-clerk/1", function (e) { });
+                            $("#online-status").removeClass("badge-secondary badge-danger").addClass("badge-success").text("Online 😎");
+                        }
+                    }
+
+
+                });
+
+            }
+
+            /* To go offline */
+            $(document).on("click", "#btn-logout", async function (e) {
+                /* Register the exit */
+                await $.get("/register-event-by-clerk/0", function (e) { });
+                /* Notify everyone via socket */
+                socket.send(im_out());
+                /* Logout */
+                window.location = "/logout";
+            });
+
+
+
+            socket.onmessage = async function (event) {
+                clerk_id = my_id;
+                var income_data = JSON.parse(event.data);
+                if (income_data.clerk_id == clerk_id) {
+                    switch (income_data.action) {
+                        case "voice-chat-intend":
+                            socket.send(attendance_actions('voice-chat-received', income_data.client_id));
+                            call_audio.play();
+                            Swal.fire({
+                                title: '<span style="font-size: 4em;">☎️</span> <br> Estão te chamando para um chat por Voz!',
+                                html: "<strong>" + await getUserName(income_data.client_id) + "</strong> <br> quer um atendimento por voz com você!",
+                                showCancelButton: false,
+                                reverseButtons: true,
+                                allowOutsideClick: false,
+                                showDenyButton: true,
+                                confirmButtonText: "Vamos lá! 💁",
+                                denyButtonText: "Hmm... hoje não! 😖",
+                            }).then(async function (result) {
+                                if (result.isConfirmed) {
+                                    await $.get("/register-event-by-clerk/5", function (e) { });
+                                    socket.send(im_busy());
+                                    $.get("/register-voice-chat/" + income_data.client_id, function (e) {
+                                        socket.send(attendance_actions('voice-chat-acc', income_data.client_id, e));
+                                        window.location = '/voip/' + e;
+                                    });
+                                } else if (result.isDenied) {
+                                    socket.send(attendance_actions('voice-chat-ref', income_data.client_id));
+                                    call_audio.pause();
+                                    Swal.fire({
+                                        title: '<span style="font-size: 4em;">😱</span> <br> Você recusou o atendimento!',
+                                        text: 'Avisamos o cliente que você não deseja atender-lo agora.',
+                                    });
+                                }
+                            })
+                            break;
+
+                        case "text-chat-intend":
+
+                            text_audio.play();
+                            socket.send(attendance_actions('text-chat-received', income_data.client_id));
+                            Swal.fire({
+                                title: '<span style="font-size: 4em;">💬</span> <br> Estão te chamando para um chat por Texto!',
+                                html: "<strong>" + await getUserName(income_data.client_id) + "</strong> <br> quer um atendimento por texto com você!",
+                                showCancelButton: false,
+                                reverseButtons: true,
+                                allowOutsideClick: false,
+                                showDenyButton: true,
+                                confirmButtonText: "Vamos lá! 💁",
+                                denyButtonText: "Hmm... hoje não! 😖",
+                            }).then(async function (result) {
+                                /* Read more about isConfirmed, isDenied below */
+                                if (result.isConfirmed) {
+                                    await $.get("/register-event-by-clerk/3", function (e) { });
+                                    socket.send(im_busy());
+                                    $.get("/register-chat/" + income_data.client_id, function (e) {
+                                        socket.send(attendance_actions('text-chat-acc', income_data.client_id, e));
+                                        window.location = '/chat/' + e;
+                                    });
+                                } else if (result.isDenied) {
+                                    socket.send(attendance_actions('text-chat-ref', income_data.client_id));
+                                    text_audio.pause();
+                                    Swal.fire({
+                                        title: '<span style="font-size: 4em;">😱</span> <br> Você recusou o atendimento!',
+                                        html: '<span class="lead"> Avisamos o cliente que você não deseja atender-lo agora.</span>',
+                                        confirmButtonText: 'Tá bem 😔',
+
+                                    });
+                                }
+                            })
+                            break;
+                    }
+                }
+            };
+
+            /* 
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            ATTENDANCE SOCKET  ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE SOCKET ATTENDANCE 
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            */
+
+            /* 
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS 
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            */
+
+            var last_thirty_days = 0;
+            var this_thirty_days = 0;
+            var last_week = 0;
+            var this_week = 0;
+            var yesterday = 0;
+            var today = 0;
+
+            var sixty_days_data_text = await $.get("/text-transactions-data", function (data) {
+                return data;
+            });
+
+            var sixty_days_data_voice = await $.get("/voice-transactions-data", function (data) {
+                return data;
+            });
+
+
+            /* Day Card */
+            today = sixty_days_data_text[0][1] ? sixty_days_data_text[0][1].sum : 0 + sixty_days_data_voice[0][1] ? sixty_days_data_voice[0][1].sum : 0;
+            yesterday = sixty_days_data_text[1][1].sum ? 1 : parseFloat(sixty_days_data_text[1][1].sum) + sixty_days_data_voice[1][1].sum ? 1 : parseFloat(sixty_days_data_voice[1][1].sum);
+            var day_proportion = parseInt((today * 100) / yesterday) - 100;
+            $("#earned-day").html("€" + parseFloat(today).toFixed(2).replace(".", ",")).addClass("animate__animated animate__fadeIn");
+            $("#earned-yesterday").html("(Ontem: €" + parseFloat(yesterday).toFixed(2).replace(".", ",") + ")").addClass("animate__animated animate__fadeIn");
+            if (day_proportion >= 0) {
+                $("#earned-day-diff").parent().addClass("text-success");
+                $("#earned-day-diff").html('<i class="fa fa-arrow-up"></i> +' + day_proportion + " %" + " - Em relação a ontem").addClass("animate__animated animate__tada");
+            } else {
+                $("#earned-day-diff").parent().addClass("text-danger");
+                $("#earned-day-diff").html('<i class="fa fa-arrow-down"></i> ' + day_proportion + " %" + " - Em relação a ontem").addClass("animate__animated animate__shakeX");
+            }
+            /* End Days Card */
+
+            /* Week card */
+            sixty_days_data_text.slice(0, 7).map((data) => {
+                this_week += parseFloat(data[1].sum ? data[1].sum : 0);
+            });
+            sixty_days_data_voice.slice(0, 7).map((data) => {
+                this_week += parseFloat(data[1].sum ? data[1].sum : 0);
+            });
+
+            sixty_days_data_text.slice(8, 14).map((data) => {
+                last_week += parseFloat(data[1].sum ? data[1].sum : 0);
+            });
+
+            sixty_days_data_voice.slice(8, 14).map((data) => {
+                last_week += parseFloat(data[1].sum ? data[1].sum : 0);
+            });
+
+            var week_proportion = parseInt((this_week * 100) / last_week) - 100;
+
+            $("#earned-week").html("€" + parseFloat(this_week).toFixed(2).replace(".", ",")).addClass("animate__animated animate__fadeIn");
+            $("#earned-last-week").html("(Sem. Pass.: €" + parseFloat(last_week).toFixed(2).replace(".", ",") + ")").addClass("animate__animated animate__fadeIn");
+
+            if (week_proportion >= 0) {
+                $("#earned-week-diff").parent().addClass("text-success");
+                $("#earned-week-diff").html('<i class="fa fa-arrow-up"></i> +' + week_proportion + " %" + " - Em relação a passada.").addClass("animate__animated animate__tada");
+            } else {
+                $("#earned-week-diff").parent().addClass("text-danger");
+                $("#earned-week-diff").html('<i class="fa fa-arrow-down"></i> ' + week_proportion + " %" + " - Em relação a passada.").addClass("animate__animated animate__shakeX");
+            }
+            /* End Week Cards */
+            /* Month Cards */
+            this_thirty_days += this_week + last_week;
+
+            sixty_days_data_text.slice(15, 30).map((data) => {
+                this_thirty_days += parseFloat(data[1].sum ? data[1].sum : 0);
+            })
+
+            sixty_days_data_voice.slice(15, 30).map((data) => {
+                this_thirty_days += parseFloat(data[1].sum ? data[1].sum : 0);
+            })
+
+            sixty_days_data_text.slice(30, -1).map((data) => {
+                last_thirty_days += parseFloat(data[1].sum ? data[1].sum : 0);
+            });
+
+            sixty_days_data_voice.slice(30, -1).map((data) => {
+                last_thirty_days += parseFloat(data[1].sum ? data[1].sum : 0);
+            });
+
+            var month_proportion = parseInt((this_thirty_days * 100) / last_thirty_days) - 100;
+
+            $("#earned-month").html("€ " + parseFloat(this_thirty_days).toFixed(2).replace(".", ",")).addClass("animate__animated animate__fadeIn");
+            $("#earned-last-month").html("(M. Pass.: €" + parseFloat(last_thirty_days).toFixed(2).replace(".", ",") + ")").addClass("animate__animated animate__fadeIn");
+
+            if (month_proportion >= 0) {
+                $("#earned-month-diff").parent().addClass("text-success");
+                $("#earned-month-diff").html('<i class="fa fa-arrow-up"></i> +' + month_proportion + " %" + " - Em relação ao último mês.").addClass("animate__animated animate__tada");
+            } else {
+                $("#earned-month-diff").parent().addClass("text-danger");
+                $("#earned-month-diff").html('<i class="fa fa-arrow-down"></i> ' + month_proportion + " %" + " - Em relação ao último mês.").addClass("animate__animated animate__shakeX");
+            }
+
+            /* End Month Cards */
+
+            /* Earned since self epoch */
+            var earned_since_begun = await $.get("/earned-since-begun", (data) => {
+                return data;
+            });
+
+            $("#earned-sibnce-begun").html("€ " + parseFloat(earned_since_begun).toFixed(2).replace(".", ",")).addClass("animate__animated animate__tada");
+
+            /* 
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS CARDS 
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            */
+
+            var ctx_text = document.getElementById('chart-text').getContext('2d');
+            var chart_text = new Chart(ctx_text, {
+                type: 'line',
+                data: {
+                    labels: [].map.call((days), (day) => {
+                        return "No dia " + day;
+                    }),
+                    datasets: [{
+                        label: '€ ganhos no dia',
+                        data: [].map.call(sixty_days_data_text.slice(0, 7), (day_data) => {
+                            return parseFloat(day_data[1].sum ? day_data[1].sum : 0.0).toFixed(2);
+                        }),
+                        backgroundColor: [
+                            'rgba(94,114,228, 0.3)',
+                        ],
+                        borderColor: [
+                            'rgba(94,114,228, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+            var ctx_text = document.getElementById('chart-voice').getContext('2d');
+            var chart_text = new Chart(ctx_text, {
+                type: 'line',
+                data: {
+                    labels: [].map.call((days), (day) => {
+                        return "No dia " + day;
+                    }),
+                    datasets: [{
+                        label: '€ ganhos no dia',
+                        data: [].map.call(sixty_days_data_voice.slice(0, 7), (day_data) => {
+                            return parseFloat(day_data[1].sum ? day_data[1].sum : 0.0).toFixed(2);
+                        }),
+                        backgroundColor: [
+                            'rgba(220,53,69, 0.3)',
+                        ],
+                        borderColor: [
+                            'rgba(220,53,69, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        } else {
+
+            window.location = "/login";
+
+        }
+
+        /* Conect to the socket. */
+
+    });
+
+    tinymce.init({
+        selector: '#mailContent'
+    });
+</script>
+
+
+<!-- Modal -->
+<form id="answerMail" method="POST">
+    <div class="modal fade" id="answerMailModal" tabindex="-1" role="dialog" aria-labelledby="answerMailModalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="answerMailModalTitle">Respondendo um E-mail:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <strong>Nome do cliente</strong>
+                                <span id="mailUserName"></span>
+                                <hr>
+                                <strong>Assunto:</strong>
+                                <br>
+                                <span id="mailSubject"></span>
+                                <hr>
+                                <strong>Conteúdo:</strong><br>
+                                <span id="mailReqContent"></span>
+                                <hr>
+                                <strong>Data:</strong><br>
+                                <span id="mailReqDate"></span>
+                            </div>
+                            <div class="col-lg-6">
+                                <input type="hidden" id="mailId" name="call_email_id">
+                                <input type="hidden" id="mailReqDest" name="call_email_request_to_email">
+                                <h4>Sua resposta:</h4>
+                                <hr>
+                                <label>Assunto:</label>
+                                <input name="call_email_response_title"
+                                    placeholder="Descreva em suma o conteúdo da resposta" type="text"
+                                    class="form-control">
+                                <hr>
+                                <label>Conteúdo da sua mensagem:</label>
+                                <textarea id="mailContent" placeholder="Sua mensagem"
+                                    name="call_email_response_body"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger mr-auto" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-success">Enviar e-mail</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
