@@ -17,6 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
+]
+
+urlpatterns += [
     path('paypal/', include('paypal_pay.urls')),
-    path('stripe/', include('stripe_pay.urls')),
+    path(
 ]
